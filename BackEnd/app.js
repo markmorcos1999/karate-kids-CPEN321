@@ -1,46 +1,72 @@
 var express = require("express")
+var http = require('http');
 var https = require('https');
 
-var express = require('express');
-var app = express();
-var serv = require('http').Server(app);
-
-var app = express();
 var fs = require('fs');
 
-app.use(express.json())
+var Player = require('./player.js');
+var Instance = require('./instance.js');
+var Session = require('./instance.js');
+
+const options = {
+	//key: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem', 'utf8'),
+	//cert: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem', 'utf8')
+};
 
 
-//Start the server on a port
-serv.listen(8012);
-console.log("Server started.");
 
-var SOCKET_LIST = {};
+async function run(){
+	console.log("Running")
+	try{//CHANGE THIS TO HTTPS after uncommenting the keys
+		http.createServer(options, handleRequest).listen(8081)
+	}
+	catch(err){
+		console.log(err)
+	}
+}
 
-//Creating the io object (to help us talk with the sockets) web sockets, fast connection 
-var io = require('socket.io')(serv,{});
-
-
-//Setting up what to do when someone connects
-io.sockets.on('connection', function(socket){
-    
-    //Give it an ID and add it to the list
-	//console.log('socket connection');
-	socket.id = Math.random();
-	SOCKET_LIST[socket.id] = socket;
+//Code for making post requests from stackoverflow: https://stackoverflow.com/questions/12006417/node-js-server-that-accepts-post-requests			
+function handleRequest(request, response){
+	if(request.method == 'POST'){
+				console.log('POST')
+				var body = ''
+				request.on('data', function(data) {
+					body += data
+					console.log('Partial body: ' + body)
+				})
+				request.on('end', function() {
+					message = JSON.parse(body)
+					console.log('Body: ' + message)
+					response.writeHead(200, {'Content-Type': 'text/html'})
+					if(message.subject == "connect"){
+						playerId = connectPlayer(message.data)
+						
+						sessionId = Math.random();
+						Instance.sessionList[id] = new Session(id, [Instance.PlayerList[playerId]])
+						
+						response.end(playerId);
+					}
+					else if(message.subject == "join"){
+						
+					}
+					else{
+						response.end("unknown subject")
+					}
+				})
+			}
+			else{
+				response.writeHead(200);
+				response.end("Welcome to Node.js HTTPS servern");
+			}	
 	
-	console.log("Connected");
-	
-    //Determine what to do when it disconnects
-    socket.on('disconnect', function(){
-        delete Player.list[socket.id];
-		delete SOCKET_LIST[socket.id];
-	});
-	
-	socket.on('test', function(data){
-       console.log(data.message);
-	   socket.emit('response', {});
-    });
-	
-    
-});
+}
+
+function connectPlayer(data){
+	id = Math.random();
+	Instance.playerList[id] = new Player(id, data.name); 
+  return String(id);
+}
+
+
+
+run()

@@ -13,25 +13,19 @@ import java.net.URL;
 
 public final class Networker {
 
-    private static Socket socket;
+    private static String URL = "https://milestone1.canadacentral.cloudapp.azure.com:8081";
     final static String TAG = "Networker";
     private Networker () { // private constructor
 
     }
-    public static void connectToServer() {
+    public static void connectToServer(ConnectionData dat) {
         //using a new thread to do the http request, as per suggestion in https://stackoverflow.com/questions/6343166/how-can-i-fix-android-os-networkonmainthreadexception
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
-                    socket = new Socket("127.0.0.1", 8012 );
-                }
-                catch(java.net.UnknownHostException e) {
-                    Log.d(TAG, "Unknown Host");
-                }
-                catch( java.io.IOException f){
-                    Log.d(TAG, f.toString());
-                }
+                Log.d(TAG, executePost(URL, dat.getMessage()));
+
+                //Log.d(TAG, executePost("https://milestone1.canadacentral.cloudapp.azure.com:8081", "date"));
             }
         });
 
