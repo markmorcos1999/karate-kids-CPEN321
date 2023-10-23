@@ -19,6 +19,8 @@ public class LobbyActivity extends AppCompatActivity {
                 startActivity(startGameIntent);
             }
         });
+
+        //TODO: remove button for starting game and automatically start game when all players have joined
     }
 
 }
