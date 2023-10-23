@@ -1,10 +1,13 @@
 package com.karatekids.wikipediarace;
 
+import static com.karatekids.wikipediarace.InGameActivity.count;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 public class ResultsActivity extends AppCompatActivity {
 
@@ -20,6 +23,9 @@ public class ResultsActivity extends AppCompatActivity {
                 startActivity(mainIntent);
             }
         });
+
+        TextView num_links = (TextView) findViewById(R.id.links_num_text);
+        num_links.append(" "+String.valueOf(count));
 
         //TODO: show the results from the page and how the player fared
     }

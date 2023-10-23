@@ -7,4 +7,5 @@
     <string name="start_game_st">Start Game</string>
     <string name="destination_page_st">Destination Page: </string>
     <string name="return_main_st">Return to Main Page</string>
+    <string name="links_clicked_st">Number of Links to Reach Destination:</string>
 </resources>
