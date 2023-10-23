@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view){
 
 
-                Networker.connectToServer();
+                Networker.connectToServer(new ConnectionData("Kyle"));
 
                 Log.d(TAG, "Trying to network!");
 
