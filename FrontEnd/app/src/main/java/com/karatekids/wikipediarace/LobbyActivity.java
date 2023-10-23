@@ -11,6 +11,14 @@ public class LobbyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
+
+        findViewById(R.id.start_game_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startGameIntent = new Intent(LobbyActivity.this, InGameActivity.class);
+                startActivity(startGameIntent);
+            }
+        });
     }
 
 }
