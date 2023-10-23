@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wikipedia Race</string>
+    <string name="welcome_st">Welcome!</string>
 </resources>
