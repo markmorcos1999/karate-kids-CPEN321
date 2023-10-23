@@ -96,9 +96,9 @@ public class SignInActivity extends AppCompatActivity {
             Log.d(TAG, "Display Name: " + account.getDisplayName());
 
             //move to SignInActivity to display client and server data
-            Intent signInIntent = new Intent(SignInActivity.this, MainActivity.class);
-            signInIntent.putExtra("userName", account.getDisplayName());
-            startActivity(signInIntent);
+            Intent mainActivity = new Intent(SignInActivity.this, MainActivity.class);
+            mainActivity.putExtra("userName", account.getDisplayName());
+            startActivity(mainActivity);
         }
     }
 }

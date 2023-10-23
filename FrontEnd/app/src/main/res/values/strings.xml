@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Wikipedia Race</string>
     <string name="welcome_st">Welcome!</string>
+    <string name="game_st">Join a Game</string>
+    <string name="stats_st">View User\'s Statistics</string>
+    <string name="leaderboard_st">View Leaderboard</string>
 </resources>

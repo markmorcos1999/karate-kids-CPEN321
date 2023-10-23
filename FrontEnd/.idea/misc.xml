@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/markm/AndroidStudioProjects/WikipediaRace/karate-kids-CPEN321/FrontEnd/app/src/main/res/layout/acitivity_lobby.xml" value="0.1" />
+        <entry key="..\:/Users/markm/AndroidStudioProjects/WikipediaRace/karate-kids-CPEN321/FrontEnd/app/src/main/res/layout/activity_leaderboard.xml" value="0.1" />
+        <entry key="..\:/Users/markm/AndroidStudioProjects/WikipediaRace/karate-kids-CPEN321/FrontEnd/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/markm/AndroidStudioProjects/WikipediaRace/karate-kids-CPEN321/FrontEnd/app/src/main/res/layout/activity_signin.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/markm/AndroidStudioProjects/WikipediaRace/karate-kids-CPEN321/FrontEnd/app/src/main/res/layout/activity_statistics.xml" value="0.1" />
       </map>
     </option>
   </component>
