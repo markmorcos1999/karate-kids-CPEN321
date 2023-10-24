@@ -5,4 +5,14 @@
     <string name="stats_st">View User\'s Statistics</string>
     <string name="leaderboard_st">View Leaderboard</string>
     <string name="loading_st">Searching for Players...</string>
+    <string name="games_won_st">Number of Games Won:</string>
+    <string name="games_won_value_st">aaaa</string>
+    <string name="games_lost_st">Number of Games Lost:</string>
+    <string name="games_lost_value_st">bbbb</string>
+    <string name="most_visited_page_st">Most Visited Page:</string>
+    <string name="most_visited_page_value_st">cccc</string>
+    <string name="avg_traversal_length_st">Average Traversal Length:</string>
+    <string name="avg_traversal_length_value_st">dddd</string>
+    <string name="avg_traversal_time_st">Average Traversal Time:</string>
+    <string name="avg_traversal_time_value_st">eeee</string>
 </resources>

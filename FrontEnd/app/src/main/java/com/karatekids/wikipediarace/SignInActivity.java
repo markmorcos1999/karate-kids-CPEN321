@@ -19,7 +19,6 @@ public class SignInActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private final static String TAG = "SignInActivity";
     private final int RC_SIGN_IN = 1;
-    private Button connectButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,19 +36,6 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signIn();
-            }
-        });
-
-        connectButton = findViewById(R.id.connection_button);
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-
-
-                Networker.connectToServer();
-
-                Log.d(TAG, "Trying to network!");
-
             }
         });
     }
