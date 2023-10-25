@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "444665526008",
+    "project_id": "wikipedia-race-402904",
+    "storage_bucket": "wikipedia-race-402904.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444665526008:android:71233ccbf0db98fde6ad0d",
+        "android_client_info": {
+          "package_name": "com.karatekids.wikipediarace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArqNhr5JCdEnJ5fwZjuhc4md7ptn65E9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
