@@ -55,6 +55,33 @@ public final class NetworkMessage {
         return message.toString();
     }
 
+    public static String leaderboardRequest(){
+        try {
+            data = new JSONObject();
+            message = new JSONObject();
+            message.put("subject", "leaderboard");
+            message.put("data", data);
+        }
+        catch(JSONException e) {
+        }
+        return message.toString();
+    }
+
+    public static String signInMessage(String name, String id){
+        try {
+            data = new JSONObject();
+            data.put("name", name);
+            data.put("id", id);
+            message = new JSONObject();
+            message.put("subject", "signIn");
+            message.put("data", data);
+        }
+        catch(JSONException e) {
+        }
+        return message.toString();
+    }
+
+
     public static String endGame(String name, String id){
         try {
             data = new JSONObject();
