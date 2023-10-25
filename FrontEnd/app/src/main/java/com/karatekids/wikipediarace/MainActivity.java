@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     public void goToStats(String data){
         Intent statisticsIntent = new Intent(MainActivity.this, StatisticsActivity.class);
         statisticsIntent.putExtra("playerStats", data);
+        Log.d(TAG, data);
         startActivity(statisticsIntent);
     }
 
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent leaderboardIntent = new Intent(MainActivity.this, LeaderboardActivity.class);
         leaderboardIntent.putExtra("leaderboardData", data);
+        Log.d(TAG, data);
         startActivity(leaderboardIntent);
     }
 }
