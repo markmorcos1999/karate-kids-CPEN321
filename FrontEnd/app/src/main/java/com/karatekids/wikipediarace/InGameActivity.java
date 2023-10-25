@@ -47,12 +47,7 @@ public class InGameActivity extends AppCompatActivity {
         builder.setMessage("Do you want to end the game now and see your results?");
         builder.setCancelable(false);
         builder.setPositiveButton("End Game", (DialogInterface.OnClickListener) (dialog, which) -> {
-            Intent resultIntent = new Intent(InGameActivity.this, ResultsActivity.class)
-                    .putExtra("count", count)
-                    .putExtra("time", seconds)
-                    .putExtra("visited_list", pagesVisited);
-            Log.d(TAG, "Time is: " + seconds);
-            startActivity(resultIntent);
+            endGame();
         });
         builder.setNegativeButton("Continue playing current game for second", (DialogInterface.OnClickListener) (dialog, which) -> {
             dialog.dismiss();
@@ -111,14 +106,26 @@ public class InGameActivity extends AppCompatActivity {
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
             if(url.equals(b.getString("end_url"))){
-                Intent resultIntent = new Intent(InGameActivity.this, ResultsActivity.class)
-                        .putExtra("count", count)
-                        .putExtra("time", seconds)
-                        .putExtra("visited_list", pagesVisited);
-                Log.d(TAG, "Time is: " + seconds);
-                startActivity(resultIntent);
+                endGame();
             }
         }
+    }
+
+    private void endGame(){
+        Intent resultIntent = new Intent(InGameActivity.this, ResultsActivity.class)
+                .putExtra("count", count)
+                .putExtra("time", seconds)
+                .putExtra("visited_list", pagesVisited);
+        Log.d(TAG, "Time is: " + seconds);
+        startActivity(resultIntent);
+
+        Networker.endGame(InGameActivity.this);
+    }
+
+    public void updateResults(String data){
+        Intent resultActivity = new Intent(InGameActivity.this, ResultsActivity.class);
+        resultActivity.putExtra("data", data);
+        startActivity(resultActivity);
     }
 
     // https://www.geeksforgeeks.org/how-to-create-a-stopwatch-app-using-android-studio/

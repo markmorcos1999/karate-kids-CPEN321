@@ -97,11 +97,12 @@ public final class Networker {
 
     }
 
-    public static void endGame(){
+    public static void endGame(InGameActivity game){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.endGame(name, id));
+                game.updateResults(ret);
                 //What to do after a post? status code returned?
             }
         });
