@@ -6,7 +6,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class MessagingService extends FirebaseMessagingService {
-    public static String TAG = "";
+    final static String TAG = "";
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // TODO(developer): Handle FCM messages here.
