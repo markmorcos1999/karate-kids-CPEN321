@@ -6,7 +6,9 @@ var fs = require('fs');
 
 var Player = require('./player.js');
 var Instance = require('./instance.js');
-var Session = require('./instance.js');
+var Session = require('./session.js');
+
+var Matchmaker = require('./matchmaker.js');
 
 const options = {
 	//key: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem', 'utf8'),
@@ -41,13 +43,17 @@ function handleRequest(request, response){
 					if(message.subject == "connect"){
 						playerId = connectPlayer(message.data)
 						
-						sessionId = Math.random();
-						Instance.sessionList[id] = new Session(id, [Instance.PlayerList[playerId]])
-						
 						response.end(playerId);
 					}
 					else if(message.subject == "join"){
-						
+						//Now we must make the player wait a bit for a response.
+						Matchmaker.lookForGame(Instance.playerList[message.data.id])
+					}
+					else if(message.subject == "leaderboard"){
+						response.end("");//Here add the "database get leaderboard"
+					}
+					else if(message.subject == "statsRequest"){
+						response.end("");//here add the "database get playerinfo
 					}
 					else{
 						response.end("unknown subject")
@@ -62,7 +68,7 @@ function handleRequest(request, response){
 }
 
 function connectPlayer(data){
-	id = Math.random();
+	id = data.id;
 	Instance.playerList[id] = new Player(id, data.name); 
   return String(id);
 }

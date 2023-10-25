@@ -1,6 +1,6 @@
 module.exports = class Session{
 
-	var Game = require('./game.js');
+
 
     constructor(id, newPlayers) {
 		

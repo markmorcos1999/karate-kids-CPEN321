@@ -5,10 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Button connectButton;
     final static String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.leaderboard_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent leaderboardIntent = new Intent(MainActivity.this, LeaderboardActivity.class);
-                startActivity(leaderboardIntent);
+                Networker.getLeaderboard(MainActivity.this);
             }
         });
+    }
+
+    public void goToLeaderboard(String data){
+
+        Intent leaderboardIntent = new Intent(MainActivity.this, LeaderboardActivity.class);
+        leaderboardIntent.putExtra("leaderboardData", data);
+        startActivity(leaderboardIntent);
     }
 }

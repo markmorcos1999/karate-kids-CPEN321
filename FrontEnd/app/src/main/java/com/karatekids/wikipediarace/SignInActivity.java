@@ -40,18 +40,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        connectButton = findViewById(R.id.connection_button);
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
 
-
-                Networker.connectToServer();
-
-                Log.d(TAG, "Trying to network!");
-
-            }
-        });
     }
 
     /**
@@ -90,7 +79,8 @@ public class SignInActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            updateUI(account);
+            //updateUI(account.getDisplayName());
+            Networker.serverSignIn(account.getId(), account.getDisplayName(), this);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -101,18 +91,16 @@ public class SignInActivity extends AppCompatActivity {
 
     /**
      * Transition into SignInActivity with userName
-     * @param account
+     * @param name
      */
-    private void updateUI(GoogleSignInAccount account) {
-        if(account == null) {
-            Log.d(TAG, "No user is signed in!");
-        } else {
-            Log.d(TAG, "Display Name: " + account.getDisplayName());
+    public void updateUI(String name) {
+
+        Log.d(TAG, "Display Name: " + name);
 
             //move to SignInActivity to display client and server data
             Intent mainActivity = new Intent(SignInActivity.this, MainActivity.class);
-            mainActivity.putExtra("userName", account.getDisplayName());
+            mainActivity.putExtra("userName", name);
             startActivity(mainActivity);
-        }
+
     }
 }

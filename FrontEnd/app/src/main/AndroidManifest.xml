@@ -11,8 +11,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.WikipediaRace">
-
+        android:theme="@style/Theme.WikipediaRace"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ResultsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InGameActivity"
+            android:exported="false" />
         <activity
             android:name=".SignInActivity"
             android:exported="true">
@@ -22,23 +28,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".LobbyActivity"
-            android:exported="true">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".StatisticsActivity"
-            android:exported="true">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".LeaderboardActivity"
-            android:exported="true">
-        </activity>
+            android:exported="false" />
     </application>
 
 </manifest>
