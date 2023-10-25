@@ -3,6 +3,8 @@ package com.karatekids.wikipediarace;
 import android.content.Intent;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -47,12 +49,12 @@ public final class Networker {
 
     }
 
-    public static void getLeaderboard(){
+    public static void getLeaderboard(MainActivity main){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.leaderboardRequest());
-                //Here change to the player game activity @TODO
+                main.goToLeaderboard(ret);
             }
         });
 
