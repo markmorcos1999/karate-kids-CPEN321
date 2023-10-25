@@ -45,14 +45,16 @@ function handleRequest(request, response){
 						
 						response.end(playerId);
 					}
-					else if(message.subject == "join"){
+					else if(message.subject == "requestGame"){
 						//Now we must make the player wait a bit for a response.
 						Matchmaker.lookForGame(Instance.playerList[message.data.id])
+						response.end({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
+					}
+					else if(message.subject == "endGame"){
+						response.end({gamePosition: "0"})
 					}
 					else if(message.subject == "leaderboard"){
-						response.end(
-            JSON.stringify([{name:"Kyle", ELO: "1000"}, {name:"Mark", ELO: "1001"}])
-            );//Here add the "database get leaderboard"
+						response.end(JSON.stringify([{name:"Kyle", ELO: "1000"}, {name:"Mark", ELO: "1001"}]));//Here add the "database get leaderboard"
 					}
 					else if(message.subject == "statsRequest"){
 						response.end(JSON.stringify({gamesWon:"100", gamesLost: "1000", averageLength:"2", averageTime:"2", MostVistedPage:"a"}));//here add the "database get playerinfo

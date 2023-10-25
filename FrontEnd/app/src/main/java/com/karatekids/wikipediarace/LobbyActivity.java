@@ -35,8 +35,10 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     public void matchFound(String data){
-    //Json string with list of players, ready to start game
-
+    //Json string with list of players, ready to start game and intent
+        Intent startGameIntent = new Intent(LobbyActivity.this, InGameActivity.class);
+        startGameIntent.putExtra("data", data);
+        startActivity(startGameIntent);
     }
 
 }

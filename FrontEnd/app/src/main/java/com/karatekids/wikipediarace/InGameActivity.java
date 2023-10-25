@@ -55,8 +55,8 @@ public class InGameActivity extends AppCompatActivity {
         builder.setMessage("Do you want to end the game now and see your results?");
         builder.setCancelable(false);
         builder.setPositiveButton("End Game", (DialogInterface.OnClickListener) (dialog, which) -> {
-            Intent resultActivity = new Intent(InGameActivity.this, ResultsActivity.class);
-            startActivity(resultActivity);
+            endGame();
+
         });
         builder.setNegativeButton("Continue playing current game for second", (DialogInterface.OnClickListener) (dialog, which) -> {
             dialog.dismiss();
@@ -117,13 +117,24 @@ public class InGameActivity extends AppCompatActivity {
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
             if(url.equals(endUrl)){
-                Intent resultIntent = new Intent(InGameActivity.this, ResultsActivity.class);
-                TextView stopwatch = (TextView) findViewById(R.id.stopwatch_text);
-                time = stopwatch.getText().toString();
-                Log.d(TAG, "Time is: " + time);
-                startActivity(resultIntent);
+                endGame();
+
             }
         }
+    }
+
+    private void endGame(){
+        Intent resultIntent = new Intent(InGameActivity.this, ResultsActivity.class);
+        TextView stopwatch = (TextView) findViewById(R.id.stopwatch_text);
+        time = stopwatch.getText().toString();
+
+        Networker.endGame(InGameActivity.this);
+    }
+
+    public void updateResults(String data){
+        Intent resultActivity = new Intent(InGameActivity.this, ResultsActivity.class);
+        resultActivity.putExtra("data", data);
+        startActivity(resultActivity);
     }
 
     // https://www.geeksforgeeks.org/how-to-create-a-stopwatch-app-using-android-studio/
