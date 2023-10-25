@@ -61,12 +61,13 @@ public final class Networker {
         thread.start();
     }
 
-    public static void requestGame() {
+    public static void requestGame(LobbyActivity lobby) {
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.gameRequest(name, id));
+                lobby.matchFound(ret);
                 //Here change to the player game activity @TODO
             }
         });
@@ -75,19 +76,20 @@ public final class Networker {
 
     }
 
-    public static void getPlayerStats(){
+    public static void getPlayerStats(MainActivity main){
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.statsRequest(name, id));
-                //Here change to the player stats activity @TODO
+                main.goToStats(ret);
             }
         });
 
         thread.start();
     }
 
+    //Call this any time
     public static void sendPage(String URL){
 
         Thread thread = new Thread(new Runnable() {
@@ -102,11 +104,12 @@ public final class Networker {
 
     }
 
-    public static void endGame(){
+    public static void endGame(InGameActivity game){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.endGame(name, id));
+                game.updateResults(ret);
                 //What to do after a post? status code returned?
             }
         });

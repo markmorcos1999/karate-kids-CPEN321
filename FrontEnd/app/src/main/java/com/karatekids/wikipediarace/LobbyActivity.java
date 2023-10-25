@@ -14,6 +14,7 @@ public class LobbyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
+        Networker.requestGame(LobbyActivity.this);
         findViewById(R.id.start_game_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -22,7 +23,6 @@ public class LobbyActivity extends AppCompatActivity {
                 startActivity(startGameIntent);
             }
         });
-
         //TODO: remove button for starting game and automatically start game when all players have joined
         //----- send request to join game----
 
@@ -32,6 +32,13 @@ public class LobbyActivity extends AppCompatActivity {
 
         //to hide loading progress bar:
         // findViewById(R.id.loading_pb).setVisibility(View.GONE);
+    }
+
+    public void matchFound(String data){
+    //Json string with list of players, ready to start game and intent
+        Intent startGameIntent = new Intent(LobbyActivity.this, InGameActivity.class);
+        startGameIntent.putExtra("data", data);
+        startActivity(startGameIntent);
     }
 
 }
