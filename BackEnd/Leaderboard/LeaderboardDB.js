@@ -10,7 +10,7 @@ class LeaderboardDB {
         try {
             await this.client.connect();
             this.collection = this.client.db('user').collection('leaderboard');
-            console.log("Successfully connected to the database");
+            console.log("Successfully connected to the leaderboard database");
         } catch (err) {
             console.error(err);
             await this.client.close();
