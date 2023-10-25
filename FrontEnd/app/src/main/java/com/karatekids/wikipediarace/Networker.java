@@ -35,7 +35,6 @@ public final class Networker {
     }
 
     public static void requestGame() {
-         makePost(NetworkMessage.gameRequest(name, id));
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -62,10 +61,30 @@ public final class Networker {
         thread.start();
     }
 
-    private static void makePost(String data){
+    public static void sendPage(String URL){
 
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.pagePost(name, id, URL));
+                //What to do after a post? status code returned?
+            }
+        });
 
+        thread.start();
 
+    }
+
+    public static void endGame(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.endGame(name, id));
+                //What to do after a post? status code returned?
+            }
+        });
+
+        thread.start();
     }
 
     //This method comes from https://stackoverflow.com/questions/1359689/how-to-send-http-request-in-java
