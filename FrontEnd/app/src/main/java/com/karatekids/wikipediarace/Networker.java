@@ -11,21 +11,33 @@ import java.net.SocketImpl;
 import java.net.Socket;
 import java.net.URL;
 
+
+//This code uses some references from stack ovefrflow:
+//using a new thread to do the http request, as per suggestion in https://stackoverflow.com/questions/6343166/how-can-i-fix-android-os-networkonmainthreadexception
+
 public final class Networker {
 
     private static String URL = "https://milestone1.canadacentral.cloudapp.azure.com:8081";
+    private static String networkId;
+
+    private static String id = "0";
+    private static String name = "";
+
     final static String TAG = "Networker";
     private Networker () { // private constructor
 
     }
-    public static void connectToServer(ConnectionData dat) {
-        //using a new thread to do the http request, as per suggestion in https://stackoverflow.com/questions/6343166/how-can-i-fix-android-os-networkonmainthreadexception
+
+
+    //Here we want to take the sign in info from google and put it in here @TODO
+    public static void serverSignIn(String _id, String _name){
+        id = _id;
+        name = _name;
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, executePost(URL, dat.getMessage()));
-
-                //Log.d(TAG, executePost("https://milestone1.canadacentral.cloudapp.azure.com:8081", "date"));
+                String ret = executePost(URL, NetworkMessage.signInMessage(name, id));
+                //What to do with returned sign in info? Go to activity?
             }
         });
 
@@ -33,9 +45,74 @@ public final class Networker {
 
     }
 
+    public static void getLeaderboard(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.leaderboardRequest());
+                //Here change to the player game activity @TODO
+            }
+        });
+
+        thread.start();
+    }
+
+    public static void requestGame() {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.gameRequest(name, id));
+                //Here change to the player game activity @TODO
+            }
+        });
+
+        thread.start();
+
+    }
+
+    public static void getPlayerStats(){
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.statsRequest(name, id));
+                //Here change to the player stats activity @TODO
+            }
+        });
+
+        thread.start();
+    }
+
+    public static void sendPage(String URL){
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.pagePost(name, id, URL));
+                //What to do after a post? status code returned?
+            }
+        });
+
+        thread.start();
+
+    }
+
+    public static void endGame(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.endGame(name, id));
+                //What to do after a post? status code returned?
+            }
+        });
+
+        thread.start();
+    }
+
     //This method comes from https://stackoverflow.com/questions/1359689/how-to-send-http-request-in-java
     //To help with executing a post
-    public static String executePost(String targetURL, String urlParameters) {
+    private static String executePost(String targetURL, String urlParameters) {
         HttpURLConnection connection = null;
 
         try {

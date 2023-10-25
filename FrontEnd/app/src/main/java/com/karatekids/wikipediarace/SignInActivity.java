@@ -46,7 +46,7 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View view){
 
 
-                Networker.connectToServer();
+                Networker.requestGame();
 
                 Log.d(TAG, "Trying to network!");
 
