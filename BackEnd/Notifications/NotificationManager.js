@@ -1,11 +1,11 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('./your-service-account-key.json'); // Replace with your own service account key
+const serviceAccount = require('./service-account-key.json');
 
+// ChatGPT generated this
 class FCMNotifier {
   constructor() {
     admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      databaseURL: 'https://your-firebase-database-url.firebaseio.com',
+      credential: admin.credential.cert(serviceAccount)
     });
 
     this.messaging = admin.messaging();
