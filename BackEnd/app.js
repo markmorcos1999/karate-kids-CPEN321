@@ -43,9 +43,6 @@ function handleRequest(request, response){
 					if(message.subject == "connect"){
 						playerId = connectPlayer(message.data)
 						
-						sessionId = Math.random();
-						//Instance.sessionList[id] = new Session(id, [Instance.PlayerList[playerId]])
-						
 						response.end(playerId);
 					}
 					else if(message.subject == "join"){

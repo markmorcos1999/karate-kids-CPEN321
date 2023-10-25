@@ -1,5 +1,6 @@
 package com.karatekids.wikipediarace;
 
+import android.content.Intent;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -30,14 +31,15 @@ public final class Networker {
 
 
     //Here we want to take the sign in info from google and put it in here @TODO
-    public static void serverSignIn(String _id, String _name){
+    public static void serverSignIn(String _id, String _name, SignInActivity UI){
         id = _id;
         name = _name;
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.signInMessage(name, id));
-                //What to do with returned sign in info? Go to activity?
+                //Check return if correct
+                UI.updateUI(name);
             }
         });
 
