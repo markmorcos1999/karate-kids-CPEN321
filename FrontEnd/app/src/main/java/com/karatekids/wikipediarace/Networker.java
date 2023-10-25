@@ -75,13 +75,13 @@ public final class Networker {
 
     }
 
-    public static void getPlayerStats(){
+    public static void getPlayerStats(MainActivity main){
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.statsRequest(name, id));
-                //Here change to the player stats activity @TODO
+                main.goToStats(ret);
             }
         });
 

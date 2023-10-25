@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.stats_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent statisticsIntent = new Intent(MainActivity.this, StatisticsActivity.class);
-                startActivity(statisticsIntent);
+                Networker.getPlayerStats(MainActivity.this);
+
             }
         });
 
@@ -38,6 +38,12 @@ public class MainActivity extends AppCompatActivity {
                 Networker.getLeaderboard(MainActivity.this);
             }
         });
+    }
+
+    public void goToStats(String data){
+        Intent statisticsIntent = new Intent(MainActivity.this, StatisticsActivity.class);
+        statisticsIntent.putExtra("playerStats", data);
+        startActivity(statisticsIntent);
     }
 
     public void goToLeaderboard(String data){
