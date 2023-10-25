@@ -101,6 +101,7 @@ public class InGameActivity extends AppCompatActivity {
                return true;
             }
             Log.d(TAG, "URL host: "+request.getUrl().getHost());
+            Networker.sendPage(String.valueOf(request.getUrl()));
             view.loadUrl(String.valueOf(request.getUrl()));
             return true;
         }

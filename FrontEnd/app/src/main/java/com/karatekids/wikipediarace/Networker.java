@@ -61,12 +61,13 @@ public final class Networker {
         thread.start();
     }
 
-    public static void requestGame() {
+    public static void requestGame(LobbyActivity lobby) {
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.gameRequest(name, id));
+                lobby.matchFound(ret);
                 //Here change to the player game activity @TODO
             }
         });
@@ -88,6 +89,7 @@ public final class Networker {
         thread.start();
     }
 
+    //Call this any time
     public static void sendPage(String URL){
 
         Thread thread = new Thread(new Runnable() {
