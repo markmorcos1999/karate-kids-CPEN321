@@ -5,4 +5,5 @@
     <string name="stats_st">View User\'s Statistics</string>
     <string name="leaderboard_st">View Leaderboard</string>
     <string name="loading_st">Searching for Players...</string>
+    <string name="msg_token_fmt">%1$s</string>
 </resources>
