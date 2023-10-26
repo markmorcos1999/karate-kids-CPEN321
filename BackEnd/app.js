@@ -5,11 +5,8 @@ var https = require('https');
 var fs = require('fs');
 
 var LeaderBoardDB = require('./Player/PlayerManager.js')
-var Player = require('./Player/Player.js');
 var Instance = require('./Game/GameManager.js');
-var Session = require('./Game/Game.js');
 
-var Matchmaker = require('./Game/Matchmaker.js');
 
 const options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem', 'utf8'),
@@ -82,8 +79,8 @@ function handleRequest(request, response){
 
 function connectPlayer(data){
 	id = data.id;
-	
 	Instance.playerList[id] = new Player(id, data.name, data.deviceToken); 
+	
   return String(id);
 }
 
