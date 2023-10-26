@@ -112,20 +112,18 @@ public class InGameActivity extends AppCompatActivity {
     }
 
     private void endGame(){
-        Intent resultIntent = new Intent(InGameActivity.this, ResultsActivity.class)
-                .putExtra("count", count)
-                .putExtra("time", seconds)
-                .putExtra("visited_list", pagesVisited);
-        Log.d(TAG, "Time is: " + seconds);
-        startActivity(resultIntent);
-
         Networker.endGame(InGameActivity.this);
     }
 
     public void updateResults(String data){
-        Intent resultActivity = new Intent(InGameActivity.this, ResultsActivity.class);
-        resultActivity.putExtra("data", data);
-        startActivity(resultActivity);
+        Intent resultIntent = new Intent(InGameActivity.this, ResultsActivity.class)
+                .putExtra("count", count)
+                .putExtra("time", seconds)
+                .putExtra("visited_list", pagesVisited)
+                .putExtra("data",data);
+        Log.d(TAG, "Time is: " + seconds);
+        Log.d(TAG, data);
+        startActivity(resultIntent);
     }
 
     // https://www.geeksforgeeks.org/how-to-create-a-stopwatch-app-using-android-studio/
