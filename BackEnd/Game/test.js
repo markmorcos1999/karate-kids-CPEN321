@@ -1,15 +1,18 @@
 const MatchMaker = require('./Matchmaker');
 
-MatchMaker.addToGameWaitingList(2, 200).then((res) => console.log(res));
-MatchMaker.addToGameWaitingList(3, 200).then((res) => console.log(res));
-MatchMaker.addToGameWaitingList(1, 100).then((res) => console.log(res));
-MatchMaker.addToGameWaitingList(4, 400).then((res) => console.log(res));
-MatchMaker.addToGameWaitingList(5, 500).then((res) => console.log(res));
-MatchMaker.addToGameWaitingList(6, 10000).then((res) => console.log(res));
+MatchMaker.findMatch(2, 200).then((res) => console.log(res));
+MatchMaker.findMatch(3, 200).then((res) => console.log(res));
+MatchMaker.findMatch(1, 100).then((res) => console.log(res));
+MatchMaker.findMatch(4, 400).then((res) => console.log(res));
+MatchMaker.findMatch(6, 3000).then((res) => console.log(res), (rej) => console.log("Could not find a match :("));
 
-setInterval(
-    () => console.log(MatchMaker.matchPlayers()), 
-    500
-);
+setTimeout(() => {
+    MatchMaker.findMatch(2, 200).then((res) => console.log(res));
+    MatchMaker.findMatch(3, 200).then((res) => console.log(res));
+    MatchMaker.findMatch(1, 100).then((res) => console.log(res));
+    MatchMaker.findMatch(4, 400).then((res) => console.log(res));
+    MatchMaker.findMatch(5, 500).then((res) => console.log(res));
+    MatchMaker.findMatch(6, 10000).then((res) => console.log(res));
+}, 12000);
 
 
