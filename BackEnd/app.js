@@ -4,12 +4,12 @@ var https = require('https');
 
 var fs = require('fs');
 
-var LeaderBoardDB = require('./Leaderboard/LeaderboardDB.js')
-var Player = require('./player.js');
-var Instance = require('./instance.js');
-var Session = require('./session.js');
+var LeaderBoardDB = require('./Player/PlayerManager.js')
+var Player = require('./Player/Player.js');
+var Instance = require('./Game/GameManager.js');
+var Session = require('./Session/Session.js');
 
-var Matchmaker = require('./matchmaker.js');
+var Matchmaker = require('./Game/Matchmaker.js');
 
 const options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem', 'utf8'),

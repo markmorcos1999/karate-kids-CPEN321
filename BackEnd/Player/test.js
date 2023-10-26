@@ -1,4 +1,4 @@
-const leaderboardDB = require('./LeaderboardDB');
+const leaderboardDB = require('./PlayerManager');
 
 db = new leaderboardDB();
 db.connect().then(() => {
