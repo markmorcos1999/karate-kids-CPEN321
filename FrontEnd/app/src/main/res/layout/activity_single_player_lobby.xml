@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<!--https://stackoverflow.com/questions/5442183/using-the-animated-circle-in-an-imageview-while-loading-stuff-->
+    <!--https://stackoverflow.com/questions/5442183/using-the-animated-circle-in-an-imageview-while-loading-stuff-->
 
     <ProgressBar
         android:id="@+id/loading_pb"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="212dp"
-        android:text="@string/loading_st"
+        android:text="@string/loading_single_player_st"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"

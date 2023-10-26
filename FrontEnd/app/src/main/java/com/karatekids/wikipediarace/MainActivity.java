@@ -3,11 +3,11 @@ package com.karatekids.wikipediarace;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -15,6 +15,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
     final static String TAG = "MainActivity";
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +39,20 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        findViewById(R.id.game_bt).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.single_player_game_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent lobbyIntent = new Intent(MainActivity.this, LobbyActivity.class);
+                lobbyIntent.putExtra("game_mode","single");
+                startActivity(lobbyIntent);
+            }
+        });
+
+        findViewById(R.id.multi_player_game_st).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent lobbyIntent = new Intent(MainActivity.this, LobbyActivity.class);
+                lobbyIntent.putExtra("game_mode","multi");
                 startActivity(lobbyIntent);
             }
         });

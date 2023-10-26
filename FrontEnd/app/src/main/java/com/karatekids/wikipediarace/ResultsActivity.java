@@ -1,15 +1,12 @@
 package com.karatekids.wikipediarace;
 
-import static com.karatekids.wikipediarace.InGameActivity.count;
-import static com.karatekids.wikipediarace.InGameActivity.pagesVisited;
-import static com.karatekids.wikipediarace.InGameActivity.time;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import java.util.ArrayList;
 
 public class ResultsActivity extends AppCompatActivity {
 
@@ -17,6 +14,7 @@ public class ResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
+        Bundle b = getIntent().getExtras();
 
         findViewById(R.id.return_main_bt).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,8 +25,10 @@ public class ResultsActivity extends AppCompatActivity {
         });
 
         TextView num_links = (TextView) findViewById(R.id.links_num_text);
-        num_links.append(" "+String.valueOf(count));
+        num_links.append(" "+b.getInt("count"));
         num_links.append("\n");
+
+        ArrayList<String> pagesVisited = b.getStringArrayList("visited_list");
 
         TextView paths_taken = (TextView) findViewById(R.id.path_taken_text);
         paths_taken.append("\n");
@@ -52,7 +52,7 @@ public class ResultsActivity extends AppCompatActivity {
 
         TextView time_taken = (TextView) findViewById(R.id.time_text);
 
-        int seconds = Integer.parseInt(time.substring(0,1))*3600+Integer.parseInt(time.substring(2,4))*60+Integer.parseInt(time.substring(5,7));
+        int seconds = b.getInt("time");
 
         time_taken.append(" "+seconds);
 
