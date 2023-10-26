@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToLeaderboard(String data){
-
         Intent leaderboardIntent = new Intent(MainActivity.this, LeaderboardActivity.class);
         leaderboardIntent.putExtra("leaderboardData", data);
         Log.d(TAG, data);

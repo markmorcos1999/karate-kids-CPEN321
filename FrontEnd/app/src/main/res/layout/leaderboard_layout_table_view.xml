@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:table="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<!--    https://github.com/ISchwarz23/SortableTableView-->
+    <de.codecrafters.tableview.TableView
+        android:id="@+id/leaderboard_table"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/black"
+        table:flow_horizontalAlign="center"
+        table:flow_verticalAlign="center"
+        table:tableView_columnCount="3"
+        table:tableView_headerColor="@color/DarkGray"
+        table:tableView_headerElevation="10"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
