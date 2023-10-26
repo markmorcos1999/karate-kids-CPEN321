@@ -7,35 +7,51 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/game_bt"
+        android:id="@+id/single_player_game_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="184dp"
-        android:text="@string/game_st"
+        android:text="@string/single_player_game_st"
+        app:layout_constraintBottom_toTopOf="@+id/multi_player_game_st"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
     <Button
         android:id="@+id/stats_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
         android:text="@string/stats_st"
+        app:layout_constraintBottom_toTopOf="@+id/leaderboard_bt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_bt" />
+        app:layout_constraintTop_toBottomOf="@+id/multi_player_game_st"
+        app:layout_constraintVertical_bias="0.5" />
 
     <Button
         android:id="@+id/leaderboard_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
         android:text="@string/leaderboard_st"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stats_bt" />
+        app:layout_constraintTop_toBottomOf="@+id/stats_bt"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/multi_player_game_st"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/multi_player_game_st"
+        app:layout_constraintBottom_toTopOf="@+id/stats_bt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/single_player_game_bt"
+        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

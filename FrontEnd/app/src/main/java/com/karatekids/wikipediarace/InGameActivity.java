@@ -20,19 +20,9 @@ import java.util.Locale;
 
 public class InGameActivity extends AppCompatActivity {
 
-    public static int count;
+    private static int count;
 
-    public static String startUrl;
-
-    public static String endUrl;
-
-    public static String startPage;
-
-    public static String endPage;
-
-    public static ArrayList<String> pagesVisited;
-
-    public static String time;
+    private static ArrayList<String> pagesVisited;
 
     private int seconds = 0;
 
@@ -49,6 +39,8 @@ public class InGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_game);
 
+        Bundle b = getIntent().getExtras();
+
         //TODO: start alert when the server sends a signal saying that the game is over
         AlertDialog.Builder  builder = new AlertDialog.Builder(InGameActivity.this);
         builder.setTitle("Game Over! You lost.");
@@ -56,7 +48,6 @@ public class InGameActivity extends AppCompatActivity {
         builder.setCancelable(false);
         builder.setPositiveButton("End Game", (DialogInterface.OnClickListener) (dialog, which) -> {
             endGame();
-
         });
         builder.setNegativeButton("Continue playing current game for second", (DialogInterface.OnClickListener) (dialog, which) -> {
             dialog.dismiss();
@@ -68,22 +59,18 @@ public class InGameActivity extends AppCompatActivity {
 
         // temporary
         //TODO: use server to randomly get pages
-        startUrl = "https://en.m.wikipedia.org/wiki/Taco";
-        endUrl = "https://en.m.wikipedia.org/wiki/Mexico";
-        startPage = "Taco";
-        endPage = "Mexico";
 
         runTimer();
 
         //TODO: replace with the randomly determined destination page
         TextView destination = (TextView)  findViewById(R.id.destination_page);
-        destination.append(" "+endPage);
+        destination.append(" "+b.getString("end_page"));
 
         WebView web;
         web = (WebView) findViewById(R.id.wikipedia_page_view);
         web.setWebViewClient(new myWebClient());
         web.getSettings().setJavaScriptEnabled(true);
-        web.loadUrl(startUrl);
+        web.loadUrl(b.getString("start_url"));
         count = -1;
         pagesVisited = new ArrayList<>();
     }
@@ -114,19 +101,23 @@ public class InGameActivity extends AppCompatActivity {
 
             pagesVisited.add(view.getTitle().substring(0, view.getTitle().indexOf("-")));
 
+            Bundle b = getIntent().getExtras();
+
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
-            if(url.equals(endUrl)){
+            if(url.equals(b.getString("end_url"))){
                 endGame();
-
             }
         }
     }
 
     private void endGame(){
-        Intent resultIntent = new Intent(InGameActivity.this, ResultsActivity.class);
-        TextView stopwatch = (TextView) findViewById(R.id.stopwatch_text);
-        time = stopwatch.getText().toString();
+        Intent resultIntent = new Intent(InGameActivity.this, ResultsActivity.class)
+                .putExtra("count", count)
+                .putExtra("time", seconds)
+                .putExtra("visited_list", pagesVisited);
+        Log.d(TAG, "Time is: " + seconds);
+        startActivity(resultIntent);
 
         Networker.endGame(InGameActivity.this);
     }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,7 +18,7 @@ public class SignInActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private final static String TAG = "SignInActivity";
     private final int RC_SIGN_IN = 1;
-    private Button connectButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +39,13 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.bypass_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainActivity = new Intent(SignInActivity.this, MainActivity.class);
+                startActivity(mainActivity);
+            }
+        });
 
     }
 
