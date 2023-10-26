@@ -2,7 +2,103 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ga"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/games_won_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/games_won_st"
+        app:layout_constraintBottom_toTopOf="@+id/avg_traversal_time_tv"
+        app:layout_constraintEnd_toStartOf="@+id/games_won_value_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/games_lost_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/games_lost_st"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/games_lost_value_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/avg_traversal_length_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/avg_traversal_length_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/avg_traversal_length_st"
+        app:layout_constraintBottom_toTopOf="@+id/games_lost_tv"
+        app:layout_constraintEnd_toStartOf="@+id/avg_traversal_length_value_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/avg_traversal_time_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/avg_traversal_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/avg_traversal_time_st"
+        app:layout_constraintBottom_toTopOf="@+id/avg_traversal_length_tv"
+        app:layout_constraintEnd_toStartOf="@+id/avg_traversal_time_value_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/games_won_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/games_won_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/games_won_value_st"
+        app:layout_constraintBottom_toTopOf="@+id/avg_traversal_time_value_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/games_won_tv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/games_lost_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/games_lost_value_st"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/games_lost_tv"
+        app:layout_constraintTop_toBottomOf="@+id/avg_traversal_length_value_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/avg_traversal_length_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/avg_traversal_length_value_st"
+        app:layout_constraintBottom_toTopOf="@+id/games_lost_value_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/avg_traversal_length_tv"
+        app:layout_constraintTop_toBottomOf="@+id/avg_traversal_time_value_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/avg_traversal_time_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/avg_traversal_time_value_st"
+        app:layout_constraintBottom_toTopOf="@+id/avg_traversal_length_value_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/avg_traversal_time_tv"
+        app:layout_constraintTop_toBottomOf="@+id/games_won_value_tv"
+        app:layout_constraintVertical_bias="0.5" />
 </androidx.constraintlayout.widget.ConstraintLayout>

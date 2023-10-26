@@ -12,4 +12,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         //TODO: display player statistics of games in lifetime
     }
+    //num games won + lost
+    //most visited page
+    //avg length + time of traversal
 }

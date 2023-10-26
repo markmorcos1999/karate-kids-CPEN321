@@ -41,22 +41,6 @@ public class InGameActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
 
-        //TODO: start alert when the server sends a signal saying that the game is over
-        AlertDialog.Builder  builder = new AlertDialog.Builder(InGameActivity.this);
-        builder.setTitle("Game Over! You lost.");
-        builder.setMessage("Do you want to end the game now and see your results?");
-        builder.setCancelable(false);
-        builder.setPositiveButton("End Game", (DialogInterface.OnClickListener) (dialog, which) -> {
-            endGame();
-        });
-        builder.setNegativeButton("Continue playing current game for second", (DialogInterface.OnClickListener) (dialog, which) -> {
-            dialog.dismiss();
-        });
-
-        AlertDialog alertDialog = builder.create();
-
-        alertDialog.show();
-
         // temporary
         //TODO: use server to randomly get pages
 
@@ -73,6 +57,22 @@ public class InGameActivity extends AppCompatActivity {
         web.loadUrl(b.getString("start_url"));
         count = -1;
         pagesVisited = new ArrayList<>();
+
+        //TODO: start alert when the server sends a signal saying that the game is over
+        AlertDialog.Builder  builder = new AlertDialog.Builder(InGameActivity.this);
+        builder.setTitle("Game Over! You lost.");
+        builder.setMessage("Do you want to end the game now and see your results?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("End Game", (DialogInterface.OnClickListener) (dialog, which) -> {
+            endGame();
+        });
+        builder.setNegativeButton("Continue playing current game for second", (DialogInterface.OnClickListener) (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog alertDialog = builder.create();
+
+        alertDialog.show();
     }
 
     public class myWebClient extends WebViewClient {

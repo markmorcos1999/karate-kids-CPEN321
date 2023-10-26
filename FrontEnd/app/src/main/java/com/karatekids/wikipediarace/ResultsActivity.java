@@ -32,16 +32,18 @@ public class ResultsActivity extends AppCompatActivity {
 
         TextView paths_taken = (TextView) findViewById(R.id.path_taken_text);
         paths_taken.append("\n");
-        for(int i=0;i<pagesVisited.size();i++){
-            paths_taken.append("\n");
-            paths_taken.append(pagesVisited.get(i));
-            if(i+1==pagesVisited.size()){
-                break;
+        if(pagesVisited != null) {
+            for(int i=0;i<pagesVisited.size();i++){
+                paths_taken.append("\n");
+                paths_taken.append(pagesVisited.get(i));
+                if(i+1==pagesVisited.size()){
+                    break;
+                }
+                paths_taken.append("\n");
+                paths_taken.append("|");
+                paths_taken.append("\n");
+                paths_taken.append("V");
             }
-            paths_taken.append("\n");
-            paths_taken.append("|");
-            paths_taken.append("\n");
-            paths_taken.append("V");
         }
 
         paths_taken.append("\n");
