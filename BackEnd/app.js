@@ -7,7 +7,7 @@ var fs = require('fs');
 var LeaderBoardDB = require('./Player/PlayerManager.js')
 var Player = require('./Player/Player.js');
 var Instance = require('./Game/GameManager.js');
-var Session = require('./Session/Session.js');
+var Session = require('./Game/Game.js');
 
 var Matchmaker = require('./Game/Matchmaker.js');
 
