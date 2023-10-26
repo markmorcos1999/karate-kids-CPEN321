@@ -51,7 +51,6 @@ function handleRequest(request, response){
 					}
 					else if(message.subject == "requestGame"){
 						
-						Matchmaker.lookForGame(Instance.playerList[message.data.id])
 						response.end({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
 					}
 					else if(message.subject == "page"){
