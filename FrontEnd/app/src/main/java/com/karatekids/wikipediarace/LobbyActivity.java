@@ -1,10 +1,13 @@
 package com.karatekids.wikipediarace;
 
 import static com.karatekids.wikipediarace.InGameActivity.onClickStart;
+import static com.karatekids.wikipediarace.MainActivity.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,7 +23,6 @@ public class LobbyActivity extends AppCompatActivity {
         else {
             setContentView(R.layout.activity_single_player_lobby);
         }
-        Networker.requestGame(LobbyActivity.this);
         findViewById(R.id.start_game_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,6 +37,13 @@ public class LobbyActivity extends AppCompatActivity {
         });
         //TODO: remove button for starting game and automatically start game when all players have joined
         //----- send request to join game----
+        if(b.getString("game_mode").equals("multi")) {
+            Networker.requestGame(true, LobbyActivity.this);
+        }
+        else{
+            Networker.requestGame(false, LobbyActivity.this);
+        }
+
 
         //---- receive request to join game -----
 
@@ -52,6 +61,8 @@ public class LobbyActivity extends AppCompatActivity {
                 .putExtra("end_page","Mexico")
                 .putExtra("start_url","https://en.m.wikipedia.org/wiki/Taco")
                 .putExtra("end_url","https://en.m.wikipedia.org/wiki/Mexico");
+
+        //TODO: add toasts for start page end page and list of opponents
 
         startActivity(startGameIntent);
     }

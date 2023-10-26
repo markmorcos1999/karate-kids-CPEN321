@@ -54,7 +54,7 @@ public final class Networker {
         thread.start();
     }
 
-    public static void requestGame(LobbyActivity lobby) {
+    public static void requestGame(boolean isMulti, LobbyActivity lobby) {
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -62,6 +62,12 @@ public final class Networker {
                 String ret = executePost(URL, NetworkMessage.gameRequest(name, id));
                 lobby.matchFound(ret);
                 //Here change to the player game activity @TODO
+                if(isMulti){
+
+                }
+                else{
+
+                }
             }
         });
 
