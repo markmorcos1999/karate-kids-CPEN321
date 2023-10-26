@@ -4,6 +4,7 @@ var https = require('https');
 
 var fs = require('fs');
 
+var LeaderBoardDB = require('./Leaderboard/LeaderboardDB.js')
 var Player = require('./player.js');
 var Instance = require('./instance.js');
 var Session = require('./session.js');
@@ -15,12 +16,14 @@ const options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem', 'utf8')
 };
 
-
+const leaderboardDB;
 
 async function run(){
 	console.log("Running")
 	try{//CHANGE THIS TO HTTPS after uncommenting the keys
- 		https.createServer(options, handleRequest).listen(8081)
+ 		Intsance.leaderboardDB = new LeaderboardDB();
+		Instance.firebaseNotifier = new FCMNotifier();
+		https.createServer(options, handleRequest).listen(8081)
 	}
 	catch(err){
 		console.log(err)
@@ -39,6 +42,7 @@ function handleRequest(request, response){
 				request.on('end', function() {
 					message = JSON.parse(body)
 					console.log('Body: ' + message)
+					
 					response.writeHead(200, {'Content-Type': 'text/html'})
 					if(message.subject == "connect"){
 						playerId = connectPlayer(message.data)
@@ -46,18 +50,24 @@ function handleRequest(request, response){
 						response.end(playerId);
 					}
 					else if(message.subject == "requestGame"){
-						//Now we must make the player wait a bit for a response.
+						
 						Matchmaker.lookForGame(Instance.playerList[message.data.id])
 						response.end({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
+					}
+					else if(message.subject == "page"){
+						response.end("200")
+						
 					}
 					else if(message.subject == "endGame"){
 						response.end({gamePosition: "0"})
 					}
 					else if(message.subject == "leaderboard"){
-						response.end(JSON.stringify([{name:"Kyle", ELO: "1000"}, {name:"Mark", ELO: "1001"}]));//Here add the "database get leaderboard"
+					
+						response.end(JSON.stringify(Instance.leaderboardDB.getPlayerData.id)));//Here add the "database get leaderboard"
 					}
 					else if(message.subject == "statsRequest"){
-						response.end(JSON.stringify({gamesWon:"100", gamesLost: "1000", averageLength:"2", averageTime:"2", MostVistedPage:"a"}));//here add the "database get playerinfo
+						
+						response.end(JSON.stringify(Instance.leaderboardDB.getPlayerData.id));//here add the "database get playerinfo
 					}
 					else{
 						response.end("unknown subject")
@@ -73,7 +83,8 @@ function handleRequest(request, response){
 
 function connectPlayer(data){
 	id = data.id;
-	Instance.playerList[id] = new Player(id, data.name); 
+	
+	Instance.playerList[id] = new Player(id, data.name, data.deviceToken); 
   return String(id);
 }
 

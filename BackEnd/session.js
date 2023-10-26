@@ -13,7 +13,7 @@ module.exports = class Session{
 		this.players = newPlayers;
     }
 	
-	function addPlayers(newPlayers){
+	addPlayers(newPlayers){
 		for(var pl in newPlayers){
 			pl.sessionId = id;
 			this.players.push(pl)
@@ -21,7 +21,7 @@ module.exports = class Session{
 		
 	}
 	
-	function startGame(){
+	startGame(){
 		game = new Game(this);
 	}
 	

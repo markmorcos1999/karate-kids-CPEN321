@@ -1,8 +1,6 @@
 module.exports = class MatchMaker{
 
 	//@TODO are these instances the same? If not, how do we fix this?
-	var Instance = require('./instance.js');
-	var Session = require('./session.js');
 
     static playersLooking = {};
 
@@ -26,7 +24,7 @@ module.exports = class MatchMaker{
 	}
 	
 	static lookForGame(player){
-		playersLooking[]
+		//playersLooking[]
 		
 	}
     

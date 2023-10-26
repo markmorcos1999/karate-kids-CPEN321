@@ -1,15 +1,16 @@
 module.exports = class Player{
 
-    constructor(id, username) {
+    constructor(init, deviceToken) {
 		//Check if id exists in database
 		//If no, then createNewDatabase entry
 		//if Yes, get elo
-		this.id = id;
-		this.username = username;
+		this.id = init._id;
+		this.username = init.name;
 		this.sessionId = 0;
-		this.elo = 0;
-		this.gamesWon = 0;
-		this.gamesPlayed = 0;
+		this.elo = init.elo;
+		this.gamesWon = init.gamesWon;
+		this.gamesLost = init.gamesLost;
+		this.deviceToken = deviceToken;
     }
 	
 	
