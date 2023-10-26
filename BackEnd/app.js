@@ -42,7 +42,7 @@ function handleRequest(request, response){
 					
 					response.writeHead(200, {'Content-Type': 'text/html'})
 					if(message.subject == "connect"){
-						playerId = connectPlayer(message.data)
+
 						
 						response.end(playerId);
 					}
