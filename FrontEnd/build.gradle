@@ -4,6 +4,8 @@ buildscript {
         google()
         mavenCentral()
         jcenter()
+        maven {url 'https://jitpack.io'}
+        maven{url "https://jcenter.bintray.com"}
     }
     dependencies {
         classpath 'com.google.gms:google-services:4.4.0' // Make sure the version is correct

@@ -37,12 +37,12 @@ public class LobbyActivity extends AppCompatActivity {
         });
         //TODO: remove button for starting game and automatically start game when all players have joined
         //----- send request to join game----
-        if(b.getString("game_mode").equals("multi")) {
-            Networker.requestGame(true, LobbyActivity.this);
-        }
-        else{
-            Networker.requestGame(false, LobbyActivity.this);
-        }
+//        if(b.getString("game_mode").equals("multi")) {
+//            Networker.requestGame(true, LobbyActivity.this);
+//        }
+//        else{
+//            Networker.requestGame(false, LobbyActivity.this);
+//        }
 
 
         //---- receive request to join game -----
