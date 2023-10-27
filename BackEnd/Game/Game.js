@@ -44,6 +44,10 @@ module.exports = class Game{
 	}
 	
 	playerEndGame(id){
+		if(finishOrder.length == 0){
+			manager.sendLoss(this.players, id)
+		}
+		
 		for(var pl in this.players){
 			if(pl.id == id){
 				this.finishOrder.push(pl);

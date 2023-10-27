@@ -26,6 +26,7 @@ public class LobbyActivity extends AppCompatActivity {
         findViewById(R.id.start_game_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Networker.requestGame(true, LobbyActivity.this);
                 Intent startGameIntent = new Intent(LobbyActivity.this, InGameActivity.class)
                         .putExtra("start_page","Taco")
                         .putExtra("end_page","Mexico")
