@@ -1,10 +1,10 @@
 module.exports = class Game{
 
 
-    constructor(newPlayers) {
-		
+    constructor(newPlayers, _manager) {
+		this.manager = _manager
 		this.id = Math.random();
-		this.finishOrder = 1;
+		this.finishOrder = [];
 		for(var pl in newPlayers){
 			pl.sessionId = id;
 			pl.pageList = {};
@@ -36,14 +36,21 @@ module.exports = class Game{
 		}
 	}
 	
-	endGame(id){
+	playerEndGame(id){
 		for(var pl in this.players){
 			if(pl.id == id){
-				finishOrder += 1;
-				return finishOrder - 1;
+				this.finishOrder.push(pl);
+				if (this.finishOrder.length == this.players.length){
+					gameOver()
+				}
+				return this.finishOrder.length;
 			}
 		}
 		return 0;
+	}
+	
+	gameOver(){
+		manager.completeGame(this.finishOrder, this.id)
 	}
     
 }

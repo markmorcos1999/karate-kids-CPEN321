@@ -6,6 +6,12 @@ class MatchMaker{
     static waitingPlayers = [];
 	static matchingInProgress = false;
 
+	static gameManager;
+	
+	static setGameManager(manager){
+		gameManger = manager;
+	}
+
 	// Finds a match for a player with the given id and elo. Returns a promise that
 	// resolves to the value of the id of the matched player and rejects if no match
 	// could be found within the maximum wait time.

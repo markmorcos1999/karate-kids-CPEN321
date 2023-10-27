@@ -4,38 +4,49 @@ const Game = require('./Game.js');
 const Matchmaker = require('./Matchmaker.js');
 
 module.exports = class GameManager{
-
-//Import those classes here maybe?
-    static playerList = {};
-	static sessionList = {};
-	static leaderboardDB;
-	static firebaseNotifier;
-	static matchmaker;
 	
 	//To get the leaderboard and firebase stuff, using a constructor
 	constructor(_leaderboardDB) {
-        leaderboardDB = _leaderboardDB //Is this a new one?
-		firebaseNotifier = new FCMNotifier()
-		matchmaker = new Matchmaker();
+        this.leaderboardDB = _leaderboardDB //Is this a new one?
+		this.firebaseNotifier = new FCMNotifier()
+		this.playerList = {}
+		this.sessionList = {}
+		Matchmaker.setGameManager(this)
     }
 	
 	addPlayer(init, deviceToken){
 		id = init._id;
-		playerList[id] = new Player(init, deviceToken)
+		this.playerList[id] = new Player(init, deviceToken)
 	}
 	
-	findGame(id){
-		return matchmaker.findMatch(id, playerList[id].elo)
+	playerFindGame(id){
+		return Matchmaker.findMatch(id, playerList[id].elo)
 	}
 	
-	pagePost(data){
-		sessionId = playerList[data.id].sessionId
-		sessionList[sessionId].playerToPage(data.id, data.URL)
+	playerPagePost(data){
+		sessionId = this.playerList[data.id].sessionId
+		this.sessionList[sessionId].playerToPage(data.id, data.URL)
 	}
 	
-	endGame(id){
-		sessionId = playerList[data.id].sessionId
-		return sessionList[sessionId].endGame(data.id)
+	playerEndGame(id){
+		sessionId = this.playerList[data.id].sessionId
+		return this.sessionList[sessionId].playerEndGame(data.id)
+	}
+	
+	completeGame(playerOrder, sessionId){
+		//Insert real elo logic here
+		playerOrder[0].elo += playerOrder.length
+		playerOrder[0].gamesWon += 1;
+		
+		for(int i = 1; i < playerOrder.length, i++){
+			playerOrder[i].elo += (playerOrder.length - i)
+			
+		}
+		
+		for(var i in playerOrder){
+			pl = playerOrder[i]
+			leaderboardDB.updatePlayer(pl.id, pl.elo, pl.gamesWon, pl.gamesLost, 0, 0)
+		}
 	}
     
 }
