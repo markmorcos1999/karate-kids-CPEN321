@@ -19,8 +19,23 @@ module.exports = class GameManager{
 		matchmaker = new Matchmaker();
     }
 	
+	addPlayer(init, deviceToken){
+		id = init._id;
+		playerList[id] = new Player(init, deviceToken)
+	}
 	
+	findGame(id){
+		return matchmaker.findMatch(id, playerList[id].elo)
+	}
 	
+	pagePost(data){
+		sessionId = playerList[data.id].sessionId
+		sessionList[sessionId].playerToPage(data.id, data.URL)
+	}
 	
+	endGame(id){
+		sessionId = playerList[data.id].sessionId
+		return sessionList[sessionId].endGame(data.id)
+	}
     
 }

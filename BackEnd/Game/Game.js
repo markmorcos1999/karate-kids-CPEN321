@@ -4,7 +4,7 @@ module.exports = class Game{
     constructor(newPlayers) {
 		
 		this.id = Math.random();
-		this.finishOrder = 0;
+		this.finishOrder = 1;
 		for(var pl in newPlayers){
 			pl.sessionId = id;
 			pl.pageList = {};
@@ -13,7 +13,7 @@ module.exports = class Game{
 		this.players = newPlayers;
     }
 	
-	getID()[
+	getId()[
 		return this.id;
     }
 	
@@ -26,13 +26,24 @@ module.exports = class Game{
 		
 	}
 	
-	playerToPage(page, id){
+	playerToPage(id, page){
 		for(var pl in this.players){
-			if(pl.id = id){
+			if(pl.id == id){
 				pl.pageList.push(page);
-				//Check if win game
+				//Consider: If player reaches end page, should it be done here?
+				//Consider: Should server check for cheating here?
 			}
 		}
+	}
+	
+	endGame(id){
+		for(var pl in this.players){
+			if(pl.id == id){
+				finishOrder += 1;
+				return finishOrder - 1;
+			}
+		}
+		return 0;
 	}
     
 }

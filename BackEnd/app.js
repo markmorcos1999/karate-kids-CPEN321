@@ -5,7 +5,7 @@ var https = require('https');
 var fs = require('fs');
 
 var LeaderBoardDB = require('./Player/PlayerManager.js')
-var Instance = require('./Game/GameManager.js');
+var GameManager = require('./Game/GameManager.js');
 
 
 const options = {
@@ -14,12 +14,13 @@ const options = {
 };
 
 const leaderboardDB;
+const gameManager;
 
 async function run(){
 	console.log("Running")
 	try{//CHANGE THIS TO HTTPS after uncommenting the keys
- 		Intsance.leaderboardDB = new LeaderboardDB();
-		Instance.firebaseNotifier = new FCMNotifier();
+ 		leaderboardDB = new LeaderboardDB();
+		gameManager = new GameManager(leaderboardDB);
 		https.createServer(options, handleRequest).listen(8081)
 	}
 	catch(err){
@@ -37,25 +38,37 @@ function handleRequest(request, response){
 					console.log('Partial body: ' + body)
 				})
 				request.on('end', function() {
+					
 					message = JSON.parse(body)
 					console.log('Body: ' + message)
-					
 					response.writeHead(200, {'Content-Type': 'text/html'})
+					
 					if(message.subject == "connect"){
-
+						var id = message.data.id;
+						var player;
+						if(leaderboardDB.playerExists(id)){
+							player = leaderboardDB.getPlayerInfo(id)
+						}
+						else{
+							player = leaderboardDB.createNewPlayer(id, message.data.name)
+						}
 						
-						response.end(playerId);
+						gameManager.addPlayer(player, message.data.token)
 					}
 					else if(message.subject == "requestGame"){
 						
-						response.end({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
+						//Assumes "res" in this case is a game, and that game has a method "getMessage()" that returns a string in the right form
+						gameManager.findGame(message.data.id).then((res) => response.end(res.getMessage()))
+						
+						//response.end({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
 					}
 					else if(message.subject == "page"){
+						gameManager.pagePost(message.data)
 						response.end("200")
 						
 					}
 					else if(message.subject == "endGame"){
-						response.end({gamePosition: "0"})
+						response.end(gameManager.endGame(message.subject.id))
 					}
 					else if(message.subject == "leaderboard"){
 					
