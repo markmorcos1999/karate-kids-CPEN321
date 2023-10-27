@@ -26,13 +26,13 @@ public final class Networker {
 
 
     //Here we want to take the sign in info from google and put it in here @TODO
-    public static void serverSignIn(String _id, String _name, SignInActivity UI){
+    public static void serverSignIn(String _id, String _name, String token, SignInActivity UI){
         id = _id;
         name = _name;
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.signInMessage(name, id));
+                String ret = executePost(URL, NetworkMessage.signInMessage(name, id, token));
                 //Check return if correct
                 UI.updateUI(name);
             }
@@ -94,7 +94,7 @@ public final class Networker {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.firebaseTokenPost(name, id, URL));
+                String ret = executePost(URL, NetworkMessage.pagePost(name, id, URL));
                 //What to do after a post? status code returned?
             }
         });
@@ -109,18 +109,6 @@ public final class Networker {
             public void run() {
                 String ret = executePost(URL, NetworkMessage.endGame(name, id));
                 game.updateResults(ret);
-                //What to do after a post? status code returned?
-            }
-        });
-
-        thread.start();
-    }
-
-    public static void sendFirebaseToken(String token) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String ret = executePost(URL, NetworkMessage.firebaseTokenPost(name, id, token));
                 //What to do after a post? status code returned?
             }
         });
