@@ -91,7 +91,7 @@ public class InGameActivity extends AppCompatActivity {
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
             if(url.equals(b.getString("end_url"))){
-                endGame(getBaseContext());
+                endGame(InGameActivity.this);
             }
         }
     }
