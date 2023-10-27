@@ -12,6 +12,7 @@ module.exports = class GameManager{
 		this.playerList = {}
 		this.sessionList = {}
 		Matchmaker.setGameManager(this)
+		this.pageMan = new PageManager()
     }
 	
 	addPlayer(init, deviceToken){
@@ -47,6 +48,24 @@ module.exports = class GameManager{
 			pl = playerOrder[i]
 			leaderboardDB.updatePlayer(pl.id, pl.elo, pl.gamesWon, pl.gamesLost, 0, 0)
 		}
+	}
+	
+	async startGame(p1Id, p2Id){
+		sessionId = Math.random()
+		
+		players = []
+		players.push(this.playerList[p1Id])
+		players.push(this.playerList[p2Id])
+		
+		pageList = await pageMan.getRandomPages()
+		
+		//Check if there isnt a path
+		
+		game = new Game(sessionId, players, pageList, this)
+		this.sessionList[sessionId] = game
+		
+		return game 
+		
 	}
     
 }

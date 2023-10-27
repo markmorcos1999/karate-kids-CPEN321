@@ -1,7 +1,9 @@
+const PageManager = require('../Page/PageManger.js');
+
 module.exports = class Game{
 
 
-    constructor(newPlayers, _manager) {
+    constructor(id, newPlayers, pages, _manager) {
 		this.manager = _manager
 		this.id = Math.random();
 		this.finishOrder = [];
@@ -11,6 +13,11 @@ module.exports = class Game{
 		}
 		this.game = null;
 		this.players = newPlayers;
+		
+		
+		
+		this.start = pages[0]
+		this.end = pages[1]
     }
 	
 	getId()[
@@ -51,6 +58,13 @@ module.exports = class Game{
 	
 	gameOver(){
 		manager.completeGame(this.finishOrder, this.id)
+	}
+	
+	getMessage(){
+		
+		return {startPage:this.start.url, startTitle:this.start.title,
+		endPage:this.end.url, endTitle:this.end.title,
+		players:this.players}
 	}
     
 }

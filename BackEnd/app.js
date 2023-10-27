@@ -58,7 +58,7 @@ function handleRequest(request, response){
 					else if(message.subject == "requestGame"){
 						
 						//Assumes "res" in this case is a game, and that game has a method "getMessage()" that returns a string in the right form
-						gameManager.playerFindGame(message.data.id).then((res) => response.end(res.getMessage()))
+						gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
 						
 						//response.end({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
 					}
@@ -72,11 +72,11 @@ function handleRequest(request, response){
 					}
 					else if(message.subject == "leaderboard"){
 					
-						response.end(JSON.stringify(Instance.leaderboardDB.getPlayerData.id)));//Here add the "database get leaderboard"
+						response.end(JSON.stringify(leaderboardDB.getTopPlayers()));//Here add the "database get leaderboard"
 					}
 					else if(message.subject == "statsRequest"){
 						
-						response.end(JSON.stringify(Instance.leaderboardDB.getPlayerData.id));//here add the "database get playerinfo
+						response.end(JSON.stringify(leaderboardDB.getPlayerInfo(message.data.id)));//here add the "database get playerinfo
 					}
 					else{
 						response.end("unknown subject")

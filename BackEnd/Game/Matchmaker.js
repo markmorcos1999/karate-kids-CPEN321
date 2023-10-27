@@ -57,8 +57,9 @@ class MatchMaker{
 				const allowedDiff = this.allowedEloDiff(p1.waitStartTime, p2.waitStartTime);
 				
 				if (diff <= allowedDiff) {
-					p1.matchPromiseResolve(p2.id);
-					p2.matchPromiseResolve(p1.id);
+					game = gameManager.startGame(p1.id, p2.id)
+					p1.matchPromiseResolve(game);
+					p2.matchPromiseResolve(game);
 
 					this.waitingPlayers.splice(i - 1, 2);
 					
