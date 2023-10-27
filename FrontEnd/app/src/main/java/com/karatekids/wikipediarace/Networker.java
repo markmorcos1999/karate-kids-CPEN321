@@ -1,5 +1,7 @@
 package com.karatekids.wikipediarace;
 
+import android.content.Context;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -103,12 +105,12 @@ public final class Networker {
 
     }
 
-    public static void endGame(InGameActivity game){
+    public static void endGame(Context context){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.endGame(name, id));
-                game.updateResults(ret);
+                InGameActivity.updateResults(context, ret);
                 //What to do after a post? status code returned?
             }
         });
