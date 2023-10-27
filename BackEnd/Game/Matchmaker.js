@@ -1,15 +1,18 @@
-const DIFF_TIME_MULTIPLIER_EXPONENT = 0.002;
 const ALLOWED_DIF_BASE = 50;
+const DIFF_TIME_MULTIPLIER_EXPONENT = 0.002;
+const MATCHING_INTERVAL = 500;
 const MAX_WAIT_TIME = 10000;
 
-class MatchMaker{
-    static waitingPlayers = [];
-	static matchingInProgress = false;
+class MatchMaker {
+	constructor() {
+		this.waitingPlayers = [];
+		this.matchingInProgress = false;
+	}
 
 	// Finds a match for a player with the given id and elo. Returns a promise that
 	// resolves to the value of the id of the matched player and rejects if no match
 	// could be found within the maximum wait time.
-	static async findMatch(playerId, playerElo, waitStartTime = Date.now()) {
+	async findMatch(playerId, playerElo, waitStartTime = Date.now()) {
 		var player = {
 			id: playerId,
 			elo: playerElo,
@@ -33,7 +36,9 @@ class MatchMaker{
 		return player.matchPromise;
 	}
 
-	static matchPlayers() {
+	// Attempts to match players on a set time interval until there are no players left
+	// that need to be matched.
+	async matchPlayers() {
 		if (this.waitingPlayers.length == 0) {
 			this.matchingInProgress = false;
 			return;
@@ -74,10 +79,12 @@ class MatchMaker{
 			}
 		}
 
-		setTimeout(() => this.matchPlayers(), 500);
+		setTimeout(() => this.matchPlayers(), MATCHING_INTERVAL);
 	}
 
-	static allowedEloDiff(time1, time2) {
+	// Computes the maximum allowed elo diff between two waiting players. This increases exponentially
+	// as a player's wait time increases.
+	allowedEloDiff(time1, time2) {
 		const diff = Date.now() - Math.max(time1, time2);
 		return ALLOWED_DIF_BASE + Math.pow(2, diff * DIFF_TIME_MULTIPLIER_EXPONENT);
 	}
