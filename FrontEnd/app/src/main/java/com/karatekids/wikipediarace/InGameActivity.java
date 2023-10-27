@@ -3,6 +3,7 @@ package com.karatekids.wikipediarace;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,7 +25,7 @@ public class InGameActivity extends AppCompatActivity {
 
     private static ArrayList<String> pagesVisited;
 
-    private int seconds = 0;
+    private static int seconds = 0;
 
     // Is the stopwatch running?
     private static boolean running;
@@ -57,22 +58,6 @@ public class InGameActivity extends AppCompatActivity {
         web.loadUrl(b.getString("start_url"));
         count = -1;
         pagesVisited = new ArrayList<>();
-
-        //TODO: start alert when the server sends a signal saying that the game is over
-        AlertDialog.Builder  builder = new AlertDialog.Builder(InGameActivity.this);
-        builder.setTitle("Game Over! You lost.");
-        builder.setMessage("Do you want to end the game now and see your results?");
-        builder.setCancelable(false);
-        builder.setPositiveButton("End Game", (DialogInterface.OnClickListener) (dialog, which) -> {
-            endGame();
-        });
-        builder.setNegativeButton("Continue playing current game for second", (DialogInterface.OnClickListener) (dialog, which) -> {
-            dialog.dismiss();
-        });
-
-        AlertDialog alertDialog = builder.create();
-
-        alertDialog.show();
     }
 
     public class myWebClient extends WebViewClient {
@@ -106,24 +91,24 @@ public class InGameActivity extends AppCompatActivity {
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
             if(url.equals(b.getString("end_url"))){
-                endGame();
+                endGame(getBaseContext());
             }
         }
     }
 
-    private void endGame(){
-        Networker.endGame(InGameActivity.this);
+    public static void endGame(Context context){
+        Networker.endGame(context);
     }
 
-    public void updateResults(String data){
-        Intent resultIntent = new Intent(InGameActivity.this, ResultsActivity.class)
+    public static void updateResults(Context context, String data){
+        Intent resultIntent = new Intent(context, ResultsActivity.class)
                 .putExtra("count", count)
                 .putExtra("time", seconds)
                 .putExtra("visited_list", pagesVisited)
                 .putExtra("data",data);
         Log.d(TAG, "Time is: " + seconds);
         Log.d(TAG, data);
-        startActivity(resultIntent);
+        context.startActivity(resultIntent);
     }
 
     // https://www.geeksforgeeks.org/how-to-create-a-stopwatch-app-using-android-studio/
