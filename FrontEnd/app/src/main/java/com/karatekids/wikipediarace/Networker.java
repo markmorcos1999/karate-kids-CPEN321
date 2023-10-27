@@ -94,7 +94,7 @@ public final class Networker {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.pagePost(name, id, URL));
+                String ret = executePost(URL, NetworkMessage.firebaseTokenPost(name, id, URL));
                 //What to do after a post? status code returned?
             }
         });
@@ -109,6 +109,18 @@ public final class Networker {
             public void run() {
                 String ret = executePost(URL, NetworkMessage.endGame(name, id));
                 game.updateResults(ret);
+                //What to do after a post? status code returned?
+            }
+        });
+
+        thread.start();
+    }
+
+    public static void sendFirebaseToken(String token) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.firebaseTokenPost(name, id, token));
                 //What to do after a post? status code returned?
             }
         });

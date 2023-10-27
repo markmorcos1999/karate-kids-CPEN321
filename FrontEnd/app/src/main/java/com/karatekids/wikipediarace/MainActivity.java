@@ -1,5 +1,7 @@
 package com.karatekids.wikipediarace;
 
+import static com.karatekids.wikipediarace.Networker.sendFirebaseToken;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, token);
                         Log.d(TAG, msg);
+                        sendFirebaseToken(token);
                     }
                 });
 

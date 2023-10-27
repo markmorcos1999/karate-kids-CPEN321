@@ -55,6 +55,20 @@ public final class NetworkMessage {
         return message.toString();
     }
 
+    public static String firebaseTokenPost (String name, String id, String token){
+        try {
+            data = new JSONObject();
+            data.put("name", name);
+            data.put("id", id);
+            data.put("token", token);
+            message = new JSONObject();
+            message.put("subject", "firebaseToken");
+            message.put("data", data);
+        }
+        catch(JSONException e) {
+        }
+        return message.toString();
+    }
     public static String leaderboardRequest(){
         try {
             data = new JSONObject();

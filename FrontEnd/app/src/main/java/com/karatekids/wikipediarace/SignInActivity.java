@@ -107,6 +107,5 @@ public class SignInActivity extends AppCompatActivity {
             Intent mainActivity = new Intent(SignInActivity.this, MainActivity.class);
             mainActivity.putExtra("userName", name);
             startActivity(mainActivity);
-
     }
 }
