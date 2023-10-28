@@ -28,8 +28,8 @@ public class StatisticsActivity extends AppCompatActivity {
             JSONObject obj = new JSONObject(JSON_String);
             games_won.setText(obj.getString("gamesWon"));
             games_lost.setText(obj.getString("gamesLost"));
-            avg_time_length.setText(obj.getString("averageLength"));
-            avg_traversal_length.setText(obj.getString("averageTime"));
+            //avg_time_length.setText(obj.getString("averageLength"));
+            //avg_traversal_length.setText(obj.getString("averageTime"));
 
         } catch (JSONException e) {
             throw new RuntimeException(e);

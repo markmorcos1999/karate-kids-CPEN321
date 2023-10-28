@@ -47,18 +47,15 @@ function handleRequest(request, response){
 					if(message.subject == "signIn"){
 						var id = message.data.id;
 						var player;
-						console.log(await leaderboardDB.playerExists(id))
 						if(await leaderboardDB.playerExists(id)){
 							player = await leaderboardDB.getPlayerInfo(id)
 							console.log("Exists")
-							console.log(player)
 							
 						}
 						else{
 							leaderboardDB.createNewPlayer(id, message.data.name)
 							player = {_id:id, name:message.data.name, elo:0, gamesWon:0, gamesLost:0}
 							console.log("New")
-							console.log(player)
 						}
 						
 						gameManager.addPlayer(player, message.data.token)
@@ -81,11 +78,11 @@ function handleRequest(request, response){
 					}
 					else if(message.subject == "leaderboard"){
 					
-						response.end(JSON.stringify(leaderboardDB.getTopPlayers()));//Here add the "database get leaderboard"
+						response.end(JSON.stringify(await leaderboardDB.getTopPlayers()));//Here add the "database get leaderboard"
 					}
 					else if(message.subject == "statsRequest"){
 						
-						response.end(JSON.stringify(leaderboardDB.getPlayerInfo(message.data.id)));//here add the "database get playerinfo
+						response.end(JSON.stringify(await leaderboardDB.getPlayerInfo(message.data.id)));//here add the "database get playerinfo
 					}
 					else{
 						response.end("unknown subject")

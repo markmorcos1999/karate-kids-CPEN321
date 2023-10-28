@@ -54,7 +54,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
                 rowData[0] = String.valueOf(count);
                 rowData[1] = element.getString("name");
-                rowData[2] = element.getString("ELO");
+                rowData[2] = element.getString("elo");
 
                 leaderboardData[count-1] = rowData;
                 count++;
