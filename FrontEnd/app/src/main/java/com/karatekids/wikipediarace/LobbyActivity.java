@@ -17,11 +17,13 @@ import java.util.ArrayList;
 public class LobbyActivity extends AppCompatActivity {
 
     private final static String TAG = "LobbyActivity";
+    private final static String MULTIPLAYER_MODE = "multi";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle b = getIntent().getExtras();
-        if(b.getString("game_mode").equals("multi")) {
+        if(MULTIPLAYER_MODE.equals(b.getString("game_mode"))) {
             setContentView(R.layout.activity_multi_player_lobby);
         }
         else {
@@ -30,7 +32,7 @@ public class LobbyActivity extends AppCompatActivity {
         findViewById(R.id.start_game_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Networker.requestGame(true, LobbyActivity.this);
+                Networker.requestGame(MULTIPLAYER_MODE, LobbyActivity.this);
                 Intent startGameIntent = new Intent(LobbyActivity.this, InGameActivity.class)
                         .putExtra("start_page","Taco")
                         .putExtra("end_page","Mexico")
@@ -41,12 +43,7 @@ public class LobbyActivity extends AppCompatActivity {
         });
         //TODO: remove button for starting game and automatically start game when all players have joined
         //----- send request to join game----
-        if(b.getString("game_mode").equals("multi")) {
-            Networker.requestGame(true, LobbyActivity.this);
-        }
-        else{
-            Networker.requestGame(false, LobbyActivity.this);
-        }
+        Networker.requestGame(b.getString("game_mode"), LobbyActivity.this);
 
 
         //---- receive request to join game -----
