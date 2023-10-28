@@ -1,6 +1,8 @@
 package com.karatekids.wikipediarace;
 
+import android.media.Image;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StatisticsActivity extends AppCompatActivity {
+    private static final int SILVER_THRESHOLD = 3;
+    private static final int GOLD_THRESHOLD = 6;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +33,16 @@ public class StatisticsActivity extends AppCompatActivity {
             games_lost.setText(obj.getString("gamesLost"));
             //avg_time_length.setText(obj.getString("averageLength"));
             avg_traversal_length.setText(obj.getString("elo"));
+
+            int gamesWon = Integer.parseInt(obj.getString("gamesWon"));
+
+            if(gamesWon >= GOLD_THRESHOLD) {
+                ImageView image = (ImageView) findViewById(R.id.badge_iv);
+                image.setImageResource(R.drawable.gold_badge);
+            } else if (gamesWon < GOLD_THRESHOLD && gamesWon >= SILVER_THRESHOLD) {
+                ImageView image = (ImageView) findViewById(R.id.badge_iv);
+                image.setImageResource(R.drawable.silver_badge);
+            }
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
