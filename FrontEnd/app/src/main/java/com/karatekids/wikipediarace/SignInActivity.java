@@ -41,15 +41,6 @@ public class SignInActivity extends AppCompatActivity {
                 signIn();
             }
         });
-
-        findViewById(R.id.bypass_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mainActivity = new Intent(SignInActivity.this, MainActivity.class);
-                startActivity(mainActivity);
-            }
-        });
-
     }
 
     /**
