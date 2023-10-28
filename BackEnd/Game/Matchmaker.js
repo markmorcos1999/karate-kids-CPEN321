@@ -57,7 +57,10 @@ class MatchMaker {
 				const allowedDiff = this.allowedEloDiff(p1.waitStartTime, p2.waitStartTime);
 				
 				if (diff <= allowedDiff) {
+					console.log("Match Found!")
 					var game = this.gameManager.startGame(p1.id, p2.id)
+					console.log("Sending game back to players");
+					console.log(game);
 					p1.matchPromiseResolve(game);
 					p2.matchPromiseResolve(game);
 

@@ -63,8 +63,9 @@ module.exports = class GameManager{
 		var pageList = await this.pageMan.getRandomPages()
 		
 		//Check if there isnt a path
-		
+		console.log("Making new game!")
 		var game = new Game(sessionId, players, pageList, this)
+		console.log(game)
 		this.sessionList[sessionId] = game
 		
 		return game 

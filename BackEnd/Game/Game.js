@@ -19,6 +19,7 @@ module.exports = class Game{
 		
 		this.start = pages[0]
 		this.end = pages[1]
+		return this;
     }
 	
 	getId(){
