@@ -8,12 +8,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,31 +24,25 @@ import java.util.Locale;
 
 public class InGameActivity extends AppCompatActivity {
 
+    public static Context gameContext;
     private static int count;
 
     private static ArrayList<String> pagesVisited;
 
-    private static int seconds = 0;
-
-    // Is the stopwatch running?
-    private static boolean running;
-
-    private boolean wasRunning;
-
     private final static String TAG = "InGameActivity";
+
+    private static Chronometer clock;
 
     // Followed along with: https://technotalkative.com/android-webviewclient-example/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_game);
+        gameContext = InGameActivity.this;
 
         Bundle b = getIntent().getExtras();
 
-        // temporary
         //TODO: use server to randomly get pages
-
-        runTimer();
 
         //TODO: replace with the randomly determined destination page
         TextView destination = (TextView)  findViewById(R.id.destination_page);
@@ -58,6 +55,11 @@ public class InGameActivity extends AppCompatActivity {
         web.loadUrl(b.getString("start_url"));
         count = -1;
         pagesVisited = new ArrayList<>();
+
+        // https://medium.com/native-mobile-bits/easily-build-a-chronometer-a-simple-stopwatch-1f83aa361ee7
+        clock = (Chronometer) findViewById(R.id.chronometer);
+        clock.setBase(SystemClock.elapsedRealtime());
+        clock.start();
     }
 
     public class myWebClient extends WebViewClient {
@@ -91,6 +93,7 @@ public class InGameActivity extends AppCompatActivity {
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
             if(url.equals(b.getString("end_url"))){
+                clock.stop();
                 endGame(InGameActivity.this);
             }
         }
@@ -103,97 +106,22 @@ public class InGameActivity extends AppCompatActivity {
     public static void updateResults(Context context, String data){
         Intent resultIntent = new Intent(context, ResultsActivity.class)
                 .putExtra("count", count)
-                .putExtra("time", seconds)
+                .putExtra("time", clock.getText().toString())
                 .putExtra("visited_list", pagesVisited)
                 .putExtra("data",data);
-        Log.d(TAG, "Time is: " + seconds);
+        Log.d(TAG, "Time is: " + clock.getText().toString());
         Log.d(TAG, data);
         context.startActivity(resultIntent);
     }
 
-    // https://www.geeksforgeeks.org/how-to-create-a-stopwatch-app-using-android-studio/
-    // If the activity is paused,
-    // stop the stopwatch.
+    // https://stackoverflow.com/questions/18404271/android-back-button-to-specific-activity#:~:text=If%20you%20need%20to%20go%20back%20what%20ever,Your%20intent%20here%20%2F%2F%20%2F%2F%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2F%2F%20return%20true%3B%20%7D
     @Override
-    protected void onPause()
+    public void onBackPressed()
     {
-        super.onPause();
-        wasRunning = running;
-        running = false;
-    }
+        super.onBackPressed();
+        startActivity(new Intent(InGameActivity.this, MainActivity.class));
+        finish();
 
-    // If the activity is resumed,
-    // start the stopwatch
-    // again if it was running previously.
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        if (wasRunning) {
-            running = true;
-        }
-    }
-
-    // Start the stopwatch running
-    // when the Start button is clicked.
-    // Below method gets called
-    // when the Start button is clicked.
-    public static void onClickStart(View view)
-    {
-        running = true;
-    }
-
-    // Sets the NUmber of seconds on the timer.
-    // The runTimer() method uses a Handler
-    // to increment the seconds and
-    // update the text view.
-    private void runTimer()
-    {
-
-        // Get the text view.
-        final TextView stopwatch = (TextView) findViewById(R.id.stopwatch_text);
-
-        // Creates a new Handler
-        final Handler handler
-                = new Handler();
-
-        // Call the post() method,
-        // passing in a new Runnable.
-        // The post() method processes
-        // code without a delay,
-        // so the code in the Runnable
-        // will run almost immediately.
-        handler.post(new Runnable() {
-            @Override
-
-            public void run()
-            {
-                int hours = seconds / 3600;
-                int minutes = (seconds % 3600) / 60;
-                int secs = seconds % 60;
-
-                // Format the seconds into hours, minutes,
-                // and seconds.
-                String time
-                        = String
-                        .format(Locale.getDefault(),
-                                "%d:%02d:%02d", hours,
-                                minutes, secs);
-
-                // Set the text view text.
-                stopwatch.setText(time);
-
-                // If running is true, increment the
-                // seconds variable.
-                if (running) {
-                    seconds++;
-                }
-
-                // Post the code again
-                // with a delay of 1 second.
-                handler.postDelayed(this, 1000);
-            }
-        });
     }
 
 }

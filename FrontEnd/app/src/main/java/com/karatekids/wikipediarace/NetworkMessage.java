@@ -18,7 +18,7 @@ public final class NetworkMessage {
            data.put("name", name);
            data.put("id", id);
            message = new JSONObject();
-           message.put("subject", "gameRequest");
+           message.put("subject", "requestGame");
            message.put("data", data);
        }
        catch(JSONException e) {
