@@ -1,11 +1,8 @@
 package com.karatekids.wikipediarace;
 
-import static android.app.PendingIntent.getActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -33,6 +30,7 @@ public class LobbyActivity extends AppCompatActivity {
         findViewById(R.id.start_game_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Networker.requestGame(true, LobbyActivity.this);
                 Intent startGameIntent = new Intent(LobbyActivity.this, InGameActivity.class)
                         .putExtra("start_page","Taco")
                         .putExtra("end_page","Mexico")
@@ -60,6 +58,7 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     public void matchFound(String data){
+
     //Json string with list of players, ready to start game and intent
         try {
             JSONObject obj = new JSONObject(data);
@@ -113,7 +112,6 @@ public class LobbyActivity extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(LobbyActivity.this, MainActivity.class));
         finish();
-
     }
 
 }
