@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class ResultsActivity extends AppCompatActivity {
@@ -55,11 +59,21 @@ public class ResultsActivity extends AppCompatActivity {
 
         TextView position = (TextView) findViewById(R.id.placement_text);
 
-        position.append(" 3rd\n");
+        String JSON_String = b.getString("data");
+
+        try {
+            JSONObject obj = new JSONObject(JSON_String);
+            String pos = obj.getString("gamePosition");
+            position.append(" "+pos);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
         TextView time_taken = (TextView) findViewById(R.id.time_text);
 
-        int seconds = b.getInt("time");
+        String time = b.getString("time");
+
+        int seconds = Integer.parseInt(time.substring(0,2))*60+Integer.parseInt(time.substring(3,5));
 
         time_taken.append(" "+seconds);
 
