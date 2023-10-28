@@ -57,9 +57,9 @@ module.exports = class Game{
 			if(pl.id == id){
 				this.finishOrder.push(pl);
 				if (this.finishOrder.length == this.players.length){
-					gameOver()
+					this.gameOver()
 				}
-				return this.finishOrder.length;
+				return {gamePosition: this.finishOrder.length};
 			}
 		}
 		return 0;

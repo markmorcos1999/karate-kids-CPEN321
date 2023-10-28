@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +18,15 @@ import java.util.ArrayList;
 public class LobbyActivity extends AppCompatActivity {
 
     private final static String TAG = "LobbyActivity";
+
+    private Handler handler;
     private final static String MULTIPLAYER_MODE = "multi";
+
+    private final static String SINGLEPLAYER_MODE = "single";
+
+    private final static String FRIEND_MODE = "friend";
+
+    private final static String DAILY_MODE = "daily";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,21 +35,16 @@ public class LobbyActivity extends AppCompatActivity {
         if(MULTIPLAYER_MODE.equals(b.getString("game_mode"))) {
             setContentView(R.layout.activity_multi_player_lobby);
         }
-        else {
+        else if(SINGLEPLAYER_MODE.equals(b.getString("game_mode"))) {
             setContentView(R.layout.activity_single_player_lobby);
         }
-        findViewById(R.id.start_game_bt).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Networker.requestGame(MULTIPLAYER_MODE, LobbyActivity.this);
-                Intent startGameIntent = new Intent(LobbyActivity.this, InGameActivity.class)
-                        .putExtra("start_page","Taco")
-                        .putExtra("end_page","Mexico")
-                        .putExtra("start_url","https://en.m.wikipedia.org/wiki/Taco")
-                        .putExtra("end_url","https://en.m.wikipedia.org/wiki/Mexico");
-                startActivity(startGameIntent);
-            }
-        });
+        else if(FRIEND_MODE.equals(b.getString("game_mode"))) {
+            setContentView(R.layout.activity_friend_lobby);
+        }
+        else if(DAILY_MODE.equals(b.getString("game_mode"))) {
+            setContentView(R.layout.activity_daily_challenge_lobby);
+        }
+
         //TODO: remove button for starting game and automatically start game when all players have joined
         //----- send request to join game----
         Networker.requestGame(b.getString("game_mode"), LobbyActivity.this);
@@ -50,8 +54,7 @@ public class LobbyActivity extends AppCompatActivity {
 
         //---- receive response that no other players are waiting in lobby ----
 
-        //to hide loading progress bar:
-        // findViewById(R.id.loading_pb).setVisibility(View.GONE);
+
     }
 
     public void matchFound(String data){
@@ -80,24 +83,33 @@ public class LobbyActivity extends AppCompatActivity {
                 sb.append(playerElo);
                 sb.append("\n");
 
-
                 playerNames.add(playerName);
                 playerElos.add(playerElo);
-
-
-
             }
 
             // https://stackoverflow.com/questions/7607410/finish-activity-after-toast-message-disappears
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    //to hide loading progress bar:
+                    findViewById(R.id.loading_pb).setVisibility(View.GONE);
 
-                    //Toast.makeText(getApplicationContext(),"Players: "+playerNames.toString().substring(1,playerNames.toString().length()-1)+"\n"+"ELOs: "+ playerElos.toString().substring(1,playerNames.toString().length()-1)+"\n"+"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
+                    Bundle b = getIntent().getExtras();
+                    if(b.getString("game_mode").equals("multi")) {
+                        TextView match_found = (TextView) findViewById(R.id.match_found_text);
+                        match_found.setVisibility(View.VISIBLE);
+                        match_found.setText("Match Found!");
+                    }
+                    else {
+                        TextView pages_found = (TextView) findViewById(R.id.pages_found_text);
+                        pages_found.setVisibility(View.VISIBLE);
+                        pages_found.setText("Pages Found!");
+                    }
 
-                    Toast.makeText(getApplicationContext(),sb.toString() +"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Players: "+playerNames.toString().substring(1,playerNames.toString().length()-1)+"\n"+"ELOs: "+ playerElos.toString().substring(1,playerNames.toString().length()-1)+"\n"+"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
 
-                    new Handler().postDelayed(new Runnable() {
+                    handler = new Handler();
+                    Runnable runnable = new Runnable() {
                         @Override
                         public void run() {
                             Intent startGameIntent = new Intent(LobbyActivity.this, InGameActivity.class)
@@ -107,7 +119,8 @@ public class LobbyActivity extends AppCompatActivity {
                                     .putExtra("end_url", endPageUrl);
                             startActivity(startGameIntent);
                         }
-                    }, 3500);
+                    };
+                    handler.postDelayed(runnable, 3500);
                 }
 
             });
@@ -115,7 +128,7 @@ public class LobbyActivity extends AppCompatActivity {
             //TODO: add toasts for start page end page and list of opponents
         }
         catch (JSONException e){
-            e.printStackTrace();
+
         }
     }
 
@@ -124,6 +137,8 @@ public class LobbyActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         super.onBackPressed();
+        if(handler != null)
+            handler.removeCallbacksAndMessages(null);
         startActivity(new Intent(LobbyActivity.this, MainActivity.class));
         finish();
     }

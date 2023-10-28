@@ -27,7 +27,7 @@ public class MessagingService extends FirebaseMessagingService {
                 builder.setPositiveButton("End Game", (DialogInterface.OnClickListener) (dialog, which) -> {
                     InGameActivity.endGame(InGameActivity.gameContext);
                 });
-                builder.setNegativeButton("Continue playing current game for second", (DialogInterface.OnClickListener) (dialog, which) -> {
+                builder.setNegativeButton("Continue Playing", (DialogInterface.OnClickListener) (dialog, which) -> {
                     dialog.dismiss();
                 });
 

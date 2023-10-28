@@ -9,7 +9,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
+import de.codecrafters.tableview.SortableTableView;
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
@@ -47,7 +50,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             String[][] leaderboardData = new String[Math.min(arr.length(), 10)][3];
 
             // iterate through the array and add each row of data to leaderboardData
-            for(int i = Math.min(arr.length() - 1, 9); i >= 0; i--) {
+            for(int i = 0; i <= Math.min(arr.length() - 1, 9); i++) {
                 String[] rowData = new String[3];
 
                 JSONObject element = arr.getJSONObject(i);
