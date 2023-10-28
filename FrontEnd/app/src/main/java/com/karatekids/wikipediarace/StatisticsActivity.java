@@ -5,7 +5,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +36,4 @@ public class StatisticsActivity extends AppCompatActivity {
         }
 
     }
-    //num games won + lost
-    //most visited page
-    //avg length + time of traversal
 }

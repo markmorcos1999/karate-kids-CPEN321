@@ -4,17 +4,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class ResultsActivity extends AppCompatActivity {
+
+    private final static String TAG = "ResultsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
         Bundle b = getIntent().getExtras();
+
+        Log.d(TAG, b.getString("data"));
 
         findViewById(R.id.return_main_bt).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,11 +59,21 @@ public class ResultsActivity extends AppCompatActivity {
 
         TextView position = (TextView) findViewById(R.id.placement_text);
 
-        position.append(" 3rd\n");
+        String JSON_String = b.getString("data");
+
+        try {
+            JSONObject obj = new JSONObject(JSON_String);
+            String pos = obj.getString("gamePosition");
+            position.append(" "+pos);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
         TextView time_taken = (TextView) findViewById(R.id.time_text);
 
-        int seconds = b.getInt("time");
+        String time = b.getString("time");
+
+        int seconds = Integer.parseInt(time.substring(0,2))*60+Integer.parseInt(time.substring(3,5));
 
         time_taken.append(" "+seconds);
 
@@ -63,5 +82,15 @@ public class ResultsActivity extends AppCompatActivity {
 
 
         //TODO: show the results from the page and how the player fared
+    }
+
+    // https://stackoverflow.com/questions/18404271/android-back-button-to-specific-activity#:~:text=If%20you%20need%20to%20go%20back%20what%20ever,Your%20intent%20here%20%2F%2F%20%2F%2F%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2F%2F%20return%20true%3B%20%7D
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        startActivity(new Intent(ResultsActivity.this, MainActivity.class));
+        finish();
+
     }
 }

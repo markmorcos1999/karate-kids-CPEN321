@@ -63,4 +63,14 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, data);
         startActivity(leaderboardIntent);
     }
+
+    // https://stackoverflow.com/questions/18404271/android-back-button-to-specific-activity#:~:text=If%20you%20need%20to%20go%20back%20what%20ever,Your%20intent%20here%20%2F%2F%20%2F%2F%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2F%2F%20return%20true%3B%20%7D
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        startActivity(new Intent(MainActivity.this, MainActivity.class));
+        finish();
+
+    }
 }
