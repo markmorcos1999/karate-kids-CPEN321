@@ -1,7 +1,7 @@
 const ALLOWED_DIF_BASE = 50;
 const DIFF_TIME_MULTIPLIER_EXPONENT = 0.002;
 const MATCHING_INTERVAL = 500;
-const MAX_WAIT_TIME = 10000;
+const MAX_WAIT_TIME = 100000;
 
 class MatchMaker {
 	constructor(manager) {
@@ -57,7 +57,7 @@ class MatchMaker {
 				const allowedDiff = this.allowedEloDiff(p1.waitStartTime, p2.waitStartTime);
 				
 				if (diff <= allowedDiff) {
-					game = gameManager.startGame(p1.id, p2.id)
+					var game = this.gameManager.startGame(p1.id, p2.id)
 					p1.matchPromiseResolve(game);
 					p2.matchPromiseResolve(game);
 

@@ -6,11 +6,11 @@ var fs = require('fs');
 
 var LeaderboardDB = require('./Player/PlayerManager.js')
 var GameManager = require('./Game/GameManager.js');
-
+var Player = require('./Game/Player.js');
 
 const options = {
-	//key: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem', 'utf8'),
-	//cert: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem', 'utf8')
+	key: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem', 'utf8'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem', 'utf8')
 };
 
 var leaderboardDB;
@@ -18,11 +18,11 @@ var gameManager;
 
 async function run(){
 	console.log("Running")
-	try{//CHANGE THIS TO HTTPS after uncommenting the keys
+	try{
  		leaderboardDB = new LeaderboardDB();
 		leaderboardDB.connect();
 		gameManager = new GameManager(leaderboardDB);
-		http.createServer(options, handleRequest).listen(8081)
+		https.createServer(options, handleRequest).listen(8081)
 	}
 	catch(err){
 		console.log(err)
@@ -38,23 +38,31 @@ function handleRequest(request, response){
 					body += data
 					console.log('Partial body: ' + body)
 				})
-				request.on('end', function() {
+				request.on('end', async function() {
 					
 					message = JSON.parse(body)
 					console.log('Body: ' + message)
 					response.writeHead(200, {'Content-Type': 'text/html'})
 					
-					if(message.subject == "connect"){
+					if(message.subject == "signIn"){
 						var id = message.data.id;
 						var player;
-						if(leaderboardDB.playerExists(id)){
-							player = leaderboardDB.getPlayerInfo(id)
+						console.log(await leaderboardDB.playerExists(id))
+						if(await leaderboardDB.playerExists(id)){
+							player = await leaderboardDB.getPlayerInfo(id)
+							console.log("Exists")
+							console.log(player)
+							
 						}
 						else{
-							player = leaderboardDB.createNewPlayer(id, message.data.name)
+							leaderboardDB.createNewPlayer(id, message.data.name)
+							player = {_id:id, name:message.data.name, elo:0, gamesWon:0, gamesLost:0}
+							console.log("New")
+							console.log(player)
 						}
 						
 						gameManager.addPlayer(player, message.data.token)
+						response.end(id)
 					}
 					else if(message.subject == "requestGame"){
 						

@@ -11,12 +11,13 @@ public final class NetworkMessage {
     private static JSONObject data;
 
 
-    public static String gameRequest(String name, String id) { // private constructor
+    public static String gameRequest(String name, String id, boolean multi) { // private constructor
 
        try {
            data = new JSONObject();
            data.put("name", name);
            data.put("id", id);
+           data.put("mode", multi);
            message = new JSONObject();
            message.put("subject", "requestGame");
            message.put("data", data);

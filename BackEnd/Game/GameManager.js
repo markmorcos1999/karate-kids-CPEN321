@@ -2,12 +2,13 @@ const FCKNotifier = require('.././Notifications/NotificationManager.js');
 const Game = require('./Game.js');
 const Matchmaker = require('./Matchmaker.js');
 const PageManager = require('./../Page/PageManager.js');
+const Player = require('./Player.js');
 
 module.exports = class GameManager{
 	
 	//To get the leaderboard and firebase stuff, using a constructor
 	constructor(_leaderboardDB) {
-        this.leaderboardDB = _leaderboardDB //Is this a new one?
+        this.leaderboardDB = _leaderboardDB 
 		this.firebaseNotifier = new FCKNotifier()
 		this.playerList = {}
 		this.sessionList = {}
@@ -16,21 +17,23 @@ module.exports = class GameManager{
     }
 	
 	addPlayer(init, deviceToken){
-		id = init._id;
+		var id = init._id;
+		//console.log(id)
 		this.playerList[id] = new Player(init, deviceToken)
 	}
 	
 	playerFindGame(id){
-		return Matchmaker.findMatch(id, playerList[id].elo)
+		console.log(id)
+		return this.matchmaker.findMatch(id, this.playerList[id].elo)
 	}
 	
 	playerPagePost(data){
-		sessionId = this.playerList[data.id].sessionId
+		var sessionId = this.playerList[data.id].sessionId
 		this.sessionList[sessionId].playerToPage(data.id, data.URL)
 	}
 	
 	playerEndGame(id){
-		sessionId = this.playerList[data.id].sessionId
+		var sessionId = this.playerList[data.id].sessionId
 		return this.sessionList[sessionId].playerEndGame(data.id)
 	}
 	
@@ -45,23 +48,23 @@ module.exports = class GameManager{
 		}
 		
 		for(var i in playerOrder){
-			pl = playerOrder[i]
+			var pl = playerOrder[i]
 			leaderboardDB.updatePlayer(pl.id, pl.elo, pl.gamesWon, pl.gamesLost, 0, 0)
 		}
 	}
 	
 	async startGame(p1Id, p2Id){
-		sessionId = Math.random()
+		var sessionId = Math.random()
 		
-		players = []
+		var players = []
 		players.push(this.playerList[p1Id])
 		players.push(this.playerList[p2Id])
 		
-		pageList = await pageMan.getRandomPages()
+		var pageList = await this.pageMan.getRandomPages()
 		
 		//Check if there isnt a path
 		
-		game = new Game(sessionId, players, pageList, this)
+		var game = new Game(sessionId, players, pageList, this)
 		this.sessionList[sessionId] = game
 		
 		return game 

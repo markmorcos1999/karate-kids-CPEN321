@@ -61,7 +61,7 @@ public final class Networker {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.gameRequest(name, id));
+                String ret = executePost(URL, NetworkMessage.gameRequest(name, id, isMulti));
                 lobby.matchFound(ret);
                 //Here change to the player game activity @TODO
                 if(isMulti){
