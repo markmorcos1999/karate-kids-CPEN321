@@ -44,12 +44,13 @@ module.exports = class GameManager{
 		
 		for(let i = 1; i < playerOrder.length; i++){
 			playerOrder[i].elo += (playerOrder.length - i)
+			playerOrder[i].gamesLost += 1
 			
 		}
 		
 		for(var i in playerOrder){
 			var pl = playerOrder[i]
-			leaderboardDB.updatePlayer(pl.id, pl.elo, pl.gamesWon, pl.gamesLost, 0, 0)
+			this.leaderboardDB.updatePlayer(pl.id, pl.elo, pl.gamesWon, pl.gamesLost, 0, 0)
 		}
 	}
 	
@@ -60,7 +61,8 @@ module.exports = class GameManager{
 		players.push(this.playerList[p1Id])
 		players.push(this.playerList[p2Id])
 		
-		var pageList = await this.pageMan.getRandomPages()
+		//var pageList = await this.pageMan.getRandomPages()
+		var pageList = this.pageMan.getDailyPage()
 		
 		//Check if there isnt a path
 		console.log("Making new game!")
@@ -73,9 +75,12 @@ module.exports = class GameManager{
 	}
 	
 	sendLoss(players, winner){
-		for(var pl in players){
+		for(var i in players){
+			var pl = players[i]
 			if(pl.id != winner){
-				this.firebaseNotifier.sendNotificationToDevice(pl.token, "loss", "You lost!").then((success) => console.log("successful: " + success));
+				console.log("Token: " + pl.deviceToken)
+				console.log(JSON.stringify(pl))
+				this.firebaseNotifier.sendNotificationToDevice(pl.deviceToken, "loss", "You lost!").then((success) => console.log("successful: " + success));
 			}
 			
 		}
