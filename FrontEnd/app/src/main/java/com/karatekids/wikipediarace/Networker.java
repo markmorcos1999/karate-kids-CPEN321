@@ -1,6 +1,7 @@
 package com.karatekids.wikipediarace;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -62,14 +63,10 @@ public final class Networker {
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.gameRequest(name, id, isMulti));
+                Log.d(TAG, ret);
                 lobby.matchFound(ret);
                 //Here change to the player game activity @TODO
-                if(isMulti){
 
-                }
-                else{
-
-                }
             }
         });
 
@@ -91,12 +88,12 @@ public final class Networker {
     }
 
     //Call this any time
-    public static void sendPage(String URL){
+    public static void sendPage(String url){
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.pagePost(name, id, URL));
+                String ret = executePost(URL, NetworkMessage.pagePost(name, id, url));
                 //What to do after a post? status code returned?
             }
         });

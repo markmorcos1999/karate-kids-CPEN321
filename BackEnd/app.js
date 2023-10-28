@@ -64,7 +64,8 @@ function handleRequest(request, response){
 					else if(message.subject == "requestGame"){
 						
 						//Assumes "res" in this case is a game, and that game has a method "getMessage()" that returns a string in the right form
-						gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
+						//gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
+						gameManager.playerFindGame(message.data.id).then((res) => console.log(res.getMessage()))
 						
 						//response.end({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
 					}
@@ -74,7 +75,7 @@ function handleRequest(request, response){
 						
 					}
 					else if(message.subject == "endGame"){
-						response.end(gameManager.playerEndGame(message.subject.id))
+						response.end(gameManager.playerEndGame(message.data.id))
 					}
 					else if(message.subject == "leaderboard"){
 					

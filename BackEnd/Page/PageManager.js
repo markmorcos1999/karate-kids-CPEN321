@@ -17,6 +17,10 @@ class PageManager {
             return [];
         }
     }
+	
+	getDailyPage(){
+		return [{title: "Taco", url: "https://en.m.wikipedia.org/wiki/Taco"},{title: "Mexico", url: "https://en.m.wikipedia.org/wiki/Mexico"}]
+	}
     
 
     // Find the shortest path between two pages.

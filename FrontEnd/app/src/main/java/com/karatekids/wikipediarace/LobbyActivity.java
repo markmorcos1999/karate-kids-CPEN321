@@ -69,19 +69,36 @@ public class LobbyActivity extends AppCompatActivity {
             ArrayList<String> playerNames = new ArrayList<String>();
             ArrayList<String> playerElos = new ArrayList<String>();
             JSONArray playerArray = obj.getJSONArray("players");
+
+            StringBuilder sb = new StringBuilder();
+
             for(int i=0;i<playerArray.length();i++) {
                 JSONObject playerObj = playerArray.getJSONObject(i);
-                String playerName = playerObj.getString("name");
-                String playerElo = playerObj.getString("ELO");
+                String playerName = playerObj.getString("username");
+                String playerElo = playerObj.getString("elo");
+
+                sb.append("Playername: ");
+                sb.append(playerName);
+                sb.append(" Elo: ");
+                sb.append(playerElo);
+                sb.append("\n");
+
+
                 playerNames.add(playerName);
                 playerElos.add(playerElo);
+
+
+
             }
 
             // https://stackoverflow.com/questions/7607410/finish-activity-after-toast-message-disappears
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(),"Players: "+playerNames.toString().substring(1,playerNames.toString().length()-1)+"\n"+"ELOs: "+ playerElos.toString().substring(1,playerNames.toString().length()-1)+"\n"+"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
+
+                    //Toast.makeText(getApplicationContext(),"Players: "+playerNames.toString().substring(1,playerNames.toString().length()-1)+"\n"+"ELOs: "+ playerElos.toString().substring(1,playerNames.toString().length()-1)+"\n"+"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
+
+                    Toast.makeText(getApplicationContext(),sb.toString() +"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
 
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -101,7 +118,7 @@ public class LobbyActivity extends AppCompatActivity {
             //TODO: add toasts for start page end page and list of opponents
         }
         catch (JSONException e){
-
+            e.printStackTrace();
         }
     }
 

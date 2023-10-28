@@ -33,8 +33,8 @@ module.exports = class GameManager{
 	}
 	
 	playerEndGame(id){
-		var sessionId = this.playerList[data.id].sessionId
-		return this.sessionList[sessionId].playerEndGame(data.id)
+		var sessionId = this.playerList[id].sessionId
+		return this.sessionList[sessionId].playerEndGame(id)
 	}
 	
 	completeGame(playerOrder, sessionId){
@@ -65,7 +65,7 @@ module.exports = class GameManager{
 		//Check if there isnt a path
 		console.log("Making new game!")
 		var game = new Game(sessionId, players, pageList, this)
-		console.log(game)
+		//console.log(game)
 		this.sessionList[sessionId] = game
 		
 		return game 
@@ -75,7 +75,7 @@ module.exports = class GameManager{
 	sendLoss(players, winner){
 		for(var pl in players){
 			if(pl.id != winner){
-				firebaseNotifier.sendNotificationToDevice(pl.token, "loss", "You lost!").then((success) => console.log("successful: " + success));
+				this.firebaseNotifier.sendNotificationToDevice(pl.token, "loss", "You lost!").then((success) => console.log("successful: " + success));
 			}
 			
 		}

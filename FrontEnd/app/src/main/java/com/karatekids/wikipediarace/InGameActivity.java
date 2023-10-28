@@ -74,7 +74,7 @@ public class InGameActivity extends AppCompatActivity {
             if(!request.getUrl().getHost().equals("en.m.wikipedia.org")){
                return true;
             }
-            Log.d(TAG, "URL host: "+request.getUrl().getHost());
+            Log.d(TAG, "URL host: "+request.getUrl());
             Networker.sendPage(String.valueOf(request.getUrl()));
             view.loadUrl(String.valueOf(request.getUrl()));
             return true;
