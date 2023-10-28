@@ -100,13 +100,18 @@ public class LobbyActivity extends AppCompatActivity {
                         match_found.setVisibility(View.VISIBLE);
                         match_found.setText("Match Found!");
                     }
-                    else {
+                    else if(b.getString("game_mode").equals("single")) {
                         TextView pages_found = (TextView) findViewById(R.id.pages_found_text);
                         pages_found.setVisibility(View.VISIBLE);
                         pages_found.setText("Pages Found!");
                     }
+                    else if(b.getString("game_mode").equals("daily")) {
+                        TextView pages_found = (TextView) findViewById(R.id.daily_pages_found);
+                        pages_found.setVisibility(View.VISIBLE);
+                        pages_found.setText("Daily Pages Found!");
+                    }
 
-                    Toast.makeText(getApplicationContext(),"Players: "+playerNames.toString().substring(1,playerNames.toString().length()-1)+"\n"+"ELOs: "+ playerElos.toString().substring(1,playerNames.toString().length()-1)+"\n"+"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),sb.toString() +"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
 
                     handler = new Handler();
                     Runnable runnable = new Runnable() {
@@ -122,7 +127,6 @@ public class LobbyActivity extends AppCompatActivity {
                     };
                     handler.postDelayed(runnable, 3500);
                 }
-
             });
 
             //TODO: add toasts for start page end page and list of opponents

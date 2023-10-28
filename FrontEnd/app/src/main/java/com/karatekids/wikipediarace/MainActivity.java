@@ -16,39 +16,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.daily_challenge_bt).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.play_game_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent lobbyIntent = new Intent(MainActivity.this, LobbyActivity.class);
-                lobbyIntent.putExtra("game_mode","daily");
-                startActivity(lobbyIntent);
-            }
-        });
-
-        findViewById(R.id.single_player_game_bt).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent lobbyIntent = new Intent(MainActivity.this, LobbyActivity.class);
-                lobbyIntent.putExtra("game_mode","single");
-                startActivity(lobbyIntent);
-            }
-        });
-
-        findViewById(R.id.multi_player_game_st).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent lobbyIntent = new Intent(MainActivity.this, LobbyActivity.class);
-                lobbyIntent.putExtra("game_mode","multi");
-                startActivity(lobbyIntent);
-            }
-        });
-
-        findViewById(R.id.friend_bt).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent lobbyIntent = new Intent(MainActivity.this, LobbyActivity.class);
-                lobbyIntent.putExtra("game_mode","friend");
-                startActivity(lobbyIntent);
+                Intent playGameIntent = new Intent(MainActivity.this, PlayGameActivity.class);
+                startActivity(playGameIntent);
             }
         });
 
@@ -89,6 +61,5 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(MainActivity.this, MainActivity.class));
         finish();
-
     }
 }

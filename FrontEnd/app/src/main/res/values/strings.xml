@@ -64,5 +64,6 @@
     <string name="friend_mode_wait_st">Waiting for Friend:</string>
     <string name="loading_friend_mode_st">Finding Start and End Pages...</string>
     <string name="friend_mode_look_up_friend_by_id">Input Friend ID:</string>
+    <string name="play_game_st">Play a Game</string>
 
 </resources>

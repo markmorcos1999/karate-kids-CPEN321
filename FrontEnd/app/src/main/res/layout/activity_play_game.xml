@@ -4,44 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".PlayGameActivity">
 
     <Button
-        android:id="@+id/stats_bt"
+        android:id="@+id/single_player_game_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/stats_st"
-        app:layout_constraintBottom_toTopOf="@+id/leaderboard_bt"
+        android:text="@string/single_player_game_st"
+        app:layout_constraintBottom_toTopOf="@+id/multi_player_game_st"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/play_game_bt"
+        app:layout_constraintTop_toBottomOf="@+id/friend_bt"
         app:layout_constraintVertical_bias="0.5" />
 
-
     <Button
-        android:id="@+id/leaderboard_bt"
+        android:id="@+id/multi_player_game_st"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/leaderboard_st"
+        android:text="@string/multi_player_game_st"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stats_bt"
+        app:layout_constraintTop_toBottomOf="@+id/single_player_game_bt"
         app:layout_constraintVertical_bias="0.5" />
 
     <Button
-        android:id="@+id/play_game_bt"
+        android:id="@+id/daily_challenge_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/play_game_st"
-        app:layout_constraintBottom_toTopOf="@+id/stats_bt"
+        android:text="@string/daily_challenge_st"
+        app:layout_constraintBottom_toTopOf="@+id/friend_bt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/friend_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/friend_mode_st"
+        app:layout_constraintBottom_toTopOf="@+id/single_player_game_bt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daily_challenge_bt"
         app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
