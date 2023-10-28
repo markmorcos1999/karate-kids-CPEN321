@@ -24,7 +24,9 @@ module.exports = class GameManager{
 	
 	playerFindGame(id){
 		console.log(id)
+		
 		return this.matchmaker.findMatch(id, this.playerList[id].elo)
+
 	}
 	
 	playerPagePost(data){
@@ -72,6 +74,33 @@ module.exports = class GameManager{
 		
 		return game 
 		
+	}
+	
+	async startDaily(id){
+		var sessionId = Math.random()
+		
+		var players = []
+		players.push(this.playerList[id])
+		var game = new Game(sessionId, players, pageList, this)
+		var pageList = this.pageMan.getDailyPage()
+		
+		this.sessionList[sessionId] = game
+		
+		return game 
+	}
+	
+	async startSingle(id){
+		var sessionId = Math.random()
+		
+		var players = []
+		players.push(this.playerList[id])
+		
+		var game = new Game(sessionId, players, pageList, this)
+		var pageList = await this.pageMan.getRandomPages()
+		
+		this.sessionList[sessionId] = game
+		
+		return game 
 	}
 	
 	sendLoss(players, winner){
