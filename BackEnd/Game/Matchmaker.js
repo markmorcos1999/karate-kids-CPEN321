@@ -4,15 +4,10 @@ const MATCHING_INTERVAL = 500;
 const MAX_WAIT_TIME = 10000;
 
 class MatchMaker {
-	constructor() {
+	constructor(manager) {
 		this.waitingPlayers = [];
 		this.matchingInProgress = false;
-	}
-
-	static gameManager;
-	
-	static setGameManager(manager){
-		gameManger = manager;
+		this.gameManager = manager;
 	}
 
 	// Finds a match for a player with the given id and elo. Returns a promise that

@@ -1,4 +1,4 @@
-const PageManager = require('../Page/PageManger.js');
+const PageManager = require('./../Page/PageManager.js');
 
 module.exports = class Game{
 
@@ -20,7 +20,7 @@ module.exports = class Game{
 		this.end = pages[1]
     }
 	
-	getId()[
+	getId(){
 		return this.id;
     }
 	

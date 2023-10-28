@@ -4,24 +4,25 @@ var https = require('https');
 
 var fs = require('fs');
 
-var LeaderBoardDB = require('./Player/PlayerManager.js')
+var LeaderboardDB = require('./Player/PlayerManager.js')
 var GameManager = require('./Game/GameManager.js');
 
 
 const options = {
-	key: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem', 'utf8'),
-	cert: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem', 'utf8')
+	//key: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem', 'utf8'),
+	//cert: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem', 'utf8')
 };
 
-const leaderboardDB;
-const gameManager;
+var leaderboardDB;
+var gameManager;
 
 async function run(){
 	console.log("Running")
 	try{//CHANGE THIS TO HTTPS after uncommenting the keys
  		leaderboardDB = new LeaderboardDB();
+		leaderboardDB.connect();
 		gameManager = new GameManager(leaderboardDB);
-		https.createServer(options, handleRequest).listen(8081)
+		http.createServer(options, handleRequest).listen(8081)
 	}
 	catch(err){
 		console.log(err)

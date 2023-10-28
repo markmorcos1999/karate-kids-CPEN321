@@ -1,18 +1,18 @@
 const FCKNotifier = require('.././Notifications/NotificationManager.js');
-const serviceAccount = require('./service-account-key.json');
 const Game = require('./Game.js');
 const Matchmaker = require('./Matchmaker.js');
+const PageManager = require('./../Page/PageManager.js');
 
 module.exports = class GameManager{
 	
 	//To get the leaderboard and firebase stuff, using a constructor
 	constructor(_leaderboardDB) {
         this.leaderboardDB = _leaderboardDB //Is this a new one?
-		this.firebaseNotifier = new FCMNotifier()
+		this.firebaseNotifier = new FCKNotifier()
 		this.playerList = {}
 		this.sessionList = {}
-		Matchmaker.setGameManager(this)
 		this.pageMan = new PageManager()
+		this.matchmaker = new Matchmaker(this)
     }
 	
 	addPlayer(init, deviceToken){
@@ -39,7 +39,7 @@ module.exports = class GameManager{
 		playerOrder[0].elo += playerOrder.length
 		playerOrder[0].gamesWon += 1;
 		
-		for(int i = 1; i < playerOrder.length, i++){
+		for(let i = 1; i < playerOrder.length; i++){
 			playerOrder[i].elo += (playerOrder.length - i)
 			
 		}
