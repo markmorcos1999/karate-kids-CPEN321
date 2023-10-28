@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent lobbyIntent = new Intent(MainActivity.this, LobbyActivity.class);
-                lobbyIntent.putExtra("game_mode","challenge");
+                lobbyIntent.putExtra("game_mode","daily");
                 startActivity(lobbyIntent);
             }
         });
@@ -39,6 +39,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent lobbyIntent = new Intent(MainActivity.this, LobbyActivity.class);
                 lobbyIntent.putExtra("game_mode","multi");
+                startActivity(lobbyIntent);
+            }
+        });
+
+        findViewById(R.id.friend_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent lobbyIntent = new Intent(MainActivity.this, LobbyActivity.class);
+                lobbyIntent.putExtra("game_mode","friend");
                 startActivity(lobbyIntent);
             }
         });
