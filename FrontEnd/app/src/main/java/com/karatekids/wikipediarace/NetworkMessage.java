@@ -52,6 +52,7 @@ public final class NetworkMessage {
             message.put("data", data);
         }
         catch(JSONException e) {
+            e.printStackTrace();
         }
         return message.toString();
     }

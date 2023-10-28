@@ -10,7 +10,7 @@ module.exports = class Game{
 		for(var i in newPlayers){
 			var pl = newPlayers[i]
 			pl.sessionId = id;
-			pl.pageList = {};
+			pl.pageList = [];
 		}
 		this.game = null;
 		this.players = newPlayers;
@@ -38,7 +38,7 @@ module.exports = class Game{
 	
 	playerToPage(id, page){
 		for(var i in this.players){
-			var pl = newPlayers[i]
+			var pl = this.players[i]
 			if(pl.id == id){
 				pl.pageList.push(page);
 				//Consider: If player reaches end page, should it be done here?
@@ -48,11 +48,11 @@ module.exports = class Game{
 	}
 	
 	playerEndGame(id){
-		if(finishOrder.length == 0){
-			manager.sendLoss(this.players, id)
+		if(this.finishOrder.length == 0){
+			this.manager.sendLoss(this.players, id)
 		}
 		
-		for(var pl in this.players){
+		for(var i in this.players){
 			var pl = this.players[i]
 			if(pl.id == id){
 				this.finishOrder.push(pl);
@@ -66,7 +66,7 @@ module.exports = class Game{
 	}
 	
 	gameOver(){
-		manager.completeGame(this.finishOrder, this.id)
+		this.manager.completeGame(this.finishOrder, this.id)
 	}
 	
 	getMessage(){
