@@ -21,6 +21,7 @@ import java.util.Locale;
 
 public class InGameActivity extends AppCompatActivity {
 
+    public static Context gameContext;
     private static int count;
 
     private static ArrayList<String> pagesVisited;
@@ -39,6 +40,7 @@ public class InGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_game);
+        gameContext = InGameActivity.this;
 
         Bundle b = getIntent().getExtras();
 
