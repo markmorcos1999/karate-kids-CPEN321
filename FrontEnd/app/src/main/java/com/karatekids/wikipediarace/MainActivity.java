@@ -16,6 +16,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.daily_challenge_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent lobbyIntent = new Intent(MainActivity.this, LobbyActivity.class);
+                lobbyIntent.putExtra("game_mode","challenge");
+                startActivity(lobbyIntent);
+            }
+        });
+
         findViewById(R.id.single_player_game_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
