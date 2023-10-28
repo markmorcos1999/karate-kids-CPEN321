@@ -20,25 +20,34 @@ public class LobbyActivity extends AppCompatActivity {
     private final static String TAG = "LobbyActivity";
 
     private Handler handler;
+    private final static String MULTIPLAYER_MODE = "multi";
+
+    private final static String SINGLEPLAYER_MODE = "single";
+
+    private final static String FRIEND_MODE = "friend";
+
+    private final static String DAILY_MODE = "daily";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle b = getIntent().getExtras();
-        if(b.getString("game_mode").equals("multi")) {
+        if(MULTIPLAYER_MODE.equals(b.getString("game_mode"))) {
             setContentView(R.layout.activity_multi_player_lobby);
         }
-        else {
+        else if(SINGLEPLAYER_MODE.equals(b.getString("game_mode"))) {
             setContentView(R.layout.activity_single_player_lobby);
         }
+        else if(FRIEND_MODE.equals(b.getString("game_mode"))) {
+            setContentView(R.layout.activity_friend_lobby);
+        }
+        else if(DAILY_MODE.equals(b.getString("game_mode"))) {
+            setContentView(R.layout.activity_daily_challenge_lobby);
+        }
+
         //TODO: remove button for starting game and automatically start game when all players have joined
         //----- send request to join game----
-        if(b.getString("game_mode").equals("multi")) {
-            Networker.requestGame(true, LobbyActivity.this);
-        }
-        else{
-            Networker.requestGame(false, LobbyActivity.this);
-        }
+        Networker.requestGame(b.getString("game_mode"), LobbyActivity.this);
 
 
         //---- receive request to join game -----
@@ -128,8 +137,9 @@ public class LobbyActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         super.onBackPressed();
+        if(handler != null)
+            handler.removeCallbacksAndMessages(null);
         startActivity(new Intent(LobbyActivity.this, MainActivity.class));
-        handler.removeCallbacksAndMessages(null);
         finish();
     }
 

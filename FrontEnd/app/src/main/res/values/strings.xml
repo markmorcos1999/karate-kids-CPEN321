@@ -56,6 +56,13 @@
     <string name="games_lost_value_st">bbbb</string>
     <string name="avg_traversal_length_st">Average Traversal Length:</string>
     <string name="avg_traversal_length_value_st">dddd</string>
-    <string name="avg_traversal_time_st">Average Traversal Time:</string>
-    <string name="avg_traversal_time_value_st">eeee</string>
+    <string name="elo_st">Elo:</string>
+    <string name="elo_value_st">eeee</string>
+    <string name="daily_challenge_st">Daily Challenge</string>
+    <string name="loading_daily_challenge_st">Finding Daily Pages:</string>
+    <string name="friend_mode_st">Play Against a Friend</string>
+    <string name="friend_mode_wait_st">Waiting for Friend:</string>
+    <string name="loading_friend_mode_st">Finding Start and End Pages...</string>
+    <string name="friend_mode_look_up_friend_by_id">Input Friend ID:</string>
+
 </resources>

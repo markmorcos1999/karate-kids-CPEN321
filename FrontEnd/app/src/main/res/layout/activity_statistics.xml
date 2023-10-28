@@ -10,95 +10,69 @@
         android:id="@+id/games_won_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="76dp"
         android:text="@string/games_won_st"
-        app:layout_constraintBottom_toTopOf="@+id/avg_traversal_time_tv"
         app:layout_constraintEnd_toStartOf="@+id/games_won_value_tv"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toBottomOf="@+id/elo_tv" />
 
     <TextView
         android:id="@+id/games_lost_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="76dp"
         android:text="@string/games_lost_st"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/games_lost_value_tv"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avg_traversal_length_tv"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <TextView
-        android:id="@+id/avg_traversal_length_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/avg_traversal_length_st"
-        app:layout_constraintBottom_toTopOf="@+id/games_lost_tv"
-        app:layout_constraintEnd_toStartOf="@+id/avg_traversal_length_value_tv"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avg_traversal_time_tv"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <TextView
-        android:id="@+id/avg_traversal_time_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/avg_traversal_time_st"
-        app:layout_constraintBottom_toTopOf="@+id/avg_traversal_length_tv"
-        app:layout_constraintEnd_toStartOf="@+id/avg_traversal_time_value_tv"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.06"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/games_won_tv"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/elo_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="152dp"
+        android:text="@string/elo_st"
+        app:layout_constraintEnd_toStartOf="@+id/elo_value_tv"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/games_won_value_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="72dp"
         android:text="@string/games_won_value_st"
-        app:layout_constraintBottom_toTopOf="@+id/avg_traversal_time_value_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/games_won_tv"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toBottomOf="@+id/elo_value_tv" />
 
     <TextView
         android:id="@+id/games_lost_value_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="72dp"
         android:text="@string/games_lost_value_st"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/games_lost_tv"
-        app:layout_constraintTop_toBottomOf="@+id/avg_traversal_length_value_tv"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <TextView
-        android:id="@+id/avg_traversal_length_value_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/avg_traversal_length_value_st"
-        app:layout_constraintBottom_toTopOf="@+id/games_lost_value_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/avg_traversal_length_tv"
-        app:layout_constraintTop_toBottomOf="@+id/avg_traversal_time_value_tv"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <TextView
-        android:id="@+id/avg_traversal_time_value_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/avg_traversal_time_value_st"
-        app:layout_constraintBottom_toTopOf="@+id/avg_traversal_length_value_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/avg_traversal_time_tv"
         app:layout_constraintTop_toBottomOf="@+id/games_won_value_tv"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.004" />
+
+    <TextView
+        android:id="@+id/elo_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="152dp"
+        android:layout_marginEnd="72dp"
+        android:text="@string/elo_value_st"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
