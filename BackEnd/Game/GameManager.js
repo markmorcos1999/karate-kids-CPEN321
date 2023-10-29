@@ -81,8 +81,10 @@ module.exports = class GameManager{
 		
 		var players = []
 		players.push(this.playerList[id])
-		var game = new Game(sessionId, players, pageList, this)
 		var pageList = this.pageMan.getDailyPage()
+		
+		var game = new Game(sessionId, players, pageList, this)
+		
 		
 		this.sessionList[sessionId] = game
 		
@@ -94,9 +96,9 @@ module.exports = class GameManager{
 		
 		var players = []
 		players.push(this.playerList[id])
-		
-		var game = new Game(sessionId, players, pageList, this)
 		var pageList = await this.pageMan.getRandomPages()
+		var game = new Game(sessionId, players, pageList, this)
+		
 		
 		this.sessionList[sessionId] = game
 		

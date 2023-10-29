@@ -101,12 +101,12 @@ public class LobbyActivity extends AppCompatActivity {
                         match_found.setText("Match Found!");
                     }
                     else {
-                        TextView pages_found = (TextView) findViewById(R.id.pages_found_text);
-                        pages_found.setVisibility(View.VISIBLE);
-                        pages_found.setText("Pages Found!");
+                        //TextView pages_found = (TextView) findViewById(R.id.pages_found_text);
+                        //pages_found.setVisibility(View.VISIBLE);
+                        //pages_found.setText("Pages Found!");
                     }
 
-                    Toast.makeText(getApplicationContext(),"Players: "+playerNames.toString().substring(1,playerNames.toString().length()-1)+"\n"+"ELOs: "+ playerElos.toString().substring(1,playerNames.toString().length()-1)+"\n"+"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),sb.toString() +"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
 
                     handler = new Handler();
                     Runnable runnable = new Runnable() {
