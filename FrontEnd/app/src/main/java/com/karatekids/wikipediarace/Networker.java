@@ -27,6 +27,10 @@ public final class Networker {
 
     }
 
+    public String getId(){
+
+        return id;
+    }
 
     //Here we want to take the sign in info from google and put it in here @TODO
     public static void serverSignIn(String _id, String _name, String token, SignInActivity UI){
