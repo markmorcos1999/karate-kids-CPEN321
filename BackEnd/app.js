@@ -63,11 +63,30 @@ function handleRequest(request, response){
 					}
 					else if(message.subject == "requestGame"){
 						
+						mode = message.data.mode
+						id = message.data.id
 						//Assumes "res" in this case is a game, and that game has a method "getMessage()" that returns a string in the right form
 						//gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
-						gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
-						
+		
+						if(mode == "multi"){
+							gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
+						}
+						else if(mode == "daily"){
+							game = await gameManager.startDaily(id)
+							console.log(game)
+							console.log(JSON.stringify(game.getMessage()))
+							response.end(JSON.stringify(game.getMessage()));
+						}
+						else{
+							game = await gameManager.startSingle(id)
+							console.log(game)
+							response.end(JSON.stringify(game.getMessage()));
+						}
 						//response.end({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
+					}
+					else if(message.subject == "friendGame"){
+						var game = await gameManager.friendSearch(message.data.id, message.data.friendId)
+						response.end(JSON.stringify(game.getMessage()));
 					}
 					else if(message.subject == "page"){
 						gameManager.playerPagePost(message.data)

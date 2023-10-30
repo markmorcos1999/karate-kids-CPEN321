@@ -93,6 +93,7 @@ class MatchMaker {
 		const diff = Date.now() - Math.max(time1, time2);
 		return ALLOWED_DIF_BASE + Math.pow(2, diff * DIFF_TIME_MULTIPLIER_EXPONENT);
 	}
+	
 }
 
 module.exports = MatchMaker;

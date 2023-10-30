@@ -27,6 +27,22 @@ public final class NetworkMessage {
         return message.toString();
     }
 
+    public static String friendGameRequest(String name, String id, String friendId) { // private constructor
+
+        try {
+            data = new JSONObject();
+            data.put("name", name);
+            data.put("id", id);
+            data.put("friendId", friendId);
+            message = new JSONObject();
+            message.put("subject", "friendGame");
+            message.put("data", data);
+        }
+        catch(JSONException e) {
+        }
+        return message.toString();
+    }
+
     public static String statsRequest(String name, String id){
         try {
             data = new JSONObject();

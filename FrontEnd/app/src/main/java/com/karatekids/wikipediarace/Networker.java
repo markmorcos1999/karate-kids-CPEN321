@@ -74,6 +74,23 @@ public final class Networker {
 
     }
 
+    public static void joinWithFriend(String gameMode, LobbyActivity lobby, String friendId) {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.gameRequest(name, id, gameMode));
+                Log.d(TAG, ret);
+                lobby.matchFound(ret);
+                //Here change to the player game activity @TODO
+
+            }
+        });
+
+        thread.start();
+
+    }
+
     public static void getPlayerStats(MainActivity main){
 
         Thread thread = new Thread(new Runnable() {

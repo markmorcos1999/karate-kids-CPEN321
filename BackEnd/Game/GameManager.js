@@ -11,6 +11,7 @@ module.exports = class GameManager{
         this.leaderboardDB = _leaderboardDB 
 		this.firebaseNotifier = new FCKNotifier()
 		this.playerList = {}
+		this.friendList = {}
 		this.sessionList = {}
 		this.pageMan = new PageManager()
 		this.matchmaker = new Matchmaker(this)
@@ -24,7 +25,9 @@ module.exports = class GameManager{
 	
 	playerFindGame(id){
 		console.log(id)
+		
 		return this.matchmaker.findMatch(id, this.playerList[id].elo)
+
 	}
 	
 	playerPagePost(data){
@@ -61,8 +64,8 @@ module.exports = class GameManager{
 		players.push(this.playerList[p1Id])
 		players.push(this.playerList[p2Id])
 		
-		//var pageList = await this.pageMan.getRandomPages()
-		var pageList = this.pageMan.getDailyPage()
+		var pageList = await this.pageMan.getRandomPages()
+		//var pageList = this.pageMan.getDailyPage()
 		
 		//Check if there isnt a path
 		console.log("Making new game!")
@@ -72,6 +75,68 @@ module.exports = class GameManager{
 		
 		return game 
 		
+	}
+	
+	async startDaily(id){
+		var sessionId = Math.random()
+		
+		var players = []
+		players.push(this.playerList[id])
+		var pageList = this.pageMan.getDailyPage()
+		
+		var game = new Game(sessionId, players, pageList, this)
+		
+		
+		this.sessionList[sessionId] = game
+		
+		return game 
+	}
+	
+	async startSingle(id){
+		var sessionId = Math.random()
+		
+		var players = []
+		players.push(this.playerList[id])
+		var pageList = await this.pageMan.getRandomPages()
+		var game = new Game(sessionId, players, pageList, this)
+		
+		
+		this.sessionList[sessionId] = game
+		
+		return game 
+	}
+	
+	//Some code taken from Matchmaker.js
+	async friendSearch(id, friendId){
+		
+		var friend = {
+			id: playerId,
+			id: friendId,
+			done: false
+		};
+
+		friend.matchPromise = new Promise(
+			(res, rej) => { 
+				friend.matchPromiseResolve = res;
+				friend.matchPromiseReject = rej 
+			}
+		);
+		
+		for(var i in this.friendList){
+			if(this.friendList[i] == id && !this.friendList[i].done){
+				
+				var game = startGame(id, friendId)
+				friend.matchPromiseResolve(game)
+				this.friendList[i].matchPromiseResolve(game)
+				this.friendList[i].done = true
+				friend.done = true
+				
+			}
+		}
+		
+		this.friendList[id] = friend
+		
+		return friend.matchPromise
 	}
 	
 	sendLoss(players, winner){
