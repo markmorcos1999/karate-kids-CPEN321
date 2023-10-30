@@ -85,6 +85,7 @@ function handleRequest(request, response){
 						//response.end({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
 					}
 					else if(message.subject == "friendGame"){
+						
 						var game = await gameManager.friendSearch(message.data.id, message.data.friendId)
 						response.end(JSON.stringify(game.getMessage()));
 					}

@@ -110,8 +110,8 @@ module.exports = class GameManager{
 	async friendSearch(id, friendId){
 		
 		var friend = {
-			id: playerId,
-			id: friendId,
+			id: id,
+			friendId: friendId,
 			done: false
 		};
 
@@ -123,9 +123,12 @@ module.exports = class GameManager{
 		);
 		
 		for(var i in this.friendList){
-			if(this.friendList[i] == id && !this.friendList[i].done){
-				
-				var game = startGame(id, friendId)
+			console.log(i)
+			console.log(this.friendList[i].friendId)
+			console.log(id)
+			if(this.friendList[i].friendId == id && !this.friendList[i].done){
+				console.log("PAIR FOUND")
+				var game = this.startGame(id, friendId)
 				friend.matchPromiseResolve(game)
 				this.friendList[i].matchPromiseResolve(game)
 				this.friendList[i].done = true
