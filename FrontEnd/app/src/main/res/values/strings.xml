@@ -61,9 +61,12 @@
     <string name="daily_challenge_st">Daily Challenge</string>
     <string name="loading_daily_challenge_st">Finding Daily Pages:</string>
     <string name="friend_mode_st">Play Against a Friend</string>
-    <string name="friend_mode_wait_st">Waiting for Friend:</string>
-    <string name="loading_friend_mode_st">Finding Start and End Pages...</string>
+    <string name="friend_mode_wait_st">Waiting for Friend and Finding Pages...</string>
     <string name="friend_mode_look_up_friend_by_id">Input Friend ID:</string>
     <string name="play_game_st">Play a Game</string>
+    <string name="friend_id_instruct">Insert Friend ID of Friend Below</string>
+    <string name="player_id_st">Player ID</string>
+    <string name="player_id_value_st">cccc</string>
+    <string name="validate_friend_id_st">Submit</string>
 
 </resources>

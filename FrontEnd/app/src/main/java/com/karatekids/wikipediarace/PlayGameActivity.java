@@ -43,9 +43,8 @@ public class PlayGameActivity extends AppCompatActivity {
         findViewById(R.id.friend_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent lobbyIntent = new Intent(PlayGameActivity.this, LobbyActivity.class);
-                lobbyIntent.putExtra("game_mode","friend");
-                startActivity(lobbyIntent);
+                Intent findFriendIntent = new Intent(PlayGameActivity.this, FindFriendActivity.class);
+                startActivity(findFriendIntent);
             }
         });
     }

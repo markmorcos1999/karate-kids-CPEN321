@@ -14,6 +14,9 @@
         android:theme="@style/Theme.WikipediaRace"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".FindFriendActivity"
+            android:exported="false" />
+        <activity
             android:name=".PlayGameActivity"
             android:exported="false" />
         <activity

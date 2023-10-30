@@ -110,6 +110,11 @@ public class LobbyActivity extends AppCompatActivity {
                         pages_found.setVisibility(View.VISIBLE);
                         pages_found.setText("Daily Pages Found!");
                     }
+                    else if(b.getString("game_mode").equals("friend")) {
+                        TextView friend_found = (TextView) findViewById(R.id.daily_pages_found);
+                        friend_found.setVisibility(View.VISIBLE);
+                        friend_found.setText("Friend Found!");
+                    }
 
                     Toast.makeText(getApplicationContext(),sb.toString() +"Starting Page: "+startPageTitle+"\n"+"Destination Page: "+endPageTitle,Toast.LENGTH_LONG).show();
 

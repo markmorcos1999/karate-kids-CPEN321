@@ -34,8 +34,8 @@
 
     <TextView
         android:id="@+id/elo_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="22dp"
+        android:layout_height="18dp"
         android:layout_marginStart="92dp"
         android:layout_marginTop="152dp"
         android:text="@string/elo_st"
@@ -73,6 +73,28 @@
         android:layout_marginTop="152dp"
         android:layout_marginEnd="72dp"
         android:text="@string/elo_value_st"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/player_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/player_id_st"
+        app:layout_constraintBottom_toTopOf="@+id/elo_tv"
+        app:layout_constraintEnd_toStartOf="@+id/elo_value_tv"
+        app:layout_constraintHorizontal_bias="0.363"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.503" />
+
+    <TextView
+        android:id="@+id/player_id_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="72dp"
+        android:text="@string/player_id_value_st"
+        app:layout_constraintBottom_toTopOf="@+id/elo_value_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
