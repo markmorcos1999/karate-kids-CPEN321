@@ -8,7 +8,8 @@ class PageManager {
         try {
             const randomTitles = await wiki().random(limit);
             const titlePromises = randomTitles.map(async (title) => {
-                const url = await wiki().page(title).then(page => page.url());
+                var url = await wiki().page(title).then(page => page.url());
+				url = url.slice(0, 10) + ".m" + url.slice(10);
                 return { title, url };
             });
             return Promise.all(titlePromises);
