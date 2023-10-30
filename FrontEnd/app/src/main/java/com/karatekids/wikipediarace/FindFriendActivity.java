@@ -22,6 +22,7 @@ public class FindFriendActivity extends AppCompatActivity {
                 //TODO: check if friend id is valid and friend is playing
                 Intent friendLobby = new Intent(FindFriendActivity.this, LobbyActivity.class);
                 friendLobby.putExtra("game_mode","friend");
+                friendLobby.putExtra("friend_id", friend_id.getText().toString());
                 startActivity(friendLobby);
                 //else
                 //friend_id.setError("Please enter a valid friend id string.");
