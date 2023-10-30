@@ -74,12 +74,13 @@ public final class Networker {
 
     }
 
-    public static void joinWithFriend(String gameMode, LobbyActivity lobby, String friendId) {
+    public static void joinWithFriend(LobbyActivity lobby, String friendId) {
 
+        Log.d(TAG, NetworkMessage.friendGameRequest(name, id, friendId));
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.gameRequest(name, id, gameMode));
+                String ret = executePost(URL, NetworkMessage.friendGameRequest(name, id, friendId));
                 Log.d(TAG, ret);
                 lobby.matchFound(ret);
                 //Here change to the player game activity @TODO

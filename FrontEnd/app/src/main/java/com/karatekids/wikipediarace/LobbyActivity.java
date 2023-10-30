@@ -47,7 +47,12 @@ public class LobbyActivity extends AppCompatActivity {
 
         //TODO: remove button for starting game and automatically start game when all players have joined
         //----- send request to join game----
-        Networker.requestGame(b.getString("game_mode"), LobbyActivity.this);
+        if(FRIEND_MODE.equals(b.getString("game_mode"))){
+            Networker.joinWithFriend(LobbyActivity.this, b.getString("friend_id"));
+        }
+        else{
+            Networker.requestGame(b.getString("game_mode"), LobbyActivity.this);
+        }
 
 
         //---- receive request to join game -----
@@ -111,7 +116,7 @@ public class LobbyActivity extends AppCompatActivity {
                         pages_found.setText("Daily Pages Found!");
                     }
                     else if(b.getString("game_mode").equals("friend")) {
-                        TextView friend_found = (TextView) findViewById(R.id.daily_pages_found);
+                        TextView friend_found = (TextView) findViewById(R.id.match_found_text);
                         friend_found.setVisibility(View.VISIBLE);
                         friend_found.setText("Friend Found!");
                     }
