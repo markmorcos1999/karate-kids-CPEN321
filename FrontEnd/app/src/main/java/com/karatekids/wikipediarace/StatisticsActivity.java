@@ -22,6 +22,7 @@ public class StatisticsActivity extends AppCompatActivity {
         TextView games_won = (TextView) findViewById(R.id.games_won_value_tv);
         TextView games_lost = (TextView) findViewById(R.id.games_lost_value_tv);
         TextView elo = (TextView) findViewById(R.id.elo_value_tv);
+        TextView player_id = (TextView) findViewById(R.id.player_id_value_tv);
 
         Bundle b = getIntent().getExtras();
 
@@ -32,6 +33,7 @@ public class StatisticsActivity extends AppCompatActivity {
             games_won.setText(obj.getString("gamesWon"));
             games_lost.setText(obj.getString("gamesLost"));
             elo.setText(obj.getString("elo"));
+            player_id.setText(obj.getString("_id"));
 
             int gamesWon = Integer.parseInt(obj.getString("gamesWon"));
 
