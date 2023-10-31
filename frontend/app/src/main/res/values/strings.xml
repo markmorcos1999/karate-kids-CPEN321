@@ -68,8 +68,8 @@
     <string name="player_id_st">Player ID</string>
     <string name="player_id_value_st">cccc</string>
     <string name="validate_friend_id_st">Submit</string>
+    <string name="guest_signin_st">Sign in as a Guest</string>
     <string name="user_id_st">Your ID:</string>
     <string name="user_id_value_st">abc</string>
     <string name="shortest_path_text_st">Shortest Path Possible:</string>
-
 </resources>

@@ -26,11 +26,11 @@ public final class Networker {
     private Networker () { // private constructor
 
     }
-
+    //ChatGPT usage: No
     public static String getId(){
         return id;
     }
-
+    //ChatGPT usage: No
     //Here we want to take the sign in info from google and put it in here @TODO
     public static void serverSignIn(String _id, String _name, String token, SignInActivity UI){
         id = _id;
@@ -47,7 +47,7 @@ public final class Networker {
         thread.start();
 
     }
-
+    //ChatGPT usage: No
     public static void getLeaderboard(MainActivity main){
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -59,7 +59,7 @@ public final class Networker {
 
         thread.start();
     }
-
+    //ChatGPT usage: No
     public static void requestGame(String gameMode, LobbyActivity lobby) {
 
         Thread thread = new Thread(new Runnable() {
@@ -76,7 +76,7 @@ public final class Networker {
         thread.start();
 
     }
-
+    //ChatGPT usage: No
     public static void joinWithFriend(LobbyActivity lobby, String friendId) {
 
         Log.d(TAG, NetworkMessage.friendGameRequest(name, id, friendId));
@@ -94,7 +94,7 @@ public final class Networker {
         thread.start();
 
     }
-
+    //ChatGPT usage: No
     public static void getPlayerStats(MainActivity main){
 
         Thread thread = new Thread(new Runnable() {
@@ -107,7 +107,7 @@ public final class Networker {
 
         thread.start();
     }
-
+    //ChatGPT usage: No
     //Call this any time
     public static void sendPage(String url){
 
@@ -122,7 +122,7 @@ public final class Networker {
         thread.start();
 
     }
-
+    //ChatGPT usage: No
     public static void endGame(Context context){
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -135,7 +135,7 @@ public final class Networker {
 
         thread.start();
     }
-
+    //ChatGPT usage: No
     //This method comes from https://stackoverflow.com/questions/1359689/how-to-send-http-request-in-java
     //To help with executing a post
     private static String executePost(String targetURL, String urlParameters) {

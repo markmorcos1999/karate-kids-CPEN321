@@ -4,7 +4,7 @@ var https = require('https');
 
 var fs = require('fs');
 
-var LeaderboardDB = require('./Player/PlayerManager.js')
+var PlayerManager = require('./Player/PlayerManager.js')
 var GameManager = require('./Game/GameManager.js');
 var Player = require('./Game/Player.js');
 
@@ -13,15 +13,16 @@ const options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem', 'utf8')
 };
 
-var leaderboardDB;
+var playerManager;
 var gameManager;
 
+//ChatGPT usage: No
 async function run(){
 	console.log("Running")
 	try{
- 		leaderboardDB = new LeaderboardDB();
-		leaderboardDB.connect();
-		gameManager = new GameManager(leaderboardDB);
+ 		playerManager = new PlayerManager();
+		playerManager.connect();
+		gameManager = new GameManager(playerManager);
 		https.createServer(options, handleRequest).listen(8081)
 	}
 	catch(err){
@@ -29,6 +30,7 @@ async function run(){
 	}
 }
 
+//ChatGPT usage: No
 //Code for making post requests from stackoverflow: https://stackoverflow.com/questions/12006417/node-js-server-that-accepts-post-requests			
 function handleRequest(request, response){
 	if(request.method == 'POST'){
@@ -43,17 +45,17 @@ function handleRequest(request, response){
 					message = JSON.parse(body)
 					console.log('Body: ' + message)
 					response.writeHead(200, {'Content-Type': 'text/html'})
-					
+
 					if(message.subject == "signIn"){
 						var id = message.data.id;
 						var player;
-						if(await leaderboardDB.playerExists(id)){
-							player = await leaderboardDB.getPlayerInfo(id)
+						if(await playerManager.playerExists(id)){
+							player = await playerManager.getPlayerInfo(id)
 							console.log("Exists")
 							
 						}
 						else{
-							leaderboardDB.createNewPlayer(id, message.data.name)
+							playerManager.createNewPlayer(id, message.data.name)
 							player = {_id:id, name:message.data.name, elo:0, gamesWon:0, gamesLost:0}
 							console.log("New")
 						}
@@ -65,9 +67,13 @@ function handleRequest(request, response){
 						
 						mode = message.data.mode
 						id = message.data.id
+						
+						
 						//Assumes "res" in this case is a game, and that game has a method "getMessage()" that returns a string in the right form
 						//gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
-		
+						if(!gameManager.checkForPlayer(id)){
+							response.end("400")
+						}
 						if(mode == "multi"){
 							gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
 						}
@@ -86,26 +92,40 @@ function handleRequest(request, response){
 					}
 					else if(message.subject == "friendGame"){
 						
+						if(!gameManager.checkForPlayer(message.data.id)){
+							response.end("400")
+						}
+						
 						var game = await gameManager.friendSearch(message.data.id, message.data.friendId)
 						response.end(JSON.stringify(game.getMessage()));
 					}
 					else if(message.subject == "page"){
+						
+						if(!gameManager.checkForPlayer(message.data.id)){
+							response.end("400")
+						}
+						
 						gameManager.playerPagePost(message.data)
 						response.end("200")
 						
 					}
 					else if(message.subject == "endGame"){
+						
+						if(!gameManager.checkForPlayer(message.data.id)){
+							response.end("400")
+						}
+						
 						result = gameManager.playerEndGame(message.data.id)
 						console.log(result)
 						response.end(JSON.stringify(result))
 					}
 					else if(message.subject == "leaderboard"){
 					
-						response.end(JSON.stringify(await leaderboardDB.getTopPlayers()));//Here add the "database get leaderboard"
+						response.end(JSON.stringify(await playerManager.getTopPlayers()));//Here add the "database get leaderboard"
 					}
 					else if(message.subject == "statsRequest"){
 						
-						response.end(JSON.stringify(await leaderboardDB.getPlayerInfo(message.data.id)));//here add the "database get playerinfo
+						response.end(JSON.stringify(await playerManager.getPlayerInfo(message.data.id)));//here add the "database get playerinfo
 					}
 					else{
 						response.end("unknown subject")
@@ -114,11 +134,11 @@ function handleRequest(request, response){
 			}
 			else{
 				response.writeHead(200);
-				response.end("Welcome to Node.js HTTPS servern");
+				response.end("Node.js server is currently online.");
 			}	
 	
 }
-
+//ChatGPT usage: No
 function connectPlayer(data){
 	id = data.id;
 	Instance.playerList[id] = new Player(id, data.name, data.deviceToken); 

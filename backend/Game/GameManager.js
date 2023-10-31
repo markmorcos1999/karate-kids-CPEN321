@@ -6,9 +6,10 @@ const Player = require('./Player.js');
 
 module.exports = class GameManager{
 	
+	//ChatGPT usage: No
 	//To get the leaderboard and firebase stuff, using a constructor
-	constructor(_leaderboardDB) {
-        this.leaderboardDB = _leaderboardDB 
+	constructor(_playerManager) {
+        this.playerManager = _playerManager 
 		this.firebaseNotifier = new FCKNotifier()
 		this.playerList = {}
 		this.friendList = {}
@@ -16,30 +17,39 @@ module.exports = class GameManager{
 		this.pageMan = new PageManager()
 		this.matchmaker = new Matchmaker(this)
     }
-	
+	//ChatGPT usage: No
 	addPlayer(init, deviceToken){
 		var id = init._id;
 		//console.log(id)
 		this.playerList[id] = new Player(init, deviceToken)
 	}
-	
+	//ChatGPT usage: No
+	checkForPlayer(id){
+		if(this.playerList[id] && id != 0){
+			return true;
+			
+		}
+		else{
+			return false;
+		}
+	}
+	//ChatGPT usage: No
 	playerFindGame(id){
-		console.log(id)
 		
 		return this.matchmaker.findMatch(id, this.playerList[id].elo)
 
 	}
-	
+	//ChatGPT usage: No
 	playerPagePost(data){
 		var sessionId = this.playerList[data.id].sessionId
 		this.sessionList[sessionId].playerToPage(data.id, data.URL)
 	}
-	
+	//ChatGPT usage: No
 	playerEndGame(id){
 		var sessionId = this.playerList[id].sessionId
 		return this.sessionList[sessionId].playerEndGame(id)
 	}
-	
+	//ChatGPT usage: No
 	completeGame(playerOrder, sessionId){
 		//Insert real elo logic here
 		playerOrder[0].elo += playerOrder.length
@@ -53,10 +63,10 @@ module.exports = class GameManager{
 		
 		for(var i in playerOrder){
 			var pl = playerOrder[i]
-			this.leaderboardDB.updatePlayer(pl.id, pl.elo, pl.gamesWon, pl.gamesLost, 0, 0)
+			this.playerManager.updatePlayer(pl.id, pl.elo, pl.gamesWon, pl.gamesLost, 0, 0)
 		}
 	}
-	
+	//ChatGPT usage: No
 	async startGame(p1Id, p2Id){
 		var sessionId = Math.random()
 		
@@ -65,7 +75,7 @@ module.exports = class GameManager{
 		players.push(this.playerList[p2Id])
 		
 		var pageList = await this.pageMan.getRandomPages()
-		var path = this.pageMan.getshortestPath(pageList[0].title, pageList[1].title)
+		var path = await this.pageMan.getshortestPath(pageList[0].title, pageList[1].title)
 		
 		//Check if there isnt a path
 		console.log("Making new game!")
@@ -76,14 +86,14 @@ module.exports = class GameManager{
 		return game 
 		
 	}
-	
+	//ChatGPT usage: No
 	async startDaily(id){
 		var sessionId = Math.random()
 		
 		var players = []
 		players.push(this.playerList[id])
 		var pageList = this.pageMan.getDailyPage()
-		var path = this.pageMan.getshortestPath(pageList[0].title, pageList[1].title)
+		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		
 		var game = new Game(sessionId, players, pageList, path, this)
 		
@@ -92,14 +102,14 @@ module.exports = class GameManager{
 		
 		return game 
 	}
-	
+	//ChatGPT usage: No
 	async startSingle(id){
 		var sessionId = Math.random()
 		
 		var players = []
 		players.push(this.playerList[id])
 		var pageList = await this.pageMan.getRandomPages()
-		var path = this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
+		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		var game = new Game(sessionId, players, pageList, path, this)
 		
 		
@@ -107,7 +117,7 @@ module.exports = class GameManager{
 		
 		return game 
 	}
-	
+	//ChatGPT usage: No
 	//Some code taken from Matchmaker.js
 	async friendSearch(id, friendId){
 		
@@ -143,7 +153,7 @@ module.exports = class GameManager{
 		
 		return friend.matchPromise
 	}
-	
+	//ChatGPT usage: No
 	sendLoss(players, winner){
 		for(var i in players){
 			var pl = players[i]

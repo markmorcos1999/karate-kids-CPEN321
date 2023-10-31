@@ -31,8 +31,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class StatisticsActivity extends AppCompatActivity {
-    private static final int SILVER_THRESHOLD = 3;
-    private static final int GOLD_THRESHOLD = 6;
+    private static final int SILVER_THRESHOLD = 8;
+    private static final int GOLD_THRESHOLD = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,7 @@ public class StatisticsActivity extends AppCompatActivity {
         }
     }
 
+    // https://www.geeksforgeeks.org/how-to-add-share-button-in-toolbar-in-android/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);

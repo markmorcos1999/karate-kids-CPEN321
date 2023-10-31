@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-class LeaderboardDB {
+class PlayerManager {
     constructor() {
         this.client = new MongoClient('mongodb://localhost:27017');
         this.collection = null;
@@ -98,4 +98,4 @@ class LeaderboardDB {
     }
 }
 
-module.exports = LeaderboardDB;
+module.exports = PlayerManager;

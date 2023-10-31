@@ -41,6 +41,37 @@ public class SignInActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
+        findViewById(R.id.guest_signin_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guestSignIn();
+            }
+        });
+    }
+
+    private void guestSignIn() {
+        FirebaseMessaging.getInstance().getToken()
+            .addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                        int range = Integer.MAX_VALUE;
+                        Networker.serverSignIn( Integer.toString((int)(Math.random() * range)), "Guest", "a",SignInActivity.this);
+                        return;
+                    }
+
+                    // Get new FCM registration token
+                    String token = task.getResult();
+
+                    // Log and toast
+                    String msg = getString(R.string.msg_token_fmt, token);
+                    Log.d(TAG, msg);
+                    int range = Integer.MAX_VALUE;
+                    Networker.serverSignIn(Integer.toString((int)(Math.random() * range)), "Guest", token,SignInActivity.this);
+                }
+            });
     }
 
     /**
@@ -102,8 +133,6 @@ public class SignInActivity extends AppCompatActivity {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
             updateUI(null);
         }
-
-
     }
 
     /**
