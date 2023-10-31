@@ -27,8 +27,7 @@ public final class Networker {
 
     }
 
-    public String getId(){
-
+    public static String getId(){
         return id;
     }
 
