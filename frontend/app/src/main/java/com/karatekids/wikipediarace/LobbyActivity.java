@@ -28,6 +28,7 @@ public class LobbyActivity extends AppCompatActivity {
 
     private final static String DAILY_MODE = "daily";
 
+    //ChatGPT usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,7 @@ public class LobbyActivity extends AppCompatActivity {
 
     }
 
+    //ChatGPT usage: No
     public void matchFound(String data){
 
     //Json string with list of players, ready to start game and intent
@@ -94,6 +96,7 @@ public class LobbyActivity extends AppCompatActivity {
 
             // https://stackoverflow.com/questions/7607410/finish-activity-after-toast-message-disappears
             runOnUiThread(new Runnable() {
+                //ChatGPT usage: No
                 @Override
                 public void run() {
                     //to hide loading progress bar:
@@ -125,6 +128,7 @@ public class LobbyActivity extends AppCompatActivity {
 
                     handler = new Handler();
                     Runnable runnable = new Runnable() {
+                        //ChatGPT usage: No
                         @Override
                         public void run() {
                             Intent startGameIntent = new Intent(LobbyActivity.this, InGameActivity.class)
@@ -146,6 +150,7 @@ public class LobbyActivity extends AppCompatActivity {
         }
     }
 
+    //ChatGPT usage: No
     // https://stackoverflow.com/questions/18404271/android-back-button-to-specific-activity#:~:text=If%20you%20need%20to%20go%20back%20what%20ever,Your%20intent%20here%20%2F%2F%20%2F%2F%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2F%2F%20return%20true%3B%20%7D
     @Override
     public void onBackPressed()

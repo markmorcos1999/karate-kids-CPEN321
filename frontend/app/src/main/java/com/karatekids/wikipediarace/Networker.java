@@ -23,6 +23,7 @@ public final class Networker {
     private static String name = "";
 
     final static String TAG = "Networker";
+    //ChatGPT usage: No
     private Networker () { // private constructor
 
     }
@@ -181,8 +182,5 @@ public final class Networker {
                 connection.disconnect();
             }
         }
-
-
     }
-
 }

@@ -19,6 +19,7 @@ public class ResultsActivity extends AppCompatActivity {
 
     private final static String TAG = "ResultsActivity";
 
+    //ChatGPT usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +29,7 @@ public class ResultsActivity extends AppCompatActivity {
         Log.d(TAG, b.getString("data"));
 
         findViewById(R.id.return_main_bt).setOnClickListener(new View.OnClickListener() {
+            //ChatGPT usage: No
             @Override
             public void onClick(View v) {
                 Intent mainIntent = new Intent(ResultsActivity.this, MainActivity.class);
@@ -108,6 +110,7 @@ public class ResultsActivity extends AppCompatActivity {
         //TODO: show the results from the page and how the player fared
     }
 
+    //ChatGPT usage: No
     // https://stackoverflow.com/questions/18404271/android-back-button-to-specific-activity#:~:text=If%20you%20need%20to%20go%20back%20what%20ever,Your%20intent%20here%20%2F%2F%20%2F%2F%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2F%2F%20return%20true%3B%20%7D
     @Override
     public void onBackPressed()

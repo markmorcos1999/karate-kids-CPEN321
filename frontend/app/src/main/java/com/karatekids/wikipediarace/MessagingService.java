@@ -11,6 +11,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class MessagingService extends FirebaseMessagingService {
     final static String TAG = "";
+    //ChatGPT usage: No
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());

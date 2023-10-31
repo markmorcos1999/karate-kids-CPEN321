@@ -22,6 +22,7 @@ public class SignInActivity extends AppCompatActivity {
     private final static String TAG = "SignInActivity";
     private final int RC_SIGN_IN = 1;
 
+    //ChatGPT usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class SignInActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+            //ChatGPT usage: No
             @Override
             public void onClick(View v) {
                 signIn();
@@ -43,6 +45,7 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.guest_signin_bt).setOnClickListener(new View.OnClickListener() {
+            //ChatGPT usage: No
             @Override
             public void onClick(View v) {
                 guestSignIn();
@@ -50,9 +53,11 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
+    //ChatGPT usage: No
     private void guestSignIn() {
         FirebaseMessaging.getInstance().getToken()
             .addOnCompleteListener(new OnCompleteListener<String>() {
+                //ChatGPT usage: No
                 @Override
                 public void onComplete(@NonNull Task<String> task) {
                     if (!task.isSuccessful()) {
@@ -74,6 +79,7 @@ public class SignInActivity extends AppCompatActivity {
             });
     }
 
+    //ChatGPT usage: No
     /**
      * Handle Signin when button is clicked
      */
@@ -82,6 +88,7 @@ public class SignInActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    //ChatGPT usage: No
     /**
      * Checks if user is signed in. If so, proceed to handleSignInResult
      * @param requestCode
@@ -101,6 +108,7 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
+    //ChatGPT usage: No
     /**
      * If google user signin details are accessible upddate ui with them.
      * @param completedTask
@@ -111,6 +119,7 @@ public class SignInActivity extends AppCompatActivity {
 
             FirebaseMessaging.getInstance().getToken()
                     .addOnCompleteListener(new OnCompleteListener<String>() {
+                        //ChatGPT usage: No
                         @Override
                         public void onComplete(@NonNull Task<String> task) {
                             if (!task.isSuccessful()) {
@@ -135,6 +144,7 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
+    //ChatGPT usage: No
     /**
      * Transition into SignInActivity with userName
      * @param name

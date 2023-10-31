@@ -13,6 +13,8 @@ import org.json.JSONObject;
 public class StatisticsActivity extends AppCompatActivity {
     private static final int SILVER_THRESHOLD = 8;
     private static final int GOLD_THRESHOLD = 10;
+
+    //ChatGPT usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

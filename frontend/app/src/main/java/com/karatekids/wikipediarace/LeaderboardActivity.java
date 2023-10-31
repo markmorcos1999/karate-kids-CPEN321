@@ -22,6 +22,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     private static final int[] TABLE_HEADERS = { R.string.table_ranking_st, R.string.table_name_st, R.string.table_score_st };
 
+    //ChatGPT usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

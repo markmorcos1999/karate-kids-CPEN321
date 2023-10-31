@@ -33,6 +33,7 @@ public class InGameActivity extends AppCompatActivity {
 
     private static Chronometer clock;
 
+    //ChatGPT usage: No
     // Followed along with: https://technotalkative.com/android-webviewclient-example/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +64,13 @@ public class InGameActivity extends AppCompatActivity {
     }
 
     public class myWebClient extends WebViewClient {
+        //ChatGPT usage: No
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
         }
 
+        //ChatGPT usage: No
         // display the information from the url embedded in the app instead of opening a web viewer external application
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -80,6 +83,7 @@ public class InGameActivity extends AppCompatActivity {
             return true;
         }
 
+        //ChatGPT usage: No
         @Override
         public void onPageCommitVisible(WebView view, String url) {
             count++;
@@ -99,10 +103,12 @@ public class InGameActivity extends AppCompatActivity {
         }
     }
 
+    //ChatGPT usage: No
     public static void endGame(Context context){
         Networker.endGame(context);
     }
 
+    //ChatGPT usage: No
     public static void updateResults(Context context, String data){
         Intent resultIntent = new Intent(context, ResultsActivity.class)
                 .putExtra("count", count)
@@ -114,6 +120,7 @@ public class InGameActivity extends AppCompatActivity {
         context.startActivity(resultIntent);
     }
 
+    //ChatGPT usage: No
     // https://stackoverflow.com/questions/18404271/android-back-button-to-specific-activity#:~:text=If%20you%20need%20to%20go%20back%20what%20ever,Your%20intent%20here%20%2F%2F%20%2F%2F%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2A%2F%2F%20return%20true%3B%20%7D
     @Override
     public void onBackPressed()
