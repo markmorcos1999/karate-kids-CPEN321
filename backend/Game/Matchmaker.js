@@ -4,6 +4,7 @@ const MATCHING_INTERVAL = 500;
 const MAX_WAIT_TIME = 100000;
 
 class MatchMaker {
+	// ChatGPT usage: Partial
 	constructor(manager) {
 		this.waitingPlayers = [];
 		this.matchingInProgress = false;
@@ -13,6 +14,7 @@ class MatchMaker {
 	// Finds a match for a player with the given id and elo. Returns a promise that
 	// resolves to the value of the id of the matched player and rejects if no match
 	// could be found within the maximum wait time.
+	// ChatGPT usage: Partial
 	async findMatch(playerId, playerElo, waitStartTime = Date.now()) {
 		var player = {
 			id: playerId,
@@ -39,6 +41,7 @@ class MatchMaker {
 
 	// Attempts to match players on a set time interval until there are no players left
 	// that need to be matched.
+	// ChatGPT usage: Partial
 	async matchPlayers() {
 		if (this.waitingPlayers.length == 0) {
 			this.matchingInProgress = false;
@@ -89,11 +92,11 @@ class MatchMaker {
 
 	// Computes the maximum allowed elo diff between two waiting players. This increases exponentially
 	// as a player's wait time increases.
+	// ChatGPT usage: Partial
 	allowedEloDiff(time1, time2) {
 		const diff = Date.now() - Math.max(time1, time2);
 		return ALLOWED_DIF_BASE + Math.pow(2, diff * DIFF_TIME_MULTIPLIER_EXPONENT);
 	}
-	
 }
 
 module.exports = MatchMaker;

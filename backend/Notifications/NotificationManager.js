@@ -1,8 +1,8 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('./service-account-key.json');
 
-// ChatGPT generated this
 class FCMNotifier {
+  // ChatGPT usage: Partial
   constructor() {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount)
@@ -11,7 +11,7 @@ class FCMNotifier {
     this.messaging = admin.messaging();
   }
 
-  // Send an FCM notification to a specific device token
+  // ChatGPT usage: Yes
   async sendNotificationToDevice(deviceToken, title, body) {
     try {
       const message = {
@@ -25,10 +25,10 @@ class FCMNotifier {
       const response = await this.messaging.send(message);
       console.log('Successfully sent notification:', response);
 
-      return true; // Notification sent successfully
+      return true;
     } catch (error) {
       console.error('Error sending notification:', error);
-      return false; // Failed to send the notification
+      return false;
     }
   }
 }
