@@ -7,8 +7,8 @@ const Player = require('./Player.js');
 module.exports = class GameManager{
 	
 	//To get the leaderboard and firebase stuff, using a constructor
-	constructor(_leaderboardDB) {
-        this.leaderboardDB = _leaderboardDB 
+	constructor(_playerManager) {
+        this.playerManager = _playerManager 
 		this.firebaseNotifier = new FCKNotifier()
 		this.playerList = {}
 		this.friendList = {}
@@ -62,7 +62,7 @@ module.exports = class GameManager{
 		
 		for(var i in playerOrder){
 			var pl = playerOrder[i]
-			this.leaderboardDB.updatePlayer(pl.id, pl.elo, pl.gamesWon, pl.gamesLost, 0, 0)
+			this.playerManager.updatePlayer(pl.id, pl.elo, pl.gamesWon, pl.gamesLost, 0, 0)
 		}
 	}
 	
