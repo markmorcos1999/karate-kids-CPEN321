@@ -65,11 +65,11 @@ module.exports = class GameManager{
 		players.push(this.playerList[p2Id])
 		
 		var pageList = await this.pageMan.getRandomPages()
-		//var pageList = this.pageMan.getDailyPage()
+		var path = this.pageMan.getshortestPath(pageList[0].title, pageList[1].title)
 		
 		//Check if there isnt a path
 		console.log("Making new game!")
-		var game = new Game(sessionId, players, pageList, this)
+		var game = new Game(sessionId, players, pageList, path, this)
 		//console.log(game)
 		this.sessionList[sessionId] = game
 		
@@ -83,8 +83,9 @@ module.exports = class GameManager{
 		var players = []
 		players.push(this.playerList[id])
 		var pageList = this.pageMan.getDailyPage()
+		var path = this.pageMan.getshortestPath(pageList[0].title, pageList[1].title)
 		
-		var game = new Game(sessionId, players, pageList, this)
+		var game = new Game(sessionId, players, pageList, path, this)
 		
 		
 		this.sessionList[sessionId] = game
@@ -98,7 +99,8 @@ module.exports = class GameManager{
 		var players = []
 		players.push(this.playerList[id])
 		var pageList = await this.pageMan.getRandomPages()
-		var game = new Game(sessionId, players, pageList, this)
+		var path = this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
+		var game = new Game(sessionId, players, pageList, path, this)
 		
 		
 		this.sessionList[sessionId] = game
