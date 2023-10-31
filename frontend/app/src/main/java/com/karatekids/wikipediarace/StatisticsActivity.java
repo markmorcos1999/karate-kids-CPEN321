@@ -11,8 +11,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StatisticsActivity extends AppCompatActivity {
-    private static final int SILVER_THRESHOLD = 3;
-    private static final int GOLD_THRESHOLD = 6;
+    private static final int SILVER_THRESHOLD = 8;
+    private static final int GOLD_THRESHOLD = 10;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
