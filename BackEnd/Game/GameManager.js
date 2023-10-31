@@ -23,8 +23,17 @@ module.exports = class GameManager{
 		this.playerList[id] = new Player(init, deviceToken)
 	}
 	
+	checkForPlayer(id){
+		if(this.playerList[id] && id != 0){
+			return true;
+			
+		}
+		else{
+			return false;
+		}
+	}
+	
 	playerFindGame(id){
-		console.log(id)
 		
 		return this.matchmaker.findMatch(id, this.playerList[id].elo)
 
@@ -65,7 +74,7 @@ module.exports = class GameManager{
 		players.push(this.playerList[p2Id])
 		
 		var pageList = await this.pageMan.getRandomPages()
-		var path = this.pageMan.getshortestPath(pageList[0].title, pageList[1].title)
+		var path = await this.pageMan.getshortestPath(pageList[0].title, pageList[1].title)
 		
 		//Check if there isnt a path
 		console.log("Making new game!")
@@ -83,7 +92,7 @@ module.exports = class GameManager{
 		var players = []
 		players.push(this.playerList[id])
 		var pageList = this.pageMan.getDailyPage()
-		var path = this.pageMan.getshortestPath(pageList[0].title, pageList[1].title)
+		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		
 		var game = new Game(sessionId, players, pageList, path, this)
 		
@@ -99,7 +108,7 @@ module.exports = class GameManager{
 		var players = []
 		players.push(this.playerList[id])
 		var pageList = await this.pageMan.getRandomPages()
-		var path = this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
+		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		var game = new Game(sessionId, players, pageList, path, this)
 		
 		

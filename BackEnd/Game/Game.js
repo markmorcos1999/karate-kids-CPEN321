@@ -19,8 +19,8 @@ module.exports = class Game{
 		
 		this.start = pages[0]
 		this.end = pages[1]
-		console.log(shortestPath)
-		this.shortestPath = shortestPath
+		console.log(_shortestPath)
+		this.shortestPath = _shortestPath
 		return this;
     }
 	

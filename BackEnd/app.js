@@ -43,7 +43,7 @@ function handleRequest(request, response){
 					message = JSON.parse(body)
 					console.log('Body: ' + message)
 					response.writeHead(200, {'Content-Type': 'text/html'})
-					
+
 					if(message.subject == "signIn"){
 						var id = message.data.id;
 						var player;
@@ -65,9 +65,13 @@ function handleRequest(request, response){
 						
 						mode = message.data.mode
 						id = message.data.id
+						
+						
 						//Assumes "res" in this case is a game, and that game has a method "getMessage()" that returns a string in the right form
 						//gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
-		
+						if(!gameManager.checkForPlayer(id)){
+							response.end("400")
+						}
 						if(mode == "multi"){
 							gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
 						}
@@ -86,15 +90,29 @@ function handleRequest(request, response){
 					}
 					else if(message.subject == "friendGame"){
 						
+						if(!gameManager.checkForPlayer(message.data.id)){
+							response.end("400")
+						}
+						
 						var game = await gameManager.friendSearch(message.data.id, message.data.friendId)
 						response.end(JSON.stringify(game.getMessage()));
 					}
 					else if(message.subject == "page"){
+						
+						if(!gameManager.checkForPlayer(message.data.id)){
+							response.end("400")
+						}
+						
 						gameManager.playerPagePost(message.data)
 						response.end("200")
 						
 					}
 					else if(message.subject == "endGame"){
+						
+						if(!gameManager.checkForPlayer(message.data.id)){
+							response.end("400")
+						}
+						
 						result = gameManager.playerEndGame(message.data.id)
 						console.log(result)
 						response.end(JSON.stringify(result))
@@ -114,7 +132,7 @@ function handleRequest(request, response){
 			}
 			else{
 				response.writeHead(200);
-				response.end("Welcome to Node.js HTTPS servern");
+				response.end("Node.js server is currently online.");
 			}	
 	
 }
