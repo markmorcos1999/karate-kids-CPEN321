@@ -158,7 +158,7 @@ public class LobbyActivity extends AppCompatActivity {
         super.onBackPressed();
         if(handler != null)
             handler.removeCallbacksAndMessages(null);
-        startActivity(new Intent(LobbyActivity.this, MainActivity.class));
+        startActivity(new Intent(LobbyActivity.this, PlayGameActivity.class));
         finish();
     }
 

@@ -75,7 +75,7 @@ module.exports = class GameManager{
 		players.push(this.playerList[p2Id])
 		
 		var pageList = await this.pageMan.getRandomPages()
-		var path = await this.pageMan.getshortestPath(pageList[0].title, pageList[1].title)
+		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		
 		//Check if there isnt a path
 		console.log("Making new game!")
