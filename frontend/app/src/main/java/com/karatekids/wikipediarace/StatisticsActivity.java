@@ -1,18 +1,23 @@
 package com.karatekids.wikipediarace;
 
-import android.media.Image;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StatisticsActivity extends AppCompatActivity {
-    private static final int SILVER_THRESHOLD = 3;
-    private static final int GOLD_THRESHOLD = 6;
+    private static final int SILVER_THRESHOLD = 8;
+    private static final int GOLD_THRESHOLD = 10;
+
+    //ChatGPT usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,43 @@ public class StatisticsActivity extends AppCompatActivity {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    //ChatGPT usage: No
+    // https://www.geeksforgeeks.org/how-to-add-share-button-in-toolbar-in-android/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        // first parameter is the file for icon and second one is menu
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //ChatGPT usage: No
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // We are using switch case because multiple icons can be kept
+        switch (item.getItemId()) {
+            case R.id.shareButton:
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+
+                // type of the content to be shared
+                sharingIntent.setType("text/plain");
+
+                // Body of the content
+                String shareBody = "Share your stats with friends!";
+
+                // subject of the content. you can share anything
+                String shareSubject = "Share stats";
+
+                // passing body of the content
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+
+                // passing subject of the content
+                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject);
+                startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
