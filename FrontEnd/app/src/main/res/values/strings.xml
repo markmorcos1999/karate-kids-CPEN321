@@ -9,7 +9,7 @@
     <string name="destination_page_st">Destination Page: </string>
     <string name="return_main_st">Return to Main Page</string>
     <string name="links_clicked_st">Number of Links to Reach Destination:</string>
-    <string name="paths_taken_st">Path traversed from start page: </string>
+    <string name="paths_taken_st">Your Path Traversal: </string>
     <string name="placement_st">Position: </string>
     <string name="time_taken_st">Time to Destination: </string>
     <string name="number_of_seconds_st">Seconds:</string>
@@ -70,5 +70,6 @@
     <string name="validate_friend_id_st">Submit</string>
     <string name="user_id_st">Your ID:</string>
     <string name="user_id_value_st">abc</string>
+    <string name="shortest_path_text_st">Shortest Path Possible:</string>
 
 </resources>

@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="@string/paths_taken_st"
             android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/placement_text"
+            app:layout_constraintBottom_toTopOf="@+id/shortest_path_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/path_taken_text"
+            app:layout_constraintTop_toBottomOf="@+id/shortest_path_text"
             app:layout_constraintVertical_bias="0.5" />
 
         <TextView
@@ -71,6 +71,20 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/placement_text"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <TextView
+            android:id="@+id/shortest_path_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shortest_path_text_st"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/placement_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/path_taken_text"
             app:layout_constraintVertical_bias="0.5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
