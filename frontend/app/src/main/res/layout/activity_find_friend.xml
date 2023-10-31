@@ -11,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
         android:hint="Insert Friend ID"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/validate_friend_id_bt"
@@ -44,5 +44,27 @@
         app:layout_constraintStart_toEndOf="@+id/friend_id_bar"
         app:layout_constraintTop_toBottomOf="@+id/friend_id_instructions"
         app:layout_constraintVertical_bias="0.237" />
+
+    <TextView
+        android:id="@+id/user_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/user_id_st"
+        app:layout_constraintBottom_toTopOf="@+id/friend_id_instructions"
+        app:layout_constraintEnd_toStartOf="@+id/user_id_value_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/user_id_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/user_id_value_st"
+        app:layout_constraintBottom_toTopOf="@+id/friend_id_instructions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/user_id_tv"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

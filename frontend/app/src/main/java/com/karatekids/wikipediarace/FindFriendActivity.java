@@ -24,9 +24,10 @@ public class FindFriendActivity extends AppCompatActivity {
                 friendLobby.putExtra("game_mode","friend");
                 friendLobby.putExtra("friend_id", friend_id.getText().toString());
                 startActivity(friendLobby);
-                //else
-                //friend_id.setError("Please enter a valid friend id string.");
             }
         });
+
+        TextView player_id = (TextView) findViewById(R.id.user_id_value_tv);
+        player_id.setText(Networker.getId());
     }
 }
