@@ -4,7 +4,7 @@ var https = require('https');
 
 var fs = require('fs');
 
-var LeaderboardDB = require('./Player/PlayerManager.js')
+var PlayerManager = require('./Player/PlayerManager.js')
 var GameManager = require('./Game/GameManager.js');
 var Player = require('./Game/Player.js');
 
@@ -13,16 +13,16 @@ const options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem', 'utf8')
 };
 
-var leaderboardDB;
+var playerManager;
 var gameManager;
 
 //ChatGPT usage: No
 async function run(){
 	console.log("Running")
 	try{
- 		leaderboardDB = new LeaderboardDB();
-		leaderboardDB.connect();
-		gameManager = new GameManager(leaderboardDB);
+ 		playerManager = new PlayerManager();
+		playerManager.connect();
+		gameManager = new GameManager(playerManager);
 		https.createServer(options, handleRequest).listen(8081)
 	}
 	catch(err){
@@ -49,13 +49,13 @@ function handleRequest(request, response){
 					if(message.subject == "signIn"){
 						var id = message.data.id;
 						var player;
-						if(await leaderboardDB.playerExists(id)){
-							player = await leaderboardDB.getPlayerInfo(id)
+						if(await playerManager.playerExists(id)){
+							player = await playerManager.getPlayerInfo(id)
 							console.log("Exists")
 							
 						}
 						else{
-							leaderboardDB.createNewPlayer(id, message.data.name)
+							playerManager.createNewPlayer(id, message.data.name)
 							player = {_id:id, name:message.data.name, elo:0, gamesWon:0, gamesLost:0}
 							console.log("New")
 						}
@@ -121,11 +121,11 @@ function handleRequest(request, response){
 					}
 					else if(message.subject == "leaderboard"){
 					
-						response.end(JSON.stringify(await leaderboardDB.getTopPlayers()));//Here add the "database get leaderboard"
+						response.end(JSON.stringify(await playerManager.getTopPlayers()));//Here add the "database get leaderboard"
 					}
 					else if(message.subject == "statsRequest"){
 						
-						response.end(JSON.stringify(await leaderboardDB.getPlayerInfo(message.data.id)));//here add the "database get playerinfo
+						response.end(JSON.stringify(await playerManager.getPlayerInfo(message.data.id)));//here add the "database get playerinfo
 					}
 					else{
 						response.end("unknown subject")

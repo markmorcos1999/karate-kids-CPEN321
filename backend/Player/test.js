@@ -1,6 +1,6 @@
-const leaderboardDB = require('./PlayerManager');
+const playerManager = require('./PlayerManager');
 
-db = new leaderboardDB();
+db = new playerManager();
 db.connect().then(async () => {
     await db.createNewPlayer(300, 'Julian');
 
