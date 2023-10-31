@@ -1,5 +1,6 @@
 module.exports = class Player{
 
+//ChatGPT usage: No
     constructor(init, deviceToken) {
 		//Check if id exists in database
 		//If no, then createNewDatabase entry

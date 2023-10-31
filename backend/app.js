@@ -16,6 +16,7 @@ const options = {
 var leaderboardDB;
 var gameManager;
 
+//ChatGPT usage: No
 async function run(){
 	console.log("Running")
 	try{
@@ -29,6 +30,7 @@ async function run(){
 	}
 }
 
+//ChatGPT usage: No
 //Code for making post requests from stackoverflow: https://stackoverflow.com/questions/12006417/node-js-server-that-accepts-post-requests			
 function handleRequest(request, response){
 	if(request.method == 'POST'){
@@ -136,7 +138,7 @@ function handleRequest(request, response){
 			}	
 	
 }
-
+//ChatGPT usage: No
 function connectPlayer(data){
 	id = data.id;
 	Instance.playerList[id] = new Player(id, data.name, data.deviceToken); 
