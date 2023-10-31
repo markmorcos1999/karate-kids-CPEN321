@@ -119,13 +119,7 @@ public class InGameActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         super.onBackPressed();
-//        WebView web;
-//        web = (WebView) findViewById(R.id.wikipedia_page_view);
-//        if(web.go
-//        else{
-//            Intent mainActivity = new Intent(InGameActivity.this, MainActivity.class);
-//            startActivity(mainActivity);
-//        }
+        startActivity(new Intent(InGameActivity.this, PlayGameActivity.class));
+        finish();
     }
-
 }
