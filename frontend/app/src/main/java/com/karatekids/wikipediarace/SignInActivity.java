@@ -55,6 +55,7 @@ public class SignInActivity extends AppCompatActivity {
 
     //ChatGPT usage: No
     private void guestSignIn() {
+        //https://firebase.google.com/docs/cloud-messaging/android/client
         FirebaseMessaging.getInstance().getToken()
             .addOnCompleteListener(new OnCompleteListener<String>() {
                 //ChatGPT usage: No
@@ -117,6 +118,7 @@ public class SignInActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
+            //https://firebase.google.com/docs/cloud-messaging/android/client
             FirebaseMessaging.getInstance().getToken()
                     .addOnCompleteListener(new OnCompleteListener<String>() {
                         //ChatGPT usage: No

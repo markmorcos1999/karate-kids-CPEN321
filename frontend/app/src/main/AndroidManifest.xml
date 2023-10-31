@@ -47,6 +47,7 @@
             android:name=".LeaderboardActivity"
             android:exported="false" />
 
+<!--        https://firebase.google.com/docs/cloud-messaging/android/client-->
         <service
             android:name=".MessagingService"
             android:exported="false">
