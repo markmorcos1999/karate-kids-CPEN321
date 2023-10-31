@@ -3,7 +3,7 @@ const PageManager = require('./../Page/PageManager.js');
 module.exports = class Game{
 
 
-    constructor(id, newPlayers, pages, _manager) {
+    constructor(id, newPlayers, pages, _shortestPath, _manager) {
 		this.manager = _manager
 		this.id = Math.random();
 		this.finishOrder = [];
@@ -19,6 +19,8 @@ module.exports = class Game{
 		
 		this.start = pages[0]
 		this.end = pages[1]
+		console.log(shortestPath)
+		this.shortestPath = shortestPath
 		return this;
     }
 	
@@ -59,7 +61,7 @@ module.exports = class Game{
 				if (this.finishOrder.length == this.players.length){
 					this.gameOver()
 				}
-				return {gamePosition: this.finishOrder.length};
+				return {gamePosition: this.finishOrder.length, shortestPath:this.shortestPath};
 			}
 		}
 		return 0;
