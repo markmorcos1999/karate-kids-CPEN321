@@ -10,7 +10,7 @@ public final class NetworkMessage {
     private static JSONObject message;
     private static JSONObject data;
 
-
+    //ChatGPT usage: No
     public static String gameRequest(String name, String id, String gameMode) { // private constructor
 
        try {
@@ -26,7 +26,7 @@ public final class NetworkMessage {
        }
         return message.toString();
     }
-
+    //ChatGPT usage: No
     public static String friendGameRequest(String name, String id, String friendId) { // private constructor
 
         try {
@@ -42,7 +42,7 @@ public final class NetworkMessage {
         }
         return message.toString();
     }
-
+    //ChatGPT usage: No
     public static String statsRequest(String name, String id){
         try {
             data = new JSONObject();
@@ -56,7 +56,7 @@ public final class NetworkMessage {
         }
         return message.toString();
     }
-
+    //ChatGPT usage: No
     public static String pagePost(String name, String id, String URL){
         try {
             data = new JSONObject();
@@ -72,7 +72,7 @@ public final class NetworkMessage {
         }
         return message.toString();
     }
-
+    //ChatGPT usage: No
     public static String leaderboardRequest(){
         try {
             data = new JSONObject();
@@ -84,7 +84,7 @@ public final class NetworkMessage {
         }
         return message.toString();
     }
-
+    //ChatGPT usage: No
     public static String signInMessage(String name, String id, String token){
         try {
             data = new JSONObject();
@@ -100,7 +100,7 @@ public final class NetworkMessage {
         return message.toString();
     }
 
-
+    //ChatGPT usage: No
     public static String endGame(String name, String id){
         try {
             data = new JSONObject();

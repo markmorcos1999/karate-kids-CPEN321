@@ -2,7 +2,7 @@ const PageManager = require('./../Page/PageManager.js');
 
 module.exports = class Game{
 
-
+//ChatGPT usage: No
     constructor(id, newPlayers, pages, _shortestPath, _manager) {
 		this.manager = _manager
 		this.id = Math.random();
@@ -19,15 +19,15 @@ module.exports = class Game{
 		
 		this.start = pages[0]
 		this.end = pages[1]
-		console.log(shortestPath)
-		this.shortestPath = shortestPath
+		console.log(_shortestPath)
+		this.shortestPath = _shortestPath
 		return this;
     }
-	
+	//ChatGPT usage: No
 	getId(){
 		return this.id;
     }
-	
+	//ChatGPT usage: No
 	addPlayers(newPlayers){
 		for(var i in newPlayers){
 			var pl = newPlayers[i]
@@ -37,7 +37,7 @@ module.exports = class Game{
 		}
 		
 	}
-	
+	//ChatGPT usage: No
 	playerToPage(id, page){
 		for(var i in this.players){
 			var pl = this.players[i]
@@ -48,7 +48,7 @@ module.exports = class Game{
 			}
 		}
 	}
-	
+	//ChatGPT usage: No
 	playerEndGame(id){
 		if(this.finishOrder.length == 0){
 			this.manager.sendLoss(this.players, id)
@@ -66,11 +66,11 @@ module.exports = class Game{
 		}
 		return 0;
 	}
-	
+	//ChatGPT usage: No
 	gameOver(){
 		this.manager.completeGame(this.finishOrder, this.id)
 	}
-	
+	//ChatGPT usage: No
 	getMessage(){
 		
 		return {startPage:this.start.url, startTitle:this.start.title,

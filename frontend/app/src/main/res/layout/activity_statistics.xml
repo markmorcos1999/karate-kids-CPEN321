@@ -96,6 +96,7 @@
         android:text="@string/player_id_value_st"
         app:layout_constraintBottom_toTopOf="@+id/elo_value_tv"
         app:layout_constraintEnd_toEndOf="@+id/elo_value_tv"
+        app:layout_constraintStart_toStartOf="@+id/elo_value_tv"
         app:layout_constraintTop_toBottomOf="@+id/badge_iv"
         app:layout_constraintVertical_bias="0.5" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -65,6 +67,28 @@ public class ResultsActivity extends AppCompatActivity {
             JSONObject obj = new JSONObject(JSON_String);
             String pos = obj.getString("gamePosition");
             position.append(" "+pos);
+
+            JSONArray shortest_path = obj.getJSONArray("shortestPath");
+            TextView shortest_path_text = (TextView) findViewById(R.id.shortest_path_text);
+
+            shortest_path_text.append("\n");
+
+            if(shortest_path != null) {
+                for(int i=0;i<shortest_path.length();i++){
+                    shortest_path_text.append("\n");
+                    shortest_path_text.append(shortest_path.getString(i).toString());
+                    if(i+1==shortest_path.length()){
+                        break;
+                    }
+                    shortest_path_text.append("\n");
+                    shortest_path_text.append("|");
+                    shortest_path_text.append("\n");
+                    shortest_path_text.append("V");
+                }
+            }
+
+            shortest_path_text.append("\n");
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
