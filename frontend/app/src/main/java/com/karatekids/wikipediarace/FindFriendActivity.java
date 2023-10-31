@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 public class FindFriendActivity extends AppCompatActivity {
 
+    //minor change
     //ChatGPT usage: No
     @Override
     protected void onCreate(Bundle savedInstanceState) {
