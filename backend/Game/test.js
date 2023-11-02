@@ -1,6 +1,6 @@
 const MatchMaker = require('./Matchmaker');
 
-mm = new MatchMaker()
+const mm = new MatchMaker()
 
 mm.findMatch(2, 200).then((res) => console.log(res));
 mm.findMatch(3, 200).then((res) => console.log(res));

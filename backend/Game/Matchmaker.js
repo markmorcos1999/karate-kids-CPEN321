@@ -15,17 +15,17 @@ class MatchMaker {
 	// resolves to the value of the id of the matched player and rejects if no match
 	// could be found within the maximum wait time.
 	// ChatGPT usage: Partial
-	async findMatch(playerId, playerElo, waitStartTime = Date.now()) {
+	async findMatch(id, elo, waitStartTime = Date.now()) {
 		var player = {
-			id: playerId,
-			elo: playerElo,
-			waitStartTime: waitStartTime
+			id,
+			elo,
+			waitStartTime
 		};
 
 		player.matchPromise = new Promise(
-			(res, rej) => { 
-				player.matchPromiseResolve = res;
-				player.matchPromiseReject = rej 
+			(resolve, reject) => { 
+				player.matchPromiseResolve = resolve;
+				player.matchPromiseReject = reject; 
 			}
 		);
 
@@ -61,22 +61,25 @@ class MatchMaker {
 				
 				if (diff <= allowedDiff) {
 					console.log("Match Found!")
-					var game = this.gameManager.startGame(p1.id, p2.id)
+
+					var game = this.gameManager.startGame(p1.id, p2.id);
+
 					console.log("Sending game back to players");
 					console.log(game);
+
 					p1.matchPromiseResolve(game);
 					p2.matchPromiseResolve(game);
 
 					this.waitingPlayers.splice(i - 1, 2);
 					
-					if (i-- > 1) {
-						i--;
+					if (i > 1) {
+						i -= 2;
 					}
 				}
 			}
 		}
 		
-		for (var i = 0; i < this.waitingPlayers.length; i++) {
+		for (i = 0; i < this.waitingPlayers.length; i++) {
 			const curPlayer = this.waitingPlayers[i];
 
 			if (Date.now() - curPlayer.waitStartTime >= MAX_WAIT_TIME) {

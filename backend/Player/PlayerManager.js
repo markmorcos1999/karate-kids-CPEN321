@@ -82,11 +82,11 @@ class PlayerManager {
                 { _id: id },
                 { 
                     $set: {
-                        elo: elo,
-                        gamesWon: gamesWon,
-                        gamesLost: gamesLost,
-                        avgGameDuration: avgGameDuration,
-                        avgGamePathLength: avgGamePathLength
+                        elo,
+                        gamesWon,
+                        gamesLost,
+                        avgGameDuration,
+                        avgGamePathLength
                     }
                 } 
             );

@@ -1,6 +1,6 @@
-const playerManager = require('./PlayerManager');
+const PlayerManager = require('./PlayerManager');
 
-db = new playerManager();
+let db = new PlayerManager();
 db.connect().then(async () => {
     await db.createNewPlayer(300, 'Julian');
 
