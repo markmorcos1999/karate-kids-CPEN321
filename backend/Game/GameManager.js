@@ -25,7 +25,7 @@ module.exports = class GameManager{
 	}
 	//ChatGPT usage: No
 	checkForPlayer(id){
-		return this.playerList[id] && id != 0
+		return this.playerList[id] && id !== 0
 	}
 	//ChatGPT usage: No
 	playerFindGame(id){

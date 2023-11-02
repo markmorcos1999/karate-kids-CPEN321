@@ -3,7 +3,6 @@ var fs = require('fs');
 
 var PlayerManager = require('./Player/PlayerManager.js')
 var GameManager = require('./Game/GameManager.js');
-var Player = require('./Game/Player.js');
 
 const options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem', 'utf8'),
@@ -62,7 +61,6 @@ function handleRequest(request, response){
 					}
 					else if(message.subject == "requestGame"){
 						var mode = message.data.mode
-						var game
 						id = message.data.id
 						
 						
@@ -75,13 +73,13 @@ function handleRequest(request, response){
 							gameManager.playerFindGame(message.data.id).then((res) => response.end(JSON.stringify(res.getMessage())))
 						}
 						else if(mode == "daily"){
-							game = await gameManager.startDaily(id)
+							const game = await gameManager.startDaily(id)
 							console.log(game)
 							console.log(JSON.stringify(game.getMessage()))
 							response.end(JSON.stringify(game.getMessage()));
 						}
 						else{
-							game = await gameManager.startSingle(id)
+							const game = await gameManager.startSingle(id)
 							console.log(game)
 							response.end(JSON.stringify(game.getMessage()));
 						}
@@ -93,7 +91,7 @@ function handleRequest(request, response){
 							response.end("400")
 						}
 						
-						var game = await gameManager.friendSearch(message.data.id, message.data.friendId)
+						const game = await gameManager.friendSearch(message.data.id, message.data.friendId)
 						response.end(JSON.stringify(game.getMessage()));
 					}
 					else if(message.subject == "page"){
@@ -135,14 +133,5 @@ function handleRequest(request, response){
 			}	
 	
 }
-//ChatGPT usage: No
-function connectPlayer(data){
-	id = data.id;
-	Instance.playerList[id] = new Player(id, data.name, data.deviceToken); 
-	
-  return String(id);
-}
-
-
 
 run()
