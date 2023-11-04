@@ -1,5 +1,3 @@
-const PageManager = require('./../Page/PageManager.js');
-
 module.exports = class Game{
 
 //ChatGPT usage: No
@@ -7,7 +5,7 @@ module.exports = class Game{
 		this.manager = _manager
 		this.id = Math.random();
 		this.finishOrder = [];
-		for(var i in newPlayers){
+		for(var i in newPlayers) {
 			var pl = newPlayers[i]
 			pl.sessionId = id;
 			pl.pageList = [];
@@ -31,7 +29,7 @@ module.exports = class Game{
 	addPlayers(newPlayers){
 		for(var i in newPlayers){
 			var pl = newPlayers[i]
-			pl.sessionId = id;
+			pl.sessionId = this.id;
 			pl.pageList = {};
 			this.players.push(pl)
 		}
@@ -59,9 +57,12 @@ module.exports = class Game{
 			if(pl.id == id){
 				this.finishOrder.push(pl);
 				if (this.finishOrder.length == this.players.length){
-					this.gameOver()
+					this.gameOver();
 				}
-				return {gamePosition: this.finishOrder.length, shortestPath:this.shortestPath};
+				return {
+					gamePosition: this.finishOrder.length, 
+					shortestPath: this.shortestPath
+				};
 			}
 		}
 		return 0;
@@ -72,10 +73,13 @@ module.exports = class Game{
 	}
 	//ChatGPT usage: No
 	getMessage(){
-		
-		return {startPage:this.start.url, startTitle:this.start.title,
-		endPage:this.end.url, endTitle:this.end.title,
-		players:this.players}
+		return {
+			startPage: this.start.url, 
+			startTitle: this.start.title,
+			endPage: this.end.url, 
+			endTitle: this.end.title,
+			players: this.players
+		}
 	}
     
 }

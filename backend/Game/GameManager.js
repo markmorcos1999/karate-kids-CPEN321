@@ -25,13 +25,7 @@ module.exports = class GameManager{
 	}
 	//ChatGPT usage: No
 	checkForPlayer(id){
-		if(this.playerList[id] && id != 0){
-			return true;
-			
-		}
-		else{
-			return false;
-		}
+		return this.playerList[id] && id !== 0
 	}
 	//ChatGPT usage: No
 	playerFindGame(id){
@@ -120,17 +114,16 @@ module.exports = class GameManager{
 	//ChatGPT usage: No
 	//Some code taken from Matchmaker.js
 	async friendSearch(id, friendId){
-		
 		var friend = {
-			id: id,
-			friendId: friendId,
+			id,
+			friendId,
 			done: false
 		};
 
 		friend.matchPromise = new Promise(
-			(res, rej) => { 
-				friend.matchPromiseResolve = res;
-				friend.matchPromiseReject = rej 
+			(resolve, reject) => { 
+				friend.matchPromiseResolve = resolve;
+				friend.matchPromiseReject = reject;
 			}
 		);
 		
