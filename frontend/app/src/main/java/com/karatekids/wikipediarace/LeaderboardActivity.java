@@ -1,6 +1,7 @@
 package com.karatekids.wikipediarace;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,17 +9,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import de.codecrafters.tableview.SortableTableView;
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 
 public class LeaderboardActivity extends AppCompatActivity {
+
+    private final static String TAG = "LeaderboardActivity";
 
     private static final int[] TABLE_HEADERS = { R.string.table_ranking_st, R.string.table_name_st, R.string.table_score_st };
 
@@ -68,7 +66,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             tableView.setDataAdapter(new SimpleTableDataAdapter(this, leaderboardData));
 
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            Log.d(TAG, "Unable to parse leaderboard data from server");
         }
     }
 }

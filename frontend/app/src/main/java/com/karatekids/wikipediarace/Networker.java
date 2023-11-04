@@ -17,7 +17,6 @@ import java.net.URL;
 public final class Networker {
 
     private static String URL = "https://milestone1.canadacentral.cloudapp.azure.com:8081";
-    private static String networkId;
 
     private static String id = "0";
     private static String name = "";
@@ -39,7 +38,7 @@ public final class Networker {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.signInMessage(name, id, token));
+                executePost(URL, NetworkMessage.signInMessage(name, id, token));
                 //Check return if correct
                 UI.updateUI(name);
             }
@@ -115,7 +114,7 @@ public final class Networker {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.pagePost(name, id, url));
+                executePost(URL, NetworkMessage.pagePost(name, id, url));
                 //What to do after a post? status code returned?
             }
         });

@@ -2,6 +2,7 @@ package com.karatekids.wikipediarace;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -14,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StatisticsActivity extends AppCompatActivity {
+
+    private final static String TAG = "StatisticsActivity";
     private static final int SILVER_THRESHOLD = 8;
     private static final int GOLD_THRESHOLD = 10;
 
@@ -51,7 +54,7 @@ public class StatisticsActivity extends AppCompatActivity {
             }
 
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            Log.d(TAG, "Unable to parse statistics data from server");
         }
     }
 
@@ -89,6 +92,9 @@ public class StatisticsActivity extends AppCompatActivity {
                 sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject);
                 startActivity(Intent.createChooser(sharingIntent, "Share using"));
                 break;
+
+            default:
+                Log.d(TAG, "Button could not be found.");
         }
         return super.onOptionsItemSelected(item);
     }

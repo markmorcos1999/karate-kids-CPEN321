@@ -17,8 +17,6 @@ import java.util.ArrayList;
 
 public class LobbyActivity extends AppCompatActivity {
 
-    private final static String TAG = "LobbyActivity";
-
     private Handler handler;
     private final static String MULTIPLAYER_MODE = "multi";
 

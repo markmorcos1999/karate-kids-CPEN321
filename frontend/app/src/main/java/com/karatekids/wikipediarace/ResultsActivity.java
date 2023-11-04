@@ -11,7 +11,6 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -92,7 +91,7 @@ public class ResultsActivity extends AppCompatActivity {
             shortest_path_text.append("\n");
 
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            Log.d(TAG, "Unable to parse results data from server");
         }
 
         TextView time_taken = (TextView) findViewById(R.id.time_text);

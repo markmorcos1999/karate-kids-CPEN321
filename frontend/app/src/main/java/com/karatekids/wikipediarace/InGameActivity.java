@@ -2,17 +2,12 @@ package com.karatekids.wikipediarace;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -20,7 +15,6 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class InGameActivity extends AppCompatActivity {
 
@@ -51,7 +45,7 @@ public class InGameActivity extends AppCompatActivity {
 
         WebView web;
         web = (WebView) findViewById(R.id.wikipedia_page_view);
-        web.setWebViewClient(new myWebClient());
+        web.setWebViewClient(new MyWebClient());
         web.getSettings().setJavaScriptEnabled(true);
         web.loadUrl(b.getString("start_url"));
         count = -1;
@@ -63,7 +57,7 @@ public class InGameActivity extends AppCompatActivity {
         clock.start();
     }
 
-    public class myWebClient extends WebViewClient {
+    public class MyWebClient extends WebViewClient {
         //ChatGPT usage: No
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
