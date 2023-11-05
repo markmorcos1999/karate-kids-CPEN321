@@ -14,8 +14,8 @@ const options = {
 var playerManager;
 var gameManager;
 
-app = express();
-port = 8081;
+var app = express();
+var port = 8081;
 
 //ChatGPT usage: No
 async function run() {
@@ -33,11 +33,10 @@ async function run() {
 
 app.use(express.json());
 
-app.post('/', (req, res) => async function (req, res){
-	body = req.body
+app.post('/', (req, res) => async function (request, response){
+	var body = request.body
 	var message = JSON.parse(body)
 	console.log('Body: ' + message)
-	response.writeHead(200, {'Content-Type': 'text/html'})
 
 	if(message.subject == "signIn"){
 		var id = message.data.id;
