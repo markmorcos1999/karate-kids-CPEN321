@@ -15,6 +15,8 @@ class FCMNotifier {
 
     // ChatGPT usage: Yes
     async sendNotificationToDevice(deviceToken, title, body) {
+        console.log('Sending notification to device: ' + deviceToken);
+        
         try {
             const message = {
                 notification: {

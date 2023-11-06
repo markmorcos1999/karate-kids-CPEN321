@@ -5,15 +5,19 @@ const wiki = require('wikijs').default;
 class PageManager {
     // ChatGPT usage: Yes
     async getRandomPages(limit = 2) {
+        console.log('Getting random pages...');
+        
         try {
             const randomTitles = await wiki().random(limit);
             const titlePromises = randomTitles.map(async (title) => {
                 var url = await wiki().page(title).then(page => page.url());
 				url = url.slice(0, 10) + ".m" + url.slice(10);
-                return { 
+                const pageInfo = { 
                     title, 
                     url 
                 };
+
+                return pageInfo;
             });
             return Promise.all(titlePromises);
         } catch (error) {

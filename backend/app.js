@@ -19,7 +19,8 @@ var port = 8081;
 
 //ChatGPT usage: No
 async function run() {
-	console.log("Running")
+	console.log("Running");
+	
 	try {
 		playerManager = new PlayerManager();
 		playerManager.connect();
