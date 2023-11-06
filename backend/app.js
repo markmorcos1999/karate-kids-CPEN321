@@ -17,21 +17,6 @@ var gameManager;
 var app = express();
 var port = 8081;
 
-//ChatGPT usage: No
-async function run() {
-	console.log("Running");
-	
-	try {
-		playerManager = new PlayerManager();
-		playerManager.connect();
-		gameManager = new GameManager(playerManager);
-		https.createServer(options, handleRequest).listen(8081)
-	}
-	catch(err) {
-		console.log(err)
-	}
-}
-
 app.use(express.json());
 
 app.post('/', (req, res) => async function (request, response){
@@ -140,5 +125,3 @@ server.listen(port, () => {
 	console.log('Server has started')
 })
 
-
-run()
