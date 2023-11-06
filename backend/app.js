@@ -11,9 +11,9 @@ const options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem', 'utf8')
 };
 
-playerManager = new PlayerManager();
-playerManager.connect();
-gameManager = new GameManager(playerManager);
+var playerManager = new PlayerManager();
+var playerManager.connect();
+var gameManager = new GameManager(playerManager);
 
 var app = express();
 var port = 8081;
