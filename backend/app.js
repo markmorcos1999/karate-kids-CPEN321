@@ -12,7 +12,7 @@ const options = {
 };
 
 var playerManager = new PlayerManager();
-var playerManager.connect();
+playerManager.connect();
 var gameManager = new GameManager(playerManager);
 
 var app = express();
