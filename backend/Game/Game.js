@@ -75,13 +75,15 @@ module.exports = class Game{
 	}
 	//ChatGPT usage: No
 	getMessage(){
-		return {
+		const messageInfo = {
 			startPage: this.start.url, 
 			startTitle: this.start.title,
 			endPage: this.end.url, 
 			endTitle: this.end.title,
 			players: this.players
 		}
+
+		return messageInfo;
 	}
     
 }
