@@ -89,7 +89,7 @@ app.post('/', (req, res) => async function (request, response){
 		}
 						
 		const game = await gameManager.friendSearch(message.data.id, message.data.friendId)
-		esponse.end(JSON.stringify(game.getMessage()));
+		response.end(JSON.stringify(game.getMessage()));
 	}
 	else if(message.subject == "page"){
 						
