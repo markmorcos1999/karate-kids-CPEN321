@@ -60,11 +60,11 @@ module.exports = class Game{
 					this.gameOver();
 				}
 
-				console.log("This is a test")
-				return {
+				const gameInfo = {
 					gamePosition: this.finishOrder.length, 
 					shortestPath: this.shortestPath
 				};
+				return gameInfo;
 			}
 		}
 		return 0;
