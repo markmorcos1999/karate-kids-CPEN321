@@ -59,6 +59,8 @@ module.exports = class Game{
 				if (this.finishOrder.length == this.players.length){
 					this.gameOver();
 				}
+
+				console.log("This is a test")
 				return {
 					gamePosition: this.finishOrder.length, 
 					shortestPath: this.shortestPath
