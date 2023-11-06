@@ -1,5 +1,7 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('./service-account-key.json');
+
+//Moved to a secure location, cannot be accessed without higher privileges.
+const serviceAccount = require('../../../home/azureuser/servicekey/firebase/service-account-key.json');
 
 class FCMNotifier {
     // ChatGPT usage: Partial
