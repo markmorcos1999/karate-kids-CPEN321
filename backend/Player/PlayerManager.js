@@ -9,7 +9,7 @@ class PlayerManager {
 
     // ChatGPT usage: Partial
     async connect() {
-        console.log("Connecting to the leaderboard database...")
+        console.log("Connecting to the leaderboard database...");
 
         try {
             await this.client.connect();
@@ -23,7 +23,7 @@ class PlayerManager {
 
     // ChatGPT usage: Yes
     async playerExists(id) {
-        console.log("Checking if player exists...")
+        console.log("Checking if player exists...");
 
         try {
             const player = await this.collection.findOne({ _id: id });
@@ -88,19 +88,19 @@ class PlayerManager {
     // ChatGPT usage: Partial
     async updatePlayer(id, elo, gamesWon, gamesLost, avgGameDuration, avgGamePathLength) {
         console.log("Updating player info...");
-        
+
         try {
+            const updatedProperties = {
+                elo,
+                gamesWon,
+                gamesLost,
+                avgGameDuration,
+                avgGamePathLength
+            };
+
             const result = await this.collection.updateOne(
                 { _id: id },
-                { 
-                    $set: {
-                        elo,
-                        gamesWon,
-                        gamesLost,
-                        avgGameDuration,
-                        avgGamePathLength
-                    }
-                } 
+                { $set: updatedProperties } 
             );
 
             return result.modifiedCount === 1;
