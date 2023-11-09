@@ -8,5 +8,6 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Test Backend
-        working-directory: Backend
-        run: npm test
+        run: |
+          cd Backend
+          npm test
