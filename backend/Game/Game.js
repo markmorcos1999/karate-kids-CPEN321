@@ -41,10 +41,16 @@ module.exports = class Game{
 			var pl = this.players[i]
 			if(pl.id == id){
 				pl.pageList.push(page);
+
+				if (page == this.end) {
+					return true;
+				}
 				//Consider: If player reaches end page, should it be done here?
 				//Consider: Should server check for cheating here?
 			}
 		}
+
+		return false;
 	}
 	//ChatGPT usage: No
 	playerEndGame(id){
@@ -67,6 +73,7 @@ module.exports = class Game{
 				return gameInfo;
 			}
 		}
+		
 		return 0;
 	}
 	//ChatGPT usage: No

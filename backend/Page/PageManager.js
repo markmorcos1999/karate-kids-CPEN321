@@ -26,10 +26,10 @@ class PageManager {
         }
     }
 	
+    // TODO: Implement this better
 	getDailyPage(){
 		return [{title: "Taco", url: "https://en.m.wikipedia.org/wiki/Taco"},{title: "Mexico", url: "https://en.m.wikipedia.org/wiki/Mexico"}]
 	}
-    
 
     /// ChatGPT usage: Partial
     async getShortestPath(startTitle, endTitle) {

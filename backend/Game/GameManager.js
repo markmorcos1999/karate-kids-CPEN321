@@ -35,8 +35,8 @@ module.exports = class GameManager{
 	}
 	//ChatGPT usage: No
 	playerPagePost(data){
-		var sessionId = this.playerList[data.id].sessionId
-		this.sessionList[sessionId].playerToPage(data.id, data.URL)
+		var sessionId = this.playerList[data.id].sessionId;
+		return this.sessionList[sessionId].playerToPage(data.id, data.URL);
 	}
 	//ChatGPT usage: No
 	playerEndGame(id){
