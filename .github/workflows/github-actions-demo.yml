@@ -11,5 +11,5 @@ jobs:
         run: |
           pwd
           ls
-          cd Backend
+          cd backend
           npm test
