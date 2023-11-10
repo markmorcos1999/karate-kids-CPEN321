@@ -42,7 +42,7 @@ app.post('/signIn/:id', async (req, res) => {
 	}
 					
 	gameManager.addPlayer(player, message.data.token)
-	res.end(id)
+	res.send({ id })
 });
 
 app.post('/game', async (req, res) => {
@@ -52,68 +52,72 @@ app.post('/game', async (req, res) => {
 	const id = message.data.id;
 					
 	//Assumes "res" in this case is a game, and that game has a method "getMessage()" that returns a string in the right form
-	//gameManager.playerFindGame(message.data.id).then((res) => res.end(JSON.stringify(res.getMessage())))
+	//gameManager.playerFindGame(message.data.id).then((res) => res.send(JSON.stringify(res.getMessage())))
 	if(!gameManager.checkForPlayer(id)) {
-		res.end("400");
+		res.statusCode(400);
+		res.send();
 	}
 	if(type == "multi") {
-		gameManager.playerFindGame(message.data.id).then((res) => res.end(JSON.stringify(res.getMessage())));
+		gameManager.playerFindGame(message.data.id).then((res) => res.send(res.getMessage()));
 	}
 	else if(type == "daily") {
 		const game = await gameManager.startDaily(id);
 		console.log(game);
 		console.log(JSON.stringify(game.getMessage()));
-		res.end(JSON.stringify(game.getMessage()));
+		res.send(game.getMessage());
 	}
 	else if (type == "friend") {
 		const friendId = message.data.friendId;
 		const game = await gameManager.friendSearch(id, friendId);
-		res.end(JSON.stringify(game.getMessage()));
+		res.send(game.getMessage());
 	}
 	else {
 		const game = await gameManager.startSingle(id);
 		console.log(game);
-		res.end(JSON.stringify(game.getMessage()));
+		res.send(game.getMessage());
 	}
-	//res.end({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
+	//res.send({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
 });
 
 app.put('/game', async (req, res) => {
 	const message = JSON.parse(req.body);
 
 	if(!gameManager.checkForPlayer(message.data.id)){
-		res.end("400")
+		res.statusCode(400);
+		res.send();
 	}
 					
 	if (gameManager.playerPagePost(message.data)) {
 		var result = gameManager.playerEndGame(message.data.id);
 		console.log(result);
-		res.end(JSON.stringify(result));
+		res.send(result);
 	}
 	else {
-		res.end("200")
+		res.statusCode(200);
+		res.end();
 	}
 });
 
 app.get('/leaderboard', async (req, res) => {
-	res.end(JSON.stringify(await playerManager.getTopPlayers()));//Here add the "database get leaderboard"
+	res.send(await playerManager.getTopPlayers());//Here add the "database get leaderboard"
 });
 
 app.get('/player/:id', async (req, res) => {
 	const id = req.params.id;
 
 	if(!gameManager.checkForPlayer(id)){
-		res.end("400")
+		res.statusCode(400);
+		res.send();
 	}
 
-	res.end(JSON.stringify(await playerManager.getPlayerInfo(id)));//here add the "database get playerinfo
+	res.send(await playerManager.getPlayerInfo(id));//here add the "database get playerinfo
 });
 
 app.get('/',(req, res) =>{
-	res.send("Node server active")
+	res.end("Node server active")
 });
 
- 
+
 const server = https.createServer(options, app);
 
 server.listen(port, () => {
@@ -121,4 +125,3 @@ server.listen(port, () => {
 });
 
 module.exports = app;
-
