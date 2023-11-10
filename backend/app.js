@@ -118,5 +118,7 @@ const server = https.createServer(options, app);
 
 server.listen(port, () => {
 	console.log('Server has started')
-})
+});
+
+module.exports = app;
 
