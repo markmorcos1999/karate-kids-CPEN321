@@ -80,23 +80,42 @@ app.post('/game', async (req, res) => {
 });
 
 app.put('/game', async (req, res) => {
+	
 	const message = JSON.parse(req.body);
 
 	if(!gameManager.checkForPlayer(message.id)){
 		res.statusCode(400);
 		res.send();
+		
 	}
 					
 	if (gameManager.playerPagePost(message)) {
-		var result = gameManager.playerEndGame(message.id);
+		
+		//In this case we need to send back player position, shortest path, ect
+		//var result = gameManager.playerEndGame(message.id);
 		console.log(result);
 		res.send(result);
 	}
 	else {
 		res.statusCode(200);
+		//In this case we only send back a status code`
 		res.end();
 	}
 });
+
+app.get('/game', async(req,res) =>{
+	
+	if(!gameManager.checkForPlayer(message.id)){
+		res.statusCode(400);
+		res.send();
+	
+	}
+	
+	const message = JSON.parse(req.body);
+	var result = gameManager.playerEndGame(message.id);
+	res.send(result);
+	
+}
 
 app.get('/leaderboard', async (req, res) => {
 	res.send(await playerManager.getTopPlayers());//Here add the "database get leaderboard"

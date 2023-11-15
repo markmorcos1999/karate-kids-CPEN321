@@ -3,6 +3,9 @@ package com.karatekids.wikipediarace;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -79,7 +82,7 @@ public final class Networker {
     //ChatGPT usage: No
     public static void joinWithFriend(LobbyActivity lobby, String friendId) {
 
-        Log.d(TAG, NetworkMessage.friendGameRequest(name, id, friendId));
+        NetworkMessage.friendGameRequest(name, id, friendId);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -138,14 +141,25 @@ public final class Networker {
     //ChatGPT usage: No
     //This method comes from https://stackoverflow.com/questions/1359689/how-to-send-http-request-in-java
     //To help with executing a post
-    private static String executePost(String targetURL, String urlParameters) {
+    private static String executePost(String URL, JSONObject data) {
         HttpURLConnection connection = null;
+        String method = "POST";
+        String slug = "";
+        String urlParameters = data.toString();
+        try {
+            method = data.getString("method");
+            slug = data.getString("subject");
+        }
+        catch(JSONException e) {
+        }
+
+        String targetURL = URL + "/" + slug;
 
         try {
             //Create connection
             URL url = new URL(targetURL);
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod(method);
             connection.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
 
