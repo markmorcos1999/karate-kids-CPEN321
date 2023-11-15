@@ -20,8 +20,8 @@ var port = 8081;
 
 app.use(express.json());
 
-app.post('/signIn', async (req, res) => {
-	const id = req.body.id;
+app.post('/signIn/:id', async (req, res) => {
+	const id = req.params.id;
 	var player;
 
 	if(await playerManager.playerExists(id)) {
@@ -92,7 +92,6 @@ app.put('/game', async (req, res) => {
 	if (gameManager.playerPagePost(message)) {
 		
 		//In this case we need to send back player position, shortest path, ect
-		
 		//var result = gameManager.playerEndGame(message.id);
 		console.log(result);
 		res.send(result);
@@ -122,8 +121,8 @@ app.get('/leaderboard', async (req, res) => {
 	res.send(await playerManager.getTopPlayers());//Here add the "database get leaderboard"
 });
 
-app.get('/player', async (req, res) => {
-	const id = req.body.id;
+app.get('/player/:id', async (req, res) => {
+	const id = req.params.id;
 
 	if(!gameManager.checkForPlayer(id)){
 		res.statusCode(400);
