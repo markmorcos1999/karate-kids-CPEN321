@@ -146,14 +146,27 @@ public final class Networker {
         String method = "POST";
         String slug = "";
         String urlParameters = data.toString();
+
+        StringBuilder str = new StringBuilder();
+
         try {
             method = data.getString("method");
             slug = data.getString("subject");
+
+            str.append(URL);
+            str.append("/");
+            str.append(slug);
+
+            if(method.equals("GET")) {
+               str.append("/");
+               str.append(data.getString("id"));
+            }
+
         }
         catch(JSONException e) {
         }
 
-        String targetURL = URL + "/" + slug;
+        String targetURL = str.toString();
 
         try {
             //Create connection
@@ -162,20 +175,24 @@ public final class Networker {
             connection.setRequestMethod(method);
             connection.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
-
             connection.setRequestProperty("Content-Length",
                     Integer.toString(urlParameters.getBytes().length));
             connection.setRequestProperty("Content-Language", "en-US");
 
             connection.setUseCaches(false);
-            connection.setDoOutput(true);
 
-            //Send request
-            DataOutputStream wr = new DataOutputStream (
-                    connection.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.close();
 
+            if(!method.equals("GET")){
+
+                connection.setDoOutput(true);
+
+                //Send request
+                DataOutputStream wr = new DataOutputStream (
+                        connection.getOutputStream());
+                wr.writeBytes(urlParameters);
+                wr.close();
+
+            }
             //Get Response
             InputStream is = connection.getInputStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
