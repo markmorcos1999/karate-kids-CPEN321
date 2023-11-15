@@ -30,10 +30,10 @@ app.post('/signIn/:id', async (req, res) => {
 						
 	}
 	else {
-		playerManager.createNewPlayer(id, message.data.name);
+		playerManager.createNewPlayer(id, message.name);
 		player = {
 			_id: id, 
-			name: message.data.name, 
+			name: message.name, 
 			elo: 0, 
 			gamesWon: 0, 
 			gamesLost: 0
@@ -41,15 +41,15 @@ app.post('/signIn/:id', async (req, res) => {
 		console.log("New");
 	}
 					
-	gameManager.addPlayer(player, message.data.token)
+	gameManager.addPlayer(player, message.token)
 	res.send({ id })
 });
 
 app.post('/game', async (req, res) => {
 	var message = JSON.parse(req.body);
 
-	const type = message.data.type;
-	const id = message.data.id;
+	const type = message.type;
+	const id = message.id;
 					
 	//Assumes "res" in this case is a game, and that game has a method "getMessage()" that returns a string in the right form
 	//gameManager.playerFindGame(message.data.id).then((res) => res.send(JSON.stringify(res.getMessage())))
@@ -58,7 +58,7 @@ app.post('/game', async (req, res) => {
 		res.send();
 	}
 	if(type == "multi") {
-		gameManager.playerFindGame(message.data.id).then((res) => res.send(res.getMessage()));
+		gameManager.playerFindGame(id).then((res) => res.send(res.getMessage()));
 	}
 	else if(type == "daily") {
 		const game = await gameManager.startDaily(id);
@@ -67,7 +67,7 @@ app.post('/game', async (req, res) => {
 		res.send(game.getMessage());
 	}
 	else if (type == "friend") {
-		const friendId = message.data.friendId;
+		const friendId = message.friendId;
 		const game = await gameManager.friendSearch(id, friendId);
 		res.send(game.getMessage());
 	}
@@ -82,13 +82,13 @@ app.post('/game', async (req, res) => {
 app.put('/game', async (req, res) => {
 	const message = JSON.parse(req.body);
 
-	if(!gameManager.checkForPlayer(message.data.id)){
+	if(!gameManager.checkForPlayer(message.id)){
 		res.statusCode(400);
 		res.send();
 	}
 					
-	if (gameManager.playerPagePost(message.data)) {
-		var result = gameManager.playerEndGame(message.data.id);
+	if (gameManager.playerPagePost(message)) {
+		var result = gameManager.playerEndGame(message.id);
 		console.log(result);
 		res.send(result);
 	}

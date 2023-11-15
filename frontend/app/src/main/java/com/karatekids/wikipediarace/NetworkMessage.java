@@ -18,13 +18,12 @@ public final class NetworkMessage {
            data.put("name", name);
            data.put("id", id);
            data.put("mode", gameMode);
-           message = new JSONObject();
-           message.put("subject", "requestGame");
-           message.put("data", data);
+           data.put("subject", "game");
+           data.put("method", "POST");
        }
        catch(JSONException e) {
        }
-        return message.toString();
+        return data.toString();
     }
     //ChatGPT usage: No
     public static String friendGameRequest(String name, String id, String friendId) { // private constructor
@@ -34,13 +33,13 @@ public final class NetworkMessage {
             data.put("name", name);
             data.put("id", id);
             data.put("friendId", friendId);
-            message = new JSONObject();
-            message.put("subject", "friendGame");
-            message.put("data", data);
+            data.put("mode", "friend");
+            data.put("subject", "game");
+            data.put("method", "POST");
         }
         catch(JSONException e) {
         }
-        return message.toString();
+        return data.toString();
     }
     //ChatGPT usage: No
     public static String statsRequest(String name, String id){
@@ -48,13 +47,12 @@ public final class NetworkMessage {
             data = new JSONObject();
             data.put("name", name);
             data.put("id", id);
-            message = new JSONObject();
-            message.put("subject", "statsRequest");
-            message.put("data", data);
+            data.put("subject", "player");
+            data.put("method", "GET");
         }
         catch(JSONException e) {
         }
-        return message.toString();
+        return data.toString();
     }
     //ChatGPT usage: No
     public static String pagePost(String name, String id, String URL){
@@ -63,9 +61,8 @@ public final class NetworkMessage {
             data.put("name", name);
             data.put("id", id);
             data.put("URL", URL);
-            message = new JSONObject();
-            message.put("subject", "page");
-            message.put("data", data);
+            data.put("subject", "game");
+            data.put("method", "GET");
         }
         catch(JSONException e) {
             e.printStackTrace();
@@ -76,14 +73,14 @@ public final class NetworkMessage {
     public static String leaderboardRequest(){
         try {
             data = new JSONObject();
-            message = new JSONObject();
-            message.put("subject", "leaderboard");
-            message.put("data", data);
+            data.put("subject", "leaderboard");
+            data.put("method","GET");
         }
         catch(JSONException e) {
         }
-        return message.toString();
+        return data.toString();
     }
+
     //ChatGPT usage: No
     public static String signInMessage(String name, String id, String token){
         try {
@@ -91,13 +88,12 @@ public final class NetworkMessage {
             data.put("name", name);
             data.put("id", id);
             data.put("token", token);
-            message = new JSONObject();
-            message.put("subject", "signIn");
-            message.put("data", data);
+            data.put("subject", "signIn");
+            data.put("method","GET");
         }
         catch(JSONException e) {
         }
-        return message.toString();
+        return data.toString();
     }
 
     //ChatGPT usage: No
