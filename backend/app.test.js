@@ -35,7 +35,7 @@ jest.mock('firebase-admin');
 admin.messaging = jest.fn().mockReturnValue('');
 admin.credential.cert.mockReturnValue('');
 
-const app = require('./app');
+const app = require('./app.js');
 
 // Interface GET /leaderboard
 describe("Retrieve the leaderboard", () => {

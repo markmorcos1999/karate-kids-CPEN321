@@ -137,7 +137,7 @@ module.exports = class GameManager{
 		for(var i in players){
 			var pl = players[i]
 			if(pl.id != winner){
-				this.firebaseNotifier.sendNotificationToDevice(pl.deviceToken, "loss", "You lost!").then((success) => 
+				this.firebaseNotifier.sendNotificationToDevice(pl.deviceToken, "loss", "You lost!")
 			}
 		}
 	}

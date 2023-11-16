@@ -3,7 +3,7 @@ var fs = require('fs');
 
 const express = require('express');
 
-var PlayerManager = require('./Player/PlayerManager.js')
+var PlayerManager = require('./Player/PlayerManager.js');
 var GameManager = require('./Game/GameManager.js');
 
 const options = {
