@@ -52,9 +52,11 @@ app.post('/game', async (req, res) => {
 	//Assumes "res" in this case is a game, and that game has a method "getMessage()" that returns a string in the right form
 	//gameManager.playerFindGame(message.data.id).then((res) => res.send(JSON.stringify(res.getMessage())))
 	if(!gameManager.checkForPlayer(id)) {
-		res.statusCode(400);
+		res.status(400);
 		res.send();
+		return;
 	}
+
 	if(type == "multi") {
 		gameManager.playerFindGame(message.data.id).then((res) => res.send(res.getMessage()));
 	}
@@ -78,8 +80,9 @@ app.put('/game', async (req, res) => {
 	const message = JSON.parse(req.body);
 
 	if(!gameManager.checkForPlayer(message.data.id)){
-		res.statusCode(400);
+		res.status(400);
 		res.send();
+		return;
 	}
 					
 	if (gameManager.playerPagePost(message.data)) {
@@ -87,24 +90,25 @@ app.put('/game', async (req, res) => {
 		res.send(result);
 	}
 	else {
-		res.statusCode(200);
-		res.end();
+		res.status(200);
+		res.send();
 	}
 });
 
 app.get('/leaderboard', async (req, res) => {
-	res.send(await playerManager.getTopPlayers());//Here add the "database get leaderboard"
+	res.send(await playerManager.getTopPlayers()); //Here add the "database get leaderboard"
 });
 
 app.get('/player/:id', async (req, res) => {
-	const id = req.params.id;
+	const id = parseInt(req.params.id);
 
-	if(!gameManager.checkForPlayer(id)){
-		res.statusCode(400);
+	if(!(await playerManager.playerExists(id))){
+		res.status(404);
 		res.send();
+		return;
 	}
 
-	res.send(await playerManager.getPlayerInfo(id));//here add the "database get playerinfo
+	res.send(await playerManager.getPlayerInfo(id)); //here add the "database get playerinfo
 });
 
 app.get('/',(req, res) =>{

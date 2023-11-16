@@ -8,8 +8,8 @@ https.createServer.mockReturnValue({ listen: jest.fn(() => {}) });
 
 originalReadFileSync = fs.readFileSync;
 fs.readFileSync = jest.fn((filePath, encoding) => {
-    // TODO: Fix this
-    if (filePath !== "hello") {
+    if (filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem'
+        || filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem') {
         return '';
     }
     
@@ -36,6 +36,7 @@ admin.messaging = jest.fn().mockReturnValue('');
 admin.credential.cert.mockReturnValue('');
 
 const app = require('./app.js');
+const { randomInt } = require('crypto');
 
 // Interface GET /leaderboard
 describe("Retrieve the leaderboard", () => {
@@ -46,22 +47,22 @@ describe("Retrieve the leaderboard", () => {
      * Expected output: Array of up to 10 player stats, including: id, name, elo, games won, games lost, average game duration, and average game path length
      */
     test("Successfully retrieve leaderboard with players", async () => {
-        mockCollection.find.mockReturnValueOnce({
-            sort: jest.fn().mockReturnValueOnce({
-                limit: jest.fn().mockReturnValueOnce({
-                    toArray: jest.fn().mockReturnValueOnce([
-                        { _id: "test" }
-                    ])
-                })
-            })
-        });
+        const player = mockPlayer();
+
+        var toArray = jest.fn().mockReturnValueOnce([ player ]);
+        var limit = jest.fn().mockReturnValueOnce({ toArray });
+        var sort = jest.fn().mockReturnValueOnce({ limit });
+        mockCollection.find.mockReturnValueOnce({ sort });
 
         const response = await request(app).get('/leaderboard');
 
         expect(response.status).toBe(200);
         expect(response.body).toBeInstanceOf(Array);
         expect(response.body.length).toBe(1);
-        // Add more specific expectations for the response body structure
+        expect(JSON.stringify(response.body[0])).toBe(JSON.stringify(player));
+        expect(toArray).toHaveBeenCalled();
+        expect(limit).toHaveBeenCalledWith(10);
+        expect(sort).toHaveBeenCalled();
     });
 
     /**
@@ -71,24 +72,110 @@ describe("Retrieve the leaderboard", () => {
      * Expected output: Empty array when there are no players
      */
     test("Retrieve leaderboard with no players", async () => {
-        mockCollection.find.mockReturnValueOnce({
-            sort: jest.fn().mockReturnValueOnce({
-                limit: jest.fn().mockReturnValueOnce({
-                    toArray: jest.fn().mockReturnValueOnce([])
-                })
-            })
-        });
+        var toArray = jest.fn().mockReturnValueOnce([]);
+        var limit = jest.fn().mockReturnValueOnce({ toArray });
+        var sort = jest.fn().mockReturnValueOnce({ limit });
+        mockCollection.find.mockReturnValueOnce({ sort });
 
         // Perform actions to set up the scenario with no players (e.g., clear database)
         const response = await request(app).get('/leaderboard');
 
+        expect(mockCollection)
         expect(response.status).toBe(200);
         expect(response.body).toBeInstanceOf(Array);
         expect(response.body.length).toBe(0);
+        expect(toArray).toHaveBeenCalled();
+        expect(limit).toHaveBeenCalledWith(10);
+        expect(sort).toHaveBeenCalled();
+    });
+});
+
+// Interface GET /player/:id
+describe("Retrieve a player's information", () => {
+    /**
+     * Input: A player's id
+     * Expected status code: 200
+     * Expected behaviour: The player's information should be retrieved
+     * Expected output: The player's stats, including their id, name, elo, games won, games lost, average game duration, and average game path length
+     */
+    test("Retrieve a single player's information", async () => {
+        const player = mockPlayer();
+
+        mockCollection.findOne.mockReturnValue(player);
+
+        const response = await request(app).get('/player/' + player._id);
+        expect(response.status).toBe(200);
+        expect(JSON.stringify(response.body)).toBe(JSON.stringify(player));
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id })
     });
 
     /**
-     * Add more tests as needed, for example, testing different scenarios, edge cases, or error cases.
+     * Input: A nonexistent player id (300)
+     * Expected status code: 404
+     * Expected behaviour: The server should simply return a 404 error
+     * Expected output: A 404 response
      */
+    test("Retrieve a nonexistent player's information", async () => {
+        mockCollection.findOne.mockReturnValue(null);
+
+        const response = await request(app).get('/player/300');
+        expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: 300 })
+    });
 });
 
+
+// Interface GET /player/:id
+describe("Retrieve a player's information", () => {
+    /**
+     * Input: A player's id
+     * Expected status code: 200
+     * Expected behaviour: The player's information should be retrieved
+     * Expected output: The player's stats, including their id, name, elo, games won, games lost, average game duration, and average game path length
+     */
+    test("Retrieve a single player's information", async () => {
+        const player = mockPlayer();
+
+        mockCollection.findOne.mockReturnValue(player);
+
+        const response = await request(app).get('/player/' + player._id);
+        expect(response.status).toBe(200);
+        expect(JSON.stringify(response.body)).toBe(JSON.stringify(player));
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id })
+    });
+
+    /**
+     * Input: A nonexistent player id (300)
+     * Expected status code: 404
+     * Expected behaviour: The server should simply return a 404 error
+     * Expected output: A 404 response
+     */
+    test("Retrieve a nonexistent player's information", async () => {
+        mockCollection.findOne.mockReturnValue(null);
+
+        const response = await request(app).get('/player/300');
+        expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: 300 })
+    });
+});
+
+
+function mockPlayer(
+    name = "Julia Rubin", 
+    _id = randomInt(1000000), 
+    elo = randomInt(1000000), 
+    gamesWon = randomInt(1000000), 
+    gamesLost = randomInt(1000000), 
+    avgGameDuration = randomInt(1000000), 
+    avgGamePathLength = randomInt(1000000)
+) {
+    return {
+        _id,
+        name,
+        elo,
+        gamesWon,
+        gamesLost,
+        avgGameDuration,
+        avgGamePathLength
+    };
+}
