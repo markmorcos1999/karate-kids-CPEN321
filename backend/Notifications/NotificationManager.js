@@ -15,8 +15,6 @@ class FCMNotifier {
 
     // ChatGPT usage: Yes
     async sendNotificationToDevice(deviceToken, title, body) {
-        console.log('Sending notification to device: ' + deviceToken);
-        
         try {
             const message = {
                 notification: {
@@ -27,8 +25,6 @@ class FCMNotifier {
             };
 
             const response = await this.messaging.send(message);
-            console.log('Successfully sent notification:', response);
-
             return true;
         } catch (error) {
             console.error('Error sending notification:', error);

@@ -4,9 +4,7 @@ const wiki = require('wikijs').default;
 
 class PageManager {
     // ChatGPT usage: Yes
-    async getRandomPages(limit = 2) {
-        console.log('Getting random pages...');
-        
+    async getRandomPages(limit = 2) { 
         try {
             const randomTitles = await wiki().random(limit);
             const titlePromises = randomTitles.map(async (title) => {

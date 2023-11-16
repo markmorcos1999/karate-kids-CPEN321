@@ -5,7 +5,6 @@ const PageManager = require('./../Page/PageManager.js');
 const Player = require('./Player.js');
 
 module.exports = class GameManager{
-	
 	//ChatGPT usage: No
 	//To get the leaderboard and firebase stuff, using a constructor
 	constructor(_playerManager) {
@@ -20,18 +19,15 @@ module.exports = class GameManager{
 	//ChatGPT usage: No
 	addPlayer(init, deviceToken){
 		var id = init._id;
-		//console.log(id)
-		this.playerList[id] = new Player(init, deviceToken)
+		this.playerList[id] = new Player(init, deviceToken);
 	}
 	//ChatGPT usage: No
 	checkForPlayer(id){
-		return this.playerList[id] && id !== 0
+		return this.playerList[id] && id !== 0;
 	}
 	//ChatGPT usage: No
 	playerFindGame(id){
-		
-		return this.matchmaker.findMatch(id, this.playerList[id].elo)
-
+		return this.matchmaker.findMatch(id, this.playerList[id].elo);
 	}
 	//ChatGPT usage: No
 	playerPagePost(data){
@@ -62,23 +58,21 @@ module.exports = class GameManager{
 	}
 	//ChatGPT usage: No
 	async startGame(p1Id, p2Id){
-		var sessionId = Math.random()
+		var sessionId = Math.random();
 		
-		var players = []
-		players.push(this.playerList[p1Id])
-		players.push(this.playerList[p2Id])
+		var players = [];
+		players.push(this.playerList[p1Id]);
+		players.push(this.playerList[p2Id]);
 		
-		var pageList = await this.pageMan.getRandomPages()
-		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
+		var pageList = await this.pageMan.getRandomPages();
+		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title);
 		
 		//Check if there isnt a path
-		console.log("Making new game!")
-		var game = new Game(sessionId, players, pageList, path, this)
-		//console.log(game)
-		this.sessionList[sessionId] = game
 		
-		return game 
+		var game = new Game(sessionId, players, pageList, path, this);
+		this.sessionList[sessionId] = game;
 		
+		return game ;
 	}
 	//ChatGPT usage: No
 	async startDaily(id){
@@ -90,7 +84,6 @@ module.exports = class GameManager{
 		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		
 		var game = new Game(sessionId, players, pageList, path, this)
-		
 		
 		this.sessionList[sessionId] = game
 		
@@ -105,7 +98,6 @@ module.exports = class GameManager{
 		var pageList = await this.pageMan.getRandomPages()
 		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		var game = new Game(sessionId, players, pageList, path, this)
-		
 		
 		this.sessionList[sessionId] = game
 		
@@ -128,22 +120,16 @@ module.exports = class GameManager{
 		);
 		
 		for(var i in this.friendList){
-			console.log(i)
-			console.log(this.friendList[i].friendId)
-			console.log(id)
 			if(this.friendList[i].friendId == id && !this.friendList[i].done){
-				console.log("PAIR FOUND")
 				var game = this.startGame(id, friendId)
 				friend.matchPromiseResolve(game)
 				this.friendList[i].matchPromiseResolve(game)
 				this.friendList[i].done = true
 				friend.done = true
-				
 			}
 		}
 		
 		this.friendList[id] = friend
-		
 		return friend.matchPromise
 	}
 	//ChatGPT usage: No
@@ -151,11 +137,8 @@ module.exports = class GameManager{
 		for(var i in players){
 			var pl = players[i]
 			if(pl.id != winner){
-				console.log("Token: " + pl.deviceToken)
-				console.log(JSON.stringify(pl))
-				this.firebaseNotifier.sendNotificationToDevice(pl.deviceToken, "loss", "You lost!").then((success) => console.log("successful: " + success));
+				this.firebaseNotifier.sendNotificationToDevice(pl.deviceToken, "loss", "You lost!").then((success) => 
 			}
-			
 		}
 	}
     

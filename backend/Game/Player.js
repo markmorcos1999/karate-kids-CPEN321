@@ -13,6 +13,4 @@ module.exports = class Player{
 		this.gamesLost = init.gamesLost;
 		this.deviceToken = deviceToken;
     }
-	
-
 }

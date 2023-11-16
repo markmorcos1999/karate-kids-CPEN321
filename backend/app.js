@@ -25,9 +25,7 @@ app.post('/signIn/:id', async (req, res) => {
 	var player;
 
 	if(await playerManager.playerExists(id)) {
-		player = await playerManager.getPlayerInfo(id);
-		console.log("Exists");
-						
+		player = await playerManager.getPlayerInfo(id);			
 	}
 	else {
 		playerManager.createNewPlayer(id, message.data.name);
@@ -38,7 +36,7 @@ app.post('/signIn/:id', async (req, res) => {
 			gamesWon: 0, 
 			gamesLost: 0
 		};
-		console.log("New");
+		
 	}
 					
 	gameManager.addPlayer(player, message.data.token)
@@ -62,8 +60,6 @@ app.post('/game', async (req, res) => {
 	}
 	else if(type == "daily") {
 		const game = await gameManager.startDaily(id);
-		console.log(game);
-		console.log(JSON.stringify(game.getMessage()));
 		res.send(game.getMessage());
 	}
 	else if (type == "friend") {
@@ -73,7 +69,6 @@ app.post('/game', async (req, res) => {
 	}
 	else {
 		const game = await gameManager.startSingle(id);
-		console.log(game);
 		res.send(game.getMessage());
 	}
 	//res.send({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
@@ -89,7 +84,6 @@ app.put('/game', async (req, res) => {
 					
 	if (gameManager.playerPagePost(message.data)) {
 		var result = gameManager.playerEndGame(message.data.id);
-		console.log(result);
 		res.send(result);
 	}
 	else {
