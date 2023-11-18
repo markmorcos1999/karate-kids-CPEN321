@@ -111,10 +111,6 @@ app.get('/player/:id', async (req, res) => {
 	res.send(await playerManager.getPlayerInfo(id)); //here add the "database get playerinfo
 });
 
-app.get('/',(req, res) =>{
-	res.end("Node server active")
-});
-
 
 const server = https.createServer(options, app);
 
