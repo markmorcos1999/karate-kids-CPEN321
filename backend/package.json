@@ -8,6 +8,13 @@
     "wikijs": "^6.4.1"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/coverage/**"
+    ]
   }
 }

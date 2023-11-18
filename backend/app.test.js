@@ -90,40 +90,6 @@ describe("Retrieve the leaderboard", () => {
     });
 });
 
-// Interface GET /player/:id
-describe("Retrieve a player's information", () => {
-    /**
-     * Input: A player's id
-     * Expected status code: 200
-     * Expected behaviour: The player's information should be retrieved
-     * Expected output: The player's stats, including their id, name, elo, games won, games lost, average game duration, and average game path length
-     */
-    test("Retrieve a single player's information", async () => {
-        const player = mockPlayer();
-
-        mockCollection.findOne.mockReturnValue(player);
-
-        const response = await request(app).get('/player/' + player._id);
-        expect(response.status).toBe(200);
-        expect(JSON.stringify(response.body)).toBe(JSON.stringify(player));
-        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id })
-    });
-
-    /**
-     * Input: A nonexistent player id (300)
-     * Expected status code: 404
-     * Expected behaviour: The server should simply return a 404 error
-     * Expected output: A 404 response
-     */
-    test("Retrieve a nonexistent player's information", async () => {
-        mockCollection.findOne.mockReturnValue(null);
-
-        const response = await request(app).get('/player/300');
-        expect(response.status).toBe(404);
-        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: 300 })
-    });
-});
-
 
 // Interface GET /player/:id
 describe("Retrieve a player's information", () => {
