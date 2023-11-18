@@ -4,7 +4,11 @@ const fs = require('fs');
 const { MongoClient } = require('mongodb');
 
 jest.mock('https');
-https.createServer.mockReturnValue({ listen: jest.fn(() => {}) });
+https.createServer.mockReturnValue({ 
+    listen: jest.fn((port, callback) => {
+        callback();
+    }) 
+});
 
 originalReadFileSync = fs.readFileSync;
 fs.readFileSync = jest.fn((filePath, encoding) => {
@@ -80,13 +84,27 @@ describe("Retrieve the leaderboard", () => {
         // Perform actions to set up the scenario with no players (e.g., clear database)
         const response = await request(app).get('/leaderboard');
 
-        expect(mockCollection)
         expect(response.status).toBe(200);
         expect(response.body).toBeInstanceOf(Array);
         expect(response.body.length).toBe(0);
         expect(toArray).toHaveBeenCalled();
         expect(limit).toHaveBeenCalledWith(10);
         expect(sort).toHaveBeenCalled();
+    });
+
+    /**
+     * Input: N/A
+     * Expected status code: 500
+     * Expected behaviour: The server should error out
+     * Expected output: An internal server error response
+     */
+    test("Database retrieval error", async () => {
+        var toArray = jest.fn().mockRejectedValue(new Error('Test Error'));
+
+        // Perform actions to set up the scenario with no players (e.g., clear database)
+        const response = await request(app).get('/leaderboard');
+
+        expect(response.status).toBe(500);
     });
 });
 
@@ -122,6 +140,20 @@ describe("Retrieve a player's information", () => {
         const response = await request(app).get('/player/300');
         expect(response.status).toBe(404);
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: 300 })
+    });
+
+    /**
+     * Input: N/A
+     * Expected status code: 500
+     * Expected behaviour: The server should error out
+     * Expected output: An internal server error response
+     */
+    test("Database retrieval error", async () => {
+        mockCollection.findOne.mockRejectedValue(new Error("Test error"));
+
+        const response = await request(app).get('/player/20');
+        expect(response.status).toBe(500);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: 20 })
     });
 });
 
