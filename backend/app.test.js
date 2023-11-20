@@ -157,6 +157,54 @@ describe("Retrieve a player's information", () => {
     });
 });
 
+// Interface GET /signIn/:id
+describe("Testing player signIn", () => {
+    /**
+     * Input: A player's id
+     * Expected status code: 200
+     * Expected behaviour: The player should be "signed in" and can now enter games.
+     * Expected output: Should return the players ID as signin confirmation
+     */
+    test("SignIn Player", async () => {
+        const player = mockPlayer();
+
+        mockCollection.findOne.mockReturnValue(player);
+
+        const response = await request(app).get('/signIn/' + player._id);
+        expect(response.status).toBe(200);
+        expect(JSON.stringify(response.body)).toBe(JSON.stringify(player._id));
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id })
+    });
+
+    /**
+     * Input: A nonexistent player id (300)
+     * Expected status code: 404
+     * Expected behaviour: The server should simply return a 404 error
+     * Expected output: A 404 response
+     */
+    test("Retrieve a nonexistent player's information", async () => {
+        mockCollection.findOne.mockReturnValue(null);
+
+        const response = await request(app).get('/signIn/300');
+        expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: 300 })
+    });
+
+    /**
+     * Input: N/A
+     * Expected status code: 500
+     * Expected behaviour: The server should error out
+     * Expected output: An internal server error response
+     */
+    test("Database retrieval error", async () => {
+        mockCollection.findOne.mockRejectedValue(new Error("Test error"));
+
+        const response = await request(app).get('/player/20');
+        expect(response.status).toBe(500);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: 20 })
+    });
+});
+
 
 function mockPlayer(
     name = "Julia Rubin", 

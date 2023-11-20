@@ -25,11 +25,13 @@ app.post('/signIn/:id', async (req, res) => {
 		const id = req.params.id;
 		var player;
 
+		const message = JSON.parse(req.body);
+
 		if(await playerManager.playerExists(id)) {
 			player = await playerManager.getPlayerInfo(id);			
 		}
 		else {
-			playerManager.createNewPlayer(id, message.data.name);
+			playerManager.createNewPlayer(id, message.name);
 			player = {
 				_id: id, 
 				name: message.data.name, 
