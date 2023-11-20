@@ -2,7 +2,11 @@ package com.karatekids.wikipediarace;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -12,6 +16,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static androidx.test.espresso.web.assertion.WebViewAssertions.webContent;
+import static androidx.test.espresso.web.assertion.WebViewAssertions.webMatches;
+import static androidx.test.espresso.web.model.Atoms.getCurrentUrl;
+import static androidx.test.espresso.web.sugar.Web.onWebView;
+import static androidx.test.espresso.web.webdriver.DriverAtoms.findElement;
+import static androidx.test.espresso.web.webdriver.DriverAtoms.webClick;
+
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 
@@ -24,6 +36,7 @@ import androidx.test.espresso.Root;
 import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.espresso.web.webdriver.Locator;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -31,7 +44,11 @@ import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.w3c.dom.Document;
 
+import java.util.Date;
+
+// test with two emulators simultaneously
 @RunWith(AndroidJUnit4.class)
 public class MultiPlayerTest {
     @Rule
@@ -125,11 +142,44 @@ public class MultiPlayerTest {
     }
 
     @Test
-    public void verifyRandomStartAndEndPage() throws InterruptedException {
-        Intent intent = new Intent();
-        inGameActivityRule.launchActivity(intent);
+    public void verifyMultiPlayerInGame() throws InterruptedException {
+        Intent inGameIntent = new Intent();
+        inGameIntent.putExtra("start_page","Taco")
+                .putExtra("end_page", "Mexico")
+                .putExtra("start_url", "https://en.wikipedia.org/wiki/Taco")
+                .putExtra("end_url", "https://en.wikipedia.org/wiki/Mexico");
+        Date beforeActivity = new Date();
+        inGameActivityRule.launchActivity(inGameIntent);
 
-        Log.d("TEST",intent.getStringExtra("start_page"));
+        onView(withText("Destination Page: Mexico")).check(matches(isDisplayed()));
+
+        onWebView()
+                .check(webMatches(getCurrentUrl(), containsString("Taco")));
+
+        onWebView()
+                .withElement(findElement(Locator.CSS_SELECTOR, "a[href=\"/wiki/British_English\"]")); // similar to onView(withId(...)
+//                .check(webContent((Matcher<Document>) webClick()));
+
+        onWebView()
+                .withElement(findElement(Locator.CSS_SELECTOR, "a[href=\"/wiki/British_English\"]")) // similar to onView(withId(...))
+                .perform(webClick());
+
+        onWebView()
+                .check(webMatches(getCurrentUrl(), containsString("British_English")));
+
+        while (true) {
+            try {
+                onView(withText("00:10")).perform().check(matches(isDisplayed()));
+                break;
+            } catch (Exception e) {
+            }
+        }
+
+        onView(withId(R.id.wikipedia_page_view))
+                .perform(pressBack());
+
+        intended(hasComponent(PlayGameActivity.class.getName()));
+
     }
 
 }
