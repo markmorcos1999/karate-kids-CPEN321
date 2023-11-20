@@ -4,6 +4,8 @@ import static android.app.PendingIntent.getActivity;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
@@ -11,6 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewAssertion;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -68,6 +72,7 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void singlePlayerTest() throws InterruptedException {
+
         //doesn't need espresso
         onView(withText("Sign in as a Guest")).check(matches(isDisplayed()));
         onView(withText("Sign in as a Guest")).perform(click());
@@ -89,10 +94,10 @@ public class ExampleInstrumentedTest {
 
         //check single player game button is visible
         onView(withText("Finding Start and End Pages...")).check(matches(isDisplayed()));
-        onView(withText("Finding Start and End Pages...")).perform(click());
+//        onView(withText("Finding Start and End Pages...")).perform(click());
 
         StringBuilder str;
-        while(true) {
+        while (true) {
             try {
                 str = new StringBuilder(isToastMessageDisplayed("Starting Page: "));//).inRoot(withDecorView(not(activityRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
                 break;
@@ -106,14 +111,19 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.loading_pb))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
+        onView(withText("Pages Found!")).perform().check(matches(isDisplayed()));
         //check text is gone
 //        onView(withText("Finding Start and End Pages...")).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
-        while(true) {
+        while (true) {
             try {
                 onView(withSubstring("Destination Page: ")).perform().check(matches(isDisplayed()));
                 break;
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
+
+        //check that wikipedia page is displayed
+
     }
 }
