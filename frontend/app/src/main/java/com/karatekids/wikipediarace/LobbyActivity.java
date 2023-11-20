@@ -104,7 +104,7 @@ public class LobbyActivity extends AppCompatActivity {
                     if(b.getString("game_mode").equals("multi")) {
                         TextView match_found = (TextView) findViewById(R.id.match_found_text);
                         match_found.setVisibility(View.VISIBLE);
-                        match_found.setText("Match Found!");
+                        match_found.setText(R.string.match_found_st);
                     }
                     else if(b.getString("game_mode").equals("single")) {
                         TextView pages_found = (TextView) findViewById(R.id.pages_found_text);

@@ -72,5 +72,5 @@
     <string name="user_id_st">Your ID:</string>
     <string name="user_id_value_st">abc</string>
     <string name="shortest_path_text_st">Shortest Path Possible:</string>
-    <string name="game_details_toast_st"></string>
+    <string name="match_found_st">Match Found!</string>
 </resources>
