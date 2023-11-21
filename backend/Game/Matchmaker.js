@@ -8,6 +8,7 @@ class MatchMaker {
 	constructor(manager) {
 		this.waitingPlayers = [];
 		this.matchingInProgress = false;
+		this.friendList = {}
 		this.gameManager = manager;
 	}
 
@@ -37,6 +38,20 @@ class MatchMaker {
 		}
 
 		return player.matchPromise;
+	}
+	
+	//Adds a friend to the list of friends waiting to be matched.
+	//ChatGPT usage: no
+	async friendWaiting(friend) {
+		
+		this.friendList[friend.id] = friend;
+
+		if (!this.matchingInProgress) {
+			this.matchingInProgress = true;
+			this.matchPlayers();
+		}
+
+		
 	}
 
 	// Attempts to match players on a set time interval until there are no players left
@@ -74,6 +89,7 @@ class MatchMaker {
 			}
 		}
 		
+		//Matching for the normal players
 		for (i = 0; i < this.waitingPlayers.length; i++) {
 			const curPlayer = this.waitingPlayers[i];
 
@@ -84,6 +100,23 @@ class MatchMaker {
 				i--;
 			}
 		}
+		
+		//Now the friendslist matching
+		for(var i in this.friendList){
+			if(this.friendList[i].friendId == id && !this.friendList[i].done){
+				var game = this.startGame(id, friendId)
+				friend.matchPromiseResolve(game)
+				this.friendList[i].matchPromiseResolve(game)
+				this.friendList[i].done = true
+				friend.done = true
+			} 
+			else if(this.friendList[i].waitStartTime >= MAX_WAIT_TIME){
+				this.freindList[i].done = true
+				this.friendList[i].matchPromiseReject()
+			}
+		}
+		
+		
 
 		setTimeout(() => this.matchPlayers(), MATCHING_INTERVAL);
 	}

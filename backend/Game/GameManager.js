@@ -11,7 +11,6 @@ module.exports = class GameManager{
         this.playerManager = _playerManager 
 		this.firebaseNotifier = new FCKNotifier()
 		this.playerList = {}
-		this.friendList = {}
 		this.sessionList = {}
 		this.pageMan = new PageManager()
 		this.matchmaker = new Matchmaker(this)
@@ -105,11 +104,13 @@ module.exports = class GameManager{
 	}
 	//ChatGPT usage: No
 	//Some code taken from Matchmaker.js
-	async friendSearch(id, friendId){
+	async friendSearch(id, friendId, waitStartTime = Date.now()){
+		
 		var friend = {
 			id,
 			friendId,
-			done: false
+			done: false,
+			startTime 
 		};
 
 		friend.matchPromise = new Promise(
@@ -117,19 +118,10 @@ module.exports = class GameManager{
 				friend.matchPromiseResolve = resolve;
 				friend.matchPromiseReject = reject;
 			}
-		);
+		)
 		
-		for(var i in this.friendList){
-			if(this.friendList[i].friendId == id && !this.friendList[i].done){
-				var game = this.startGame(id, friendId)
-				friend.matchPromiseResolve(game)
-				this.friendList[i].matchPromiseResolve(game)
-				this.friendList[i].done = true
-				friend.done = true
-			}
-		}
+		this.matchmaker.friendWaiting(friend)
 		
-		this.friendList[id] = friend
 		return friend.matchPromise
 	}
 	//ChatGPT usage: No

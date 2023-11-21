@@ -79,7 +79,7 @@ public final class Networker {
     //ChatGPT usage: No
     public static void joinWithFriend(LobbyActivity lobby, String friendId) {
 
-        Log.d(TAG, NetworkMessage.friendGameRequest(name, id, friendId));
+        //Log.d(TAG, NetworkMessage.friendGameRequest(name, id, friendId));
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -172,10 +172,17 @@ public final class Networker {
                 response.append('\r');
             }
             rd.close();
-            return response.toString();
+
+            String res = response.toString();
+
+            //Checking if the response was "try again" in which we resend the request
+            if(res.equals("604")){
+                return executePost(targetURL, urlParameters);
+            }
+
+            return res;
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            return executePost(targetURL, urlParameters);
         } finally {
             if (connection != null) {
                 connection.disconnect();
