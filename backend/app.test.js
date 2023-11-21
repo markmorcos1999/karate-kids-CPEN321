@@ -139,7 +139,7 @@ describe("Retrieve a player's information", () => {
 
         const response = await request(app).get('/player/300');
         expect(response.status).toBe(404);
-        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: 300 })
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: "300" })
     });
 
     /**
@@ -153,7 +153,7 @@ describe("Retrieve a player's information", () => {
 
         const response = await request(app).get('/player/20');
         expect(response.status).toBe(500);
-        expect(mockCollection.insertOne).toHaveBeenCalledWith({ _id: 20 })
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: "20" })
     });
 });
 
@@ -170,7 +170,7 @@ describe("Testing player signIn", () => {
 
         mockCollection.findOne.mockReturnValue(player);
 
-        const response = await request(app).post('/signIn/' + player._id).send({_id:player.id, username:player.name};
+        const response = await request(app).post('/signIn/' + player._id).send({_id:player.id, username:player.name});
         expect(response.status).toBe(200);
         expect(JSON.stringify(response.body)).toBe(JSON.stringify(player._id));
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id })
@@ -212,7 +212,7 @@ describe("Testing game requests", () => {
     test("Invalid Request", async () => {
         const player = mockPlayer();
 
-        const response = await request(app).post('/game').send({_id:0, username:player.name};
+        const response = await request(app).post('/game').send({_id:0, username:player.name});
         expect(response.status).toBe(400);
         
     });
@@ -259,7 +259,7 @@ describe("Testing game requests", () => {
 
 function mockPlayer(
     name = "Julia Rubin", 
-    _id = randomInt(1000000), 
+    _id = randomInt(1000000).toString(), 
     elo = randomInt(1000000), 
     gamesWon = randomInt(1000000), 
     gamesLost = randomInt(1000000), 

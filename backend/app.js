@@ -232,7 +232,7 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 		res.status(500);
 		res.send();
 	}
-)
+});
 
 
 const server = https.createServer(options, app);
