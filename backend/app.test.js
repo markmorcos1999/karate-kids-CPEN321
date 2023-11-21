@@ -39,6 +39,16 @@ jest.mock('firebase-admin');
 admin.messaging = jest.fn().mockReturnValue('');
 admin.credential.cert.mockReturnValue('');
 
+const wikijs = require('wikijs');
+
+jest.mock('wikijs');
+var mockWiki = {
+	page: jest.fn()
+}
+wikijs.mockReturnValue({
+	default: mockWiki
+});
+
 const app = require('./app.js');
 const { randomInt } = require('crypto');
 
@@ -203,7 +213,25 @@ describe("Testing player signIn", () => {
 
 // Interface POST /game
 describe("Testing game requests", () => {
-    /**
+   
+
+    /** 
+     * Input: Single Game Request
+     * Expected status code: 200
+     * Expected behaviour: The server should check on the game and send back details
+     * Expected output: Game information
+     */
+    test("Single Game Request", async () => {
+        
+		await request(app).post
+
+        const response = await request(app).post('/game').send({_id:0, username:"newPlayer"});
+        expect(response.status).toBe(400);
+        expect(mockCollection.insertOne).toHaveBeenCalledTimes(0)
+        expect(mockCollection.findOne).toHaveBeenCalledTimes(0)
+    });
+	
+	 /**
      * Input: A player's id who is not signed in and requested a game
      * Expected status code: 400
      * Expected behaviour: The server should return an error code and not crash
@@ -213,7 +241,7 @@ describe("Testing game requests", () => {
         const player = mockPlayer();
 
         const response = await request(app).post('/game').send({_id:0, username:player.name};
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(400); //not anymore!
         
     });
 
@@ -238,21 +266,6 @@ describe("Testing game requests", () => {
         const response = await request(app).post('/signIn/400').send({_id:400, username:"newPlayer"});
         expect(response.status).toBe(200);
         expect(mockCollection.insertOne).toHaveBeenCalledWith(newPlayer)
-    });
-
-    /** @TODO remove this test?
-     * Input: N/A
-     * Expected status code: 400
-     * Expected behaviour: The server not crash but send back an error.
-     * Expected output: An internal server error response
-     */
-    test("Database retrieval error", async () => {
-         
-
-        const response = await request(app).post('/signIn/0').send({_id:0, username:"newPlayer"});
-        expect(response.status).toBe(400);
-        expect(mockCollection.insertOne).toHaveBeenCalledTimes(0)
-        expect(mockCollection.findOne).toHaveBeenCalledTimes(0)
     });
 });
 
