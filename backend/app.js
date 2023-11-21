@@ -79,7 +79,7 @@ app.post('/game', async (req, res) => {
 		else if (type == "friend") {
 			const friendId = message.friendId;
 			gameManager.friendSearch(id, friendId).then(
-			(resolve) => res.send(resolve.getMessage())
+			(resolve) => res.send(resolve.getMessage()),
 			(reject) => res.send("604")
 			)
 			const game = await gameManager.friendSearch(id, friendId);
@@ -120,7 +120,22 @@ app.put('/game', async (req, res) => {
 	catch {
 		res.status(500);
 		res.send();
+		
 	}
+});
+
+app.get('/game', async(req,res) =>{
+	
+	if(!gameManager.checkForPlayer(message.id)){
+		res.statusCode(400);
+		res.send();
+	
+	}
+	
+	const message = JSON.parse(req.body);
+	var result = gameManager.playerEndGame(message.id);
+	res.send(result);
+	
 });
 
 app.get('/leaderboard', async (req, res) => {

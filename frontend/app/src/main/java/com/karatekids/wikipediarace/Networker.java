@@ -3,6 +3,9 @@ package com.karatekids.wikipediarace;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -138,30 +141,58 @@ public final class Networker {
     //ChatGPT usage: No
     //This method comes from https://stackoverflow.com/questions/1359689/how-to-send-http-request-in-java
     //To help with executing a post
-    private static String executePost(String targetURL, String urlParameters) {
+    private static String executePost(String URL, JSONObject data) {
         HttpURLConnection connection = null;
+        String method = "POST";
+        String slug = "";
+        String urlParameters = data.toString();
+
+        StringBuilder str = new StringBuilder();
+
+        try {
+            method = data.getString("method");
+            slug = data.getString("subject");
+
+            str.append(URL);
+            str.append("/");
+            str.append(slug);
+
+            if(method.equals("GET")) {
+               str.append("/");
+               str.append(data.getString("id"));
+            }
+
+        }
+        catch(JSONException e) {
+        }
+
+        String targetURL = str.toString();
 
         try {
             //Create connection
             URL url = new URL(targetURL);
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod(method);
             connection.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
-
             connection.setRequestProperty("Content-Length",
                     Integer.toString(urlParameters.getBytes().length));
             connection.setRequestProperty("Content-Language", "en-US");
 
             connection.setUseCaches(false);
-            connection.setDoOutput(true);
 
-            //Send request
-            DataOutputStream wr = new DataOutputStream (
-                    connection.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.close();
 
+            if(!method.equals("GET")){
+
+                connection.setDoOutput(true);
+
+                //Send request
+                DataOutputStream wr = new DataOutputStream (
+                        connection.getOutputStream());
+                wr.writeBytes(urlParameters);
+                wr.close();
+
+            }
             //Get Response
             InputStream is = connection.getInputStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
