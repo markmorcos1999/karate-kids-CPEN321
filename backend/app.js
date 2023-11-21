@@ -22,12 +22,13 @@ app.use(express.json());
 
 app.post('/signIn/:id', async (req, res) => {
 	try {
+		
 		const id = req.params.id;
 		var player;
 
-		const message = JSON.parse(req.body);
-
-		if(await playerManager.playerExists(id)) {
+		const message = req.body;
+		
+		if(playerManager.playerExists(id)) {
 			player = await playerManager.getPlayerInfo(id);			
 		}
 		else {
@@ -43,9 +44,10 @@ app.post('/signIn/:id', async (req, res) => {
 		}
 						
 		gameManager.addPlayer(player, message.token)
-		res.send({ id })
+		res.status(200);
+		res.send({_id: id})
 	}
-	catch {
+	catch () {
 		res.status(500);
 		res.send();
 	}
@@ -150,8 +152,8 @@ app.get('/leaderboard', async (req, res) => {
 
 app.get('/player/:id', async (req, res) => {
 	try {
-		const id = parseInt(req.params.id);
-
+		const id = req.params.id;
+		
 		if(!(await playerManager.playerExists(id))){
 			res.status(404);
 			res.send();

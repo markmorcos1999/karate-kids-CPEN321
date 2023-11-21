@@ -148,7 +148,7 @@ describe("Retrieve a player's information", () => {
         const response = await request(app).get('/player/' + player._id);
         expect(response.status).toBe(200);
         expect(JSON.stringify(response.body)).toBe(JSON.stringify(player));
-        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id })
+        expect(mockCollection.findOne).toHaveBeenCalledWith({_id: player._id})
     });
 
     /**
@@ -162,7 +162,7 @@ describe("Retrieve a player's information", () => {
 
         const response = await request(app).get('/player/300');
         expect(response.status).toBe(404);
-        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: 300 })
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: "300" })
     });
 
     /**
@@ -195,7 +195,7 @@ describe("Testing player signIn", () => {
 
         const response = await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
         expect(response.status).toBe(200);
-        expect(JSON.stringify(response.body)).toBe(JSON.stringify(player._id));
+        expect(response.body._id).toBe(player._id);
         expect(mockCollection.findOne).toHaveBeenCalledWith({_id: player._id })
     });
 
@@ -375,7 +375,7 @@ describe("Testing completing a game", () => {
 
 function mockPlayer(
     name = "Julia Rubin", 
-    id = randomInt(1000000), 
+    _id = randomInt(1000000).toString(), 
     elo = randomInt(1000000), 
     gamesWon = randomInt(1000000), 
     gamesLost = randomInt(1000000), 
@@ -383,7 +383,7 @@ function mockPlayer(
     avgGamePathLength = randomInt(1000000)
 ) {
     return {
-        id,
+        _id,
         name,
         elo,
         gamesWon,
@@ -395,7 +395,7 @@ function mockPlayer(
 
 function mockPlayer2(
     name = "John Robin", 
-    id = randomInt(1000000), 
+    _id = randomInt(1000000), 
     elo = randomInt(1000000), 
     gamesWon = randomInt(1000000), 
     gamesLost = randomInt(1000000), 
@@ -403,7 +403,7 @@ function mockPlayer2(
     avgGamePathLength = randomInt(1000000)
 ) {
     return {
-        id,
+        _id,
         name,
         elo,
         gamesWon,
