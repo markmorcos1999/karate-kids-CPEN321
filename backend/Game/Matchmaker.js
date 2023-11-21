@@ -95,7 +95,7 @@ class MatchMaker {
 
 			if (Date.now() - curPlayer.waitStartTime >= MAX_WAIT_TIME) {
 				// If exceeded max wait time with no match, return null
-				curPlayer.matchPromiseReject();
+				curPlayer.matchPromiseReject("603");
 				this.waitingPlayers.splice(i, 1);
 				i--;
 			}
@@ -112,7 +112,7 @@ class MatchMaker {
 			} 
 			else if(this.friendList[i].waitStartTime >= MAX_WAIT_TIME){
 				this.freindList[i].done = true
-				this.friendList[i].matchPromiseReject()
+				this.friendList[i].matchPromiseReject("603")
 			}
 		}
 		

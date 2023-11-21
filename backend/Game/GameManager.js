@@ -21,8 +21,28 @@ module.exports = class GameManager{
 		this.playerList[id] = new Player(init, deviceToken);
 	}
 	//ChatGPT usage: No
+	//Because there is no gracefull way for the frontend to recover when it has lost its ID
+	//We are instead going to allow the player to continue without their id.
 	checkForPlayer(id){
-		return this.playerList[id] && id !== 0;
+		
+		if(this.playerList[id]){
+		
+			return true
+
+		}
+		else{
+			newPlayer = {
+				_id: id, 
+				name: "Guest", 
+				elo: 0, 
+				gamesWon: 0, 
+				gamesLost: 0
+			};
+			
+			this.playerList
+			
+			return true
+		}
 	}
 	//ChatGPT usage: No
 	playerFindGame(id){

@@ -58,16 +58,19 @@ app.post('/game', async (req, res) => {
 		const type = message.type;
 		const id = message.id;
 						
-		//Assumes "res" in this case is a game, and that game has a method "getMessage()" that returns a string in the right form
-		//gameManager.playerFindGame(message.id).then((res) => res.send(JSON.stringify(res.getMessage())))
+		
 		if(!gameManager.checkForPlayer(id)) {
 			res.status(400);
 			res.send();
 			return;
 		}
-
+		
+		//Here, we use "604" as a message code to say "try again later", letting the front end know
+		//that no other player was found.
 		if(type == "multi") {
-			gameManager.playerFindGame(message.id).then((res) => res.send(res.getMessage()));
+			gameManager.playerFindGame(message.id).then(
+			(resolve) => res.send(resolve.getMessage()), 
+			(reject) => res.send("604"));
 		}
 		else if(type == "daily") {
 			const game = await gameManager.startDaily(id);
@@ -75,6 +78,10 @@ app.post('/game', async (req, res) => {
 		}
 		else if (type == "friend") {
 			const friendId = message.friendId;
+			gameManager.friendSearch(id, friendId).then(
+			(resolve) => res.send(resolve.getMessage())
+			(reject) => res.send("604")
+			)
 			const game = await gameManager.friendSearch(id, friendId);
 			res.send(game.getMessage());
 		}
