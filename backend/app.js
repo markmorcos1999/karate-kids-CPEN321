@@ -79,7 +79,7 @@ app.post('/game', async (req, res) => {
 		else if (type == "friend") {
 			const friendId = message.friendId;
 			gameManager.friendSearch(id, friendId).then(
-			(resolve) => res.send(resolve.getMessage())
+			(resolve) => res.send(resolve.getMessage()),
 			(reject) => res.send("604")
 			)
 			const game = await gameManager.friendSearch(id, friendId);
@@ -135,7 +135,7 @@ app.get('/leaderboard', async (req, res) => {
 
 app.get('/player/:id', async (req, res) => {
 	try {
-		const id = parseInt(req.params.id);
+		const id = req.params.id;
 
 		if(!(await playerManager.playerExists(id))){
 			res.status(404);
@@ -150,6 +150,89 @@ app.get('/player/:id', async (req, res) => {
 		res.send();
 	}
 });
+
+
+app.post('/player/:playerId/friend/:friendId', async (req, res) => {
+	try {
+		const playerId = req.params.playerId;
+		const friendId = req.params.friendId;
+
+		if(!(await playerManager.playerExists(playerId) && await playerManager.playerExists(friendId))){
+			res.status(404);
+			res.send();
+			return;
+		}
+
+		const playerInfo = await playerManager.getPlayerInfo(playerId);
+		
+		let friends = playerInfo.friends;
+		if (friends.includes(friendId)) {
+			res.status(409)
+			res.send();
+			return;
+		}
+		friends.push(friendId);
+
+		await playerManager.updatePlayer(
+			playerId,
+			playerInfo.elo,
+			playerInfo.gamesWon,
+			playerInfo.gamesLost,
+			playerInfo.avgGameDuration,
+			playerInfo.avgGamePath,
+			friends
+		);
+	
+		res.status(204);
+		res.send();
+	} 
+	catch {
+		res.status(500);
+		res.send();
+	}
+});
+
+app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
+	try {
+		const playerId = req.params.playerId;
+		const friendId = req.params.friendId;
+
+		if(!(await playerManager.playerExists(playerId) && await playerManager.playerExists(friendId))){
+			res.status(404);
+			res.send();
+			return;
+		}
+
+		const playerInfo = await playerManager.getPlayerInfo(playerId);
+		
+		let friends = playerInfo.friends;
+		const friendIndex = friends.indexOf(friendId);
+
+		if (friendIndex < 0) {
+			res.status(404)
+			res.send();
+			return;
+		}
+		delete friends[friendIndex];
+
+		await playerManager.updatePlayer(
+			playerId,
+			playerInfo.elo,
+			playerInfo.gamesWon,
+			playerInfo.gamesLost,
+			playerInfo.avgGameDuration,
+			playerInfo.avgGamePath,
+			friends
+		);
+	
+		res.status(204);
+		res.send();
+	} 
+	catch {
+		res.status(500);
+		res.send();
+	}
+)
 
 
 const server = https.createServer(options, app);
