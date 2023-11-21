@@ -2,6 +2,7 @@ const request = require('supertest');
 const https = require('https');
 const fs = require('fs');
 const { MongoClient } = require('mongodb');
+const Wikijs = require('wikijs');
 
 jest.mock('https');
 https.createServer.mockReturnValue({ 
@@ -39,15 +40,27 @@ jest.mock('firebase-admin');
 admin.messaging = jest.fn().mockReturnValue('');
 admin.credential.cert.mockReturnValue('');
 
-const wikijs = require('wikijs');
+
 
 jest.mock('wikijs');
 var mockWiki = {
-	page: jest.fn()
+	page: jest.fn(),
+	random: jest.fn()
+	
 }
-wikijs.mockReturnValue({
-	default: mockWiki
-});
+var mockTitle = {
+	map: jest.fn()
+}
+Wikijs.default.mockReturnValue(mockWiki)
+
+var node_fetch = require('node-fetch');
+
+jest.mock('node-fetch');
+
+
+node_fetch = jest.fn()
+
+node_fetch.mockReturnValue(mockPath());
 
 const app = require('./app.js');
 const { randomInt } = require('crypto');
@@ -180,10 +193,10 @@ describe("Testing player signIn", () => {
 
         mockCollection.findOne.mockReturnValue(player);
 
-        const response = await request(app).post('/signIn/' + player._id).send({_id:player.id, username:player.name};
+        const response = await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
         expect(response.status).toBe(200);
         expect(JSON.stringify(response.body)).toBe(JSON.stringify(player._id));
-        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id })
+        expect(mockCollection.findOne).toHaveBeenCalledWith({_id: player._id })
     });
 
     /**
@@ -193,7 +206,9 @@ describe("Testing player signIn", () => {
      * Expected output: The given ID as confirmation
      */
     test("Signin a nonexistent player", async () => {
-        
+        const player = mockPlayer();
+		mockCollection.findOne.mockReturnValue(player);
+		
 		var newPlayer = {
             _id: 400,
             name: "newPlayer",
@@ -204,7 +219,7 @@ describe("Testing player signIn", () => {
             avgGamePathLength: null
         }
 
-        const response = await request(app).post('/signIn/400').send({_id:400, username:"newPlayer"});
+        const response = await request(app).post('/signIn/400').send(JSON.stringify({id:400, name:"newPlayer"}));
         expect(response.status).toBe(200);
         expect(mockCollection.insertOne).toHaveBeenCalledWith(newPlayer)
     });
@@ -222,57 +237,145 @@ describe("Testing game requests", () => {
      * Expected output: Game information
      */
     test("Single Game Request", async () => {
-        
-		await request(app).post
+		
+        var player = mockPlayer();
+		var pages = mockPages();
+		mockTitle.map.mockReturnValue(pages);
+		mockWiki.random.mockReturnValue(mockTitle);
+		
+		
+		//First, sign player in
+		player = mockPlayer();		
+		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 
-        const response = await request(app).post('/game').send({_id:0, username:"newPlayer"});
-        expect(response.status).toBe(400);
-        expect(mockCollection.insertOne).toHaveBeenCalledTimes(0)
-        expect(mockCollection.findOne).toHaveBeenCalledTimes(0)
+		//Now start game
+        const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "Single"});
+        
+		expect(JSON.stringify(response.body.startTitle)).toBe(JSON.stringify(pages[0].title));
+		expect(JSON.stringify(response.body.startPage)).toBe(JSON.stringify(pages[0].url));
+		expect(JSON.stringify(response.body.endTitle)).toBe(JSON.stringify(pages[1].title));
+		expect(JSON.stringify(response.body.endPage)).toBe(JSON.stringify(pages[1].url));
+		expect(response.status).toBe(200);
+        expect(mocktitle.map).toHaveBeenCalledTimes(1)
+        expect(mockWiki.random).toHaveBeenCalledTimes(1)
     });
 	
-	 /**
-     * Input: A player's id who is not signed in and requested a game
-     * Expected status code: 400
-     * Expected behaviour: The server should return an error code and not crash
-     * Expected output: An empty message with status 400
-     */
-    test("Invalid Request", async () => {
-        const player = mockPlayer();
-
-        const response = await request(app).post('/game').send({_id:0, username:player.name};
-        expect(response.status).toBe(400); //not anymore!
-        
-    });
-
-    /**
-     * Input: Testing single player game.
+	 /** 
+     * Input: Daily Game Request
      * Expected status code: 200
-     * Expected behaviour: This should create a new game with valid pages for the user.
-     * Expected output: The given ID as confirmation
+     * Expected behaviour: The server should create a game using the Current Daily pages
+     * Expected output: Valid Game information
      */
-    test("Retrieve a nonexistent player's information", async () => {
-        
-		var newPlayer = {
-            _id: 400,
-            name: "newPlayer",
-            elo: 0,
-            gamesWon: 0,
-            gamesLost: 0,
-            avgGameDuration: null,
-            avgGamePathLength: null
-        }
+    test("Daily Game Request", async () => {	
 
-        const response = await request(app).post('/signIn/400').send({_id:400, username:"newPlayer"});
-        expect(response.status).toBe(200);
-        expect(mockCollection.insertOne).toHaveBeenCalledWith(newPlayer)
+		
+		//First, sign player in
+		player = mockPlayer();		
+		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+
+		//Now start game
+        const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "Daily"});
+        
+		expect(JSON.stringify(response.body.startTitle)).toBe("Taco");
+		expect(JSON.stringify(response.body.startPage)).toBe("https://en.m.wikipedia.org/wiki/Taco");
+		expect(JSON.stringify(response.body.endTitle)).toBe("Mexico");
+		expect(JSON.stringify(response.body.endPage)).toBe("https://en.m.wikipedia.org/wiki/Mexico");
+		expect(response.status).toBe(200);
+        
     });
+	 /** 
+     * Input: Multi Game Request
+     * Expected status code: 200
+     * Expected behaviour: The server should create a game with the two players
+     * Expected output: Valid Game information
+     */
+	test("Multi Game Request", async () => {	
+		var pages = mockPages();
+		mockTitle.map.mockReturnValue(pages);
+		mockWiki.random.mockReturnValue(mockTitle);
+		
+		//First, sign player in
+		player = mockPlayer();	
+		player2 = mockPlayer2();
+		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
+
+		//Now start game
+        request(app).post('/game').send({id:player2._id, name:player2.name, mode: "Multi"});
+        const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "Multi"});
+
+		expect(JSON.stringify(response.body.startTitle)).toBe("Taco");
+		expect(JSON.stringify(response.body.startPage)).toBe("https://en.m.wikipedia.org/wiki/Taco");
+		expect(JSON.stringify(response.body.endTitle)).toBe("Mexico");
+		expect(JSON.stringify(response.body.endPage)).toBe("https://en.m.wikipedia.org/wiki/Mexico");
+		expect(response.status).toBe(200);
+        
+    });
+	
 });
 
+// Interface PUT /game
+describe("Testing putting pages into games", () => {
+	 /** 
+     * Input: testing adding pages to a game in progress.
+     * Expected status code: 200
+     * Expected behaviour: The server should add the game to its internal page list
+     * Expected output: A success response code
+     */
+    test("Page Put Message", async () => {
+		
+		
+		//First, sign player in
+		player = mockPlayer();		
+		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+
+		//Now start a game
+        await request(app).post('/game').send({id:player._id, name:player.name, mode: "Daily"});
+        
+		const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexican_cuisine"});
+		
+		expect(response.status).toBe(200);
+        
+    });
+	
+});
+
+// Interface GET /game
+describe("Testing completing a game", () => {
+	 /** 
+     * Input: Completing a game after pages have been aded
+     * Expected status code: 200
+     * Expected behaviour: The server should create a game using the Current Daily pages
+     * Expected output: Valid Game information
+     */
+    test("Completing multiplayer game", async () => {	
+		
+		var pages = mockPages();
+		mockTitle.map.mockReturnValue(pages);
+		mockWiki.random.mockReturnValue(mockTitle);
+		
+		
+		//First, sign player in
+		player = mockPlayer();	
+		player2 = mockPlayer2();
+		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
+
+		//Now start game
+        request(app).post('/game').send({id:player2._id, name:player2.name, mode: "Multi"});
+        await request(app).post('/game').send({id:player._id, name:player.name, mode: "Multi"});
+        
+		const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexican_cuisine"});
+		
+		expect(response.status).toBe(200);
+        
+    });
+	
+});
 
 function mockPlayer(
     name = "Julia Rubin", 
-    _id = randomInt(1000000), 
+    id = randomInt(1000000), 
     elo = randomInt(1000000), 
     gamesWon = randomInt(1000000), 
     gamesLost = randomInt(1000000), 
@@ -280,7 +383,7 @@ function mockPlayer(
     avgGamePathLength = randomInt(1000000)
 ) {
     return {
-        _id,
+        id,
         name,
         elo,
         gamesWon,
@@ -292,7 +395,7 @@ function mockPlayer(
 
 function mockPlayer2(
     name = "John Robin", 
-    _id = randomInt(1000000), 
+    id = randomInt(1000000), 
     elo = randomInt(1000000), 
     gamesWon = randomInt(1000000), 
     gamesLost = randomInt(1000000), 
@@ -300,7 +403,7 @@ function mockPlayer2(
     avgGamePathLength = randomInt(1000000)
 ) {
     return {
-        _id,
+        id,
         name,
         elo,
         gamesWon,
@@ -308,4 +411,13 @@ function mockPlayer2(
         avgGameDuration,
         avgGamePathLength
     };
+}
+
+function mockPages(){
+	return [{title: "Taco", url: "https://en.m.wikipedia.org/wiki/Taco"},{title: "Mexico", url: "https://en.m.wikipedia.org/wiki/Mexico"}]
+}
+
+function mockPath(){
+	
+	return ["Taco", "Mexican Food", "Mexico"]
 }
