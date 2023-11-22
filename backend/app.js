@@ -47,7 +47,7 @@ app.post('/signIn/:id', async (req, res) => {
 		res.status(200);
 		res.send({_id: id})
 	}
-	catch () {
+	catch {
 		res.status(500);
 		res.send();
 	}

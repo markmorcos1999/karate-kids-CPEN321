@@ -176,7 +176,7 @@ describe("Retrieve a player's information", () => {
 
         const response = await request(app).get('/player/20');
         expect(response.status).toBe(500);
-        expect(mockCollection.insertOne).toHaveBeenCalledWith({ _id: 20 })
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: "20" })
     });
 });
 
@@ -200,29 +200,21 @@ describe("Testing player signIn", () => {
     });
 
     /**
-     * Input: A nonexistent player id (400)
-     * Expected status code: 200
-     * Expected behaviour: This should create a new database entry for  the new ID
-     * Expected output: The given ID as confirmation
-     */
-    test("Signin a nonexistent player", async () => {
-        const player = mockPlayer();
-		mockCollection.findOne.mockReturnValue(player);
-		
-		var newPlayer = {
-            _id: 400,
-            name: "newPlayer",
-            elo: 0,
-            gamesWon: 0,
-            gamesLost: 0,
-            avgGameDuration: null,
-            avgGamePathLength: null
-        }
+     * Input: A player ID
+     * Expected status code: 500
+     * Expected behaviour: The server should error out
+     * Expected output: An internal server error response
+    */
+    test("Database error", async () => {
 
-        const response = await request(app).post('/signIn/400').send(JSON.stringify({id:400, name:"newPlayer"}));
-        expect(response.status).toBe(200);
-        expect(mockCollection.insertOne).toHaveBeenCalledWith(newPlayer)
+		mockCollection.findOne.mockRejectedValue(new Error("Test error"));
+
+        const response = await request(app).post('/signIn/30').send(JSON.stringify({id:"30", name:"none"}));
+        expect(response.status).toBe(500);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: "30" })
+		
     });
+	
 
 });
 
