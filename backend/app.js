@@ -21,6 +21,9 @@ var port = 8081;
 app.use(express.json());
 
 app.post('/signIn/:id', async (req, res) => {
+	
+
+	
 	try {
 		
 		const id = req.params.id;
@@ -28,7 +31,7 @@ app.post('/signIn/:id', async (req, res) => {
 
 		const message = req.body;
 		
-		if(playerManager.playerExists(id)) {
+		if(await playerManager.playerExists(id)) {
 			player = await playerManager.getPlayerInfo(id);			
 		}
 		else {
