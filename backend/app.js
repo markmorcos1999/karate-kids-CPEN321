@@ -234,6 +234,28 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 	}
 });
 
+app.get('/player/:id/friend', async (req, res) => {
+	try {
+		const id = req.params.id;
+
+		if(!(await playerManager.playerExists(id))) {
+			res.status(404);
+			res.send();
+			return;
+		}
+
+		const friends = (await playerManager.getPlayerInfo(id)).friends;
+		let friendInfo = await friends.map(async (friendId) => await playerManager.getPlayerInfo(friendId))
+	
+		res.status(204);
+		res.send(friendInfo);
+	} 
+	catch {
+		res.status(500);
+		res.send();
+	}
+});
+
 
 const server = https.createServer(options, app);
 
