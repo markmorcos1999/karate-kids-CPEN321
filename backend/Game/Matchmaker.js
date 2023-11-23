@@ -58,6 +58,7 @@ class MatchMaker {
 	// that need to be matched.
 	// ChatGPT usage: Partial
 	async matchPlayers() {
+		
 		if (this.waitingPlayers.length == 0) {
 			this.matchingInProgress = false;
 			return;
@@ -73,8 +74,9 @@ class MatchMaker {
 
 				const diff = p1.elo - p2.elo;
 				const allowedDiff = this.allowedEloDiff(p1.waitStartTime, p2.waitStartTime);
-				
+				console.log(allowedDiff)
 				if (diff <= allowedDiff) {
+					console.log("madeMatch!")
 					var game = this.gameManager.startGame(p1.id, p2.id);
 
 					p1.matchPromiseResolve(game);

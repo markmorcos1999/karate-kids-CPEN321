@@ -58,11 +58,10 @@ app.post('/signIn/:id', async (req, res) => {
 
 app.post('/game', async (req, res) => {
 	try {
-		const message = JSON.parse(req.body);
+		const message = req.body;
 
-		const type = message.type;
+		const type = message.mode;
 		const id = message.id;
-						
 		
 		if(!gameManager.checkForPlayer(id)) {
 			res.status(400);
@@ -73,6 +72,8 @@ app.post('/game', async (req, res) => {
 		//Here, we use "604" as a message code to say "try again later", letting the front end know
 		//that no other player was found.
 		if(type == "multi") {
+			console.log("MultiGame with:")
+			console.log(id) //error here, I believe @TODO
 			gameManager.playerFindGame(message.id).then(
 			(resolve) => res.send(resolve.getMessage()), 
 			(reject) => res.send("604"));
@@ -95,7 +96,8 @@ app.post('/game', async (req, res) => {
 			res.send(game.getMessage());
 		}
 	}
-	catch {
+	catch (e){
+		console.error(e);
 		res.status(500);
 		res.send();
 	}
@@ -105,7 +107,7 @@ app.post('/game', async (req, res) => {
 
 app.put('/game', async (req, res) => {
 	try {
-		const message = JSON.parse(req.body);
+		const message = req.body;
 
 		if(!gameManager.checkForPlayer(message.id)){
 			res.status(400);
@@ -129,16 +131,13 @@ app.put('/game', async (req, res) => {
 	}
 });
 
-app.get('/game', async(req,res) =>{
+app.get('/game/:id', async(req,res) =>{
 	
-	if(!gameManager.checkForPlayer(message.id)){
-		res.statusCode(400);
-		res.send();
+	const id = req.params.id;
 	
-	}
+	gameManager.checkForPlayer(id);
 	
-	const message = JSON.parse(req.body);
-	var result = gameManager.playerEndGame(message.id);
+	var result = gameManager.playerEndGame(id);
 	res.send(result);
 	
 });

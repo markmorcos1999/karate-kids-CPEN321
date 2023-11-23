@@ -51,22 +51,33 @@ var mockWiki = {
 var mockTitle = {
 	map: jest.fn()
 }
+
 Wikijs.default.mockReturnValue(mockWiki)
+
+//Wikijs.default = mockWiki;
 
 var node_fetch = require('node-fetch');
 
 jest.mock('node-fetch');
 
 
-node_fetch = jest.fn()
 
-node_fetch.mockReturnValue(mockPath());
+node_fetch.mockReturnValue(
+	new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(mockResponse);
+        }, 1000);
+    })
+);
+
 
 const app = require('./app.js');
 const { randomInt } = require('crypto');
 
 // Interface GET /leaderboard
 describe("Retrieve the leaderboard", () => {
+	
+	
     /**
      * Input: N/A
      * Expected status code: 200
@@ -180,6 +191,7 @@ describe("Retrieve a player's information", () => {
     });
 });
 
+
 // Interface POST /signIn/:id
 describe("Testing player signIn", () => {
     /**
@@ -231,24 +243,29 @@ describe("Testing game requests", () => {
     test("Single Game Request", async () => {
 		
         var player = mockPlayer();
+		
+		
 		var pages = mockPages();
 		mockTitle.map.mockReturnValue(pages);
 		mockWiki.random.mockReturnValue(mockTitle);
-		
-		
-		//First, sign player in
-		player = mockPlayer();		
-		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 
-		//Now start game
-        const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "Single"});
+        mockCollection.findOne.mockReturnValue(player);
+
+        await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
         
+		const response = await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}))
+		.then(response => {
+			return request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
+		});
+                 
+		expect(response.status).toBe(200);
+		
 		expect(JSON.stringify(response.body.startTitle)).toBe(JSON.stringify(pages[0].title));
 		expect(JSON.stringify(response.body.startPage)).toBe(JSON.stringify(pages[0].url));
 		expect(JSON.stringify(response.body.endTitle)).toBe(JSON.stringify(pages[1].title));
 		expect(JSON.stringify(response.body.endPage)).toBe(JSON.stringify(pages[1].url));
-		expect(response.status).toBe(200);
-        expect(mocktitle.map).toHaveBeenCalledTimes(1)
+		
+        expect(mockTitle.map).toHaveBeenCalledTimes(1)
         expect(mockWiki.random).toHaveBeenCalledTimes(1)
     });
 	
@@ -260,21 +277,45 @@ describe("Testing game requests", () => {
      */
     test("Daily Game Request", async () => {	
 
+		var player = mockPlayer();
 		
-		//First, sign player in
-		player = mockPlayer();		
-		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+		
+		jest.mock('node-fetch');
 
-		//Now start game
-        const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "Daily"});
+		var pages = mockPages();
+		
+		mockWiki = {
+			page: jest.fn(),
+			random: jest.fn()
+		}
+		
+		mockTitle = {
+			map: jest.fn()
+		}
+		mockTitle.map.mockReturnValue(pages);
+		mockWiki.random.mockReturnValue(mockTitle);
+
+        mockCollection.findOne.mockReturnValue(player);
+
+        await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
         
-		expect(JSON.stringify(response.body.startTitle)).toBe("Taco");
-		expect(JSON.stringify(response.body.startPage)).toBe("https://en.m.wikipedia.org/wiki/Taco");
-		expect(JSON.stringify(response.body.endTitle)).toBe("Mexico");
-		expect(JSON.stringify(response.body.endPage)).toBe("https://en.m.wikipedia.org/wiki/Mexico");
+		const response = await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}))
+		.then(response => {
+			return request(app).post('/game').send({id:player._id, name:player.name, mode: "daily"});
+		});
+                 
 		expect(response.status).toBe(200);
+		
+		expect(JSON.stringify(response.body.startTitle)).toBe(JSON.stringify(pages[0].title));
+		expect(JSON.stringify(response.body.startPage)).toBe(JSON.stringify(pages[0].url));
+		expect(JSON.stringify(response.body.endTitle)).toBe(JSON.stringify(pages[1].title));
+		expect(JSON.stringify(response.body.endPage)).toBe(JSON.stringify(pages[1].url));
+		
+        expect(mockTitle.map).toHaveBeenCalledTimes(0)
+        expect(mockWiki.random).toHaveBeenCalledTimes(0)
         
     });
+	
 	 /** 
      * Input: Multi Game Request
      * Expected status code: 200
@@ -286,25 +327,32 @@ describe("Testing game requests", () => {
 		mockTitle.map.mockReturnValue(pages);
 		mockWiki.random.mockReturnValue(mockTitle);
 		
+		mockCollection.findOne.mockReturnValue(null);
+		
 		//First, sign player in
 		player = mockPlayer();	
 		player2 = mockPlayer2();
+		
+		
+		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
 
 		//Now start game
-        request(app).post('/game').send({id:player2._id, name:player2.name, mode: "Multi"});
-        const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "Multi"});
-
-		expect(JSON.stringify(response.body.startTitle)).toBe("Taco");
-		expect(JSON.stringify(response.body.startPage)).toBe("https://en.m.wikipedia.org/wiki/Taco");
-		expect(JSON.stringify(response.body.endTitle)).toBe("Mexico");
-		expect(JSON.stringify(response.body.endPage)).toBe("https://en.m.wikipedia.org/wiki/Mexico");
+        request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
+        const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "single"}); //@HERE for later kyle
+		
 		expect(response.status).toBe(200);
+
+		expect(JSON.stringify(response.body.startTitle)).toBe(JSON.stringify(pages[0].title));
+		expect(JSON.stringify(response.body.startPage)).toBe(JSON.stringify(pages[0].url));
+		expect(JSON.stringify(response.body.endTitle)).toBe(JSON.stringify(pages[1].title));
+		expect(JSON.stringify(response.body.endPage)).toBe(JSON.stringify(pages[1].url));
+		
         
     });
-	
 });
+
 
 // Interface PUT /game
 describe("Testing putting pages into games", () => {
@@ -317,16 +365,39 @@ describe("Testing putting pages into games", () => {
     test("Page Put Message", async () => {
 		
 		
-		//First, sign player in
-		player = mockPlayer();		
-		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+		var player = mockPlayer();
+	
+		
+		jest.mock('node-fetch');
 
-		//Now start a game
-        await request(app).post('/game').send({id:player._id, name:player.name, mode: "Daily"});
+		var pages = mockPages();
+		
+		mockWiki = {
+			page: jest.fn(),
+			random: jest.fn()
+		}
+		
+		mockTitle = {
+			map: jest.fn()
+		}
+		mockTitle.map.mockReturnValue(pages);
+		mockWiki.random.mockReturnValue(mockTitle);
+
+        mockCollection.findOne.mockReturnValue(player);
+
+        request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
         
-		const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexican_cuisine"});
+		await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}))
+		.then(response => {
+			return request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
+		});
+                 
+   		const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexican_cuisine"});
 		
 		expect(response.status).toBe(200);
+				
+        expect(mockTitle.map).toHaveBeenCalledTimes(0)
+        expect(mockWiki.random).toHaveBeenCalledTimes(0)
         
     });
 	
@@ -346,21 +417,41 @@ describe("Testing completing a game", () => {
 		mockTitle.map.mockReturnValue(pages);
 		mockWiki.random.mockReturnValue(mockTitle);
 		
+		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer();	
-		player2 = mockPlayer2();
+		player = mockPlayer(elo = 10);	
+		player2 = mockPlayer2(elo = 11);
+		
+		console.log(player._id)
+		console.log(player2._id)
+		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
-
+		
 		//Now start game
-        request(app).post('/game').send({id:player2._id, name:player2.name, mode: "Multi"});
+        await request(app).post('/game').send({id:player2._id, name:player2.name, mode: "Multi"});
         await request(app).post('/game').send({id:player._id, name:player.name, mode: "Multi"});
-        
-		const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexican_cuisine"});
+
+		console.log(promise1)
+		console.log(promise2)
+
+		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexican_cuisine"});
+		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexico"});
+
+        const response = await request(app).get('/game/' + player._id);
+		const response2 = await request(app).get('/game/' + player2._id);
 		
 		expect(response.status).toBe(200);
-        
+
+		
+		expect(JSON.stringify(response.body.gamePosition)).toBe(JSON.stringify(1));
+		expect(JSON.stringify(response.body.shortestPath)).toBe(JSON.stringify(["Taco", "Mexican Food", "Mexico"]));		
+
+		expect(JSON.stringify(response2.body.gamePosition)).toBe(JSON.stringify(2));
+		expect(JSON.stringify(response2.body.shortestPath)).toBe(JSON.stringify(["Taco", "Mexican Food", "Mexico"]));		
+
+		
     });
 	
 });
@@ -409,7 +500,26 @@ function mockPages(){
 	return [{title: "Taco", url: "https://en.m.wikipedia.org/wiki/Taco"},{title: "Mexico", url: "https://en.m.wikipedia.org/wiki/Mexico"}]
 }
 
+//creating a response object
+var mockResponse = {
+	json: () => {
+		return new Promise((resolve, reject) => {
+        setTimeout(() => {
+			//Creating a map object
+            resolve({paths:[{ map:()=>{return ["Taco", "Mexican Food", "Mexico"]} }]});
+			//resolve("test")
+		}, 200);
+    });
+	}
+}
+
 function mockPath(){
-	
-	return ["Taco", "Mexican Food", "Mexico"]
+
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(mockResponse);
+        }, 1000);
+    });
+
+
 }
