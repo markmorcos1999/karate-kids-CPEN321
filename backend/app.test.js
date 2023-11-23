@@ -257,6 +257,219 @@ describe("Testing game requests", () => {
 });
 
 
+// Interface POST /player/{playerId}/friend/{friendId}
+describe("Add a friend", () => {
+    /**
+     * Input: a player id and a friend id
+     * Expected status code: 201
+     * Expected behaviour: the server adds the friend id to the player's friends list
+     * Expected output: An empty message with status 201
+     */
+    test("Add a friend", async () => {
+        const player = mockPlayer("Player");
+        const friend = mockPlayer("Friend");
+
+        mockCollection.findOne.mockImplementation((idObj) => {
+            if (idObj._id == player._id) {
+                return player;
+            }
+            else if (idObj._id == friend._id) {
+                return friend;
+            }
+
+            return null;
+        });
+    
+        const response = await request(app).post('/player/' + player._id + '/friend/' + friend._id);
+
+        expect(response.status).toBe(201);
+        expect(mockCollection.updateOne).toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id });
+    });
+
+    /**
+     * Input: a player id and a friend id that doesn't exist
+     * Expected status code: 404
+     * Expected behaviour: the server responds with an error
+     * Expected output: An empty message with status 404
+     */
+    test("Add a nonexistent friend", async () => {
+        const player = mockPlayer("Player");
+
+        mockCollection.findOne.mockImplementation((idObj) => {
+            if (idObj._id == player._id) {
+                return player;
+            }
+
+            return null;
+        });
+    
+        const response = await request(app).post('/player/' + player._id + '/friend/' + (player._id + 1));
+
+        expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id + 1 });
+    });
+
+    /**
+     * Input: a player id that doesn't exist and a friend id
+     * Expected status code: 404
+     * Expected behaviour: the server responds with an error
+     * Expected output: An empty message with status 404
+     */
+    test("Add a friend to a nonexistent player", async () => {
+        const friend = mockPlayer("Player");
+
+        mockCollection.findOne.mockImplementation((idObj) => {
+            if (idObj._id == friend._id) {
+                return friend;
+            }
+
+            return null;
+        });
+    
+        const response = await request(app).post('/player/' + (friend._id + 1) + '/friend/' + friend._id);
+
+        expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id + 1 });
+    });
+
+    /**
+     * Input: N/A
+     * Expected status code: 500
+     * Expected behaviour: The server should error out
+     * Expected output: An internal server error response
+     */
+    test("Database retrieval error", async () => {
+        mockCollection.findOne.mockRejectedValue(new Error("Test error"));
+
+        const response = await request(app).post('/player/20/friend/30');
+        expect(response.status).toBe(500);
+    });
+});
+
+// Interface DELETE /player/{playerId}/friend/{friendId}
+describe("Remove a friend", () => {
+    /**
+     * Input: a player id and a friend id
+     * Expected status code: 201
+     * Expected behaviour: the server adds the friend id to the player's friends list
+     * Expected output: An empty message with status 201
+     */
+    test("Remove a friend", async () => {
+        const friend = mockPlayer("Friend");
+        const player = mockPlayer("Player");
+        player.friends = [friend._id];
+
+        mockCollection.findOne.mockImplementation((idObj) => {
+            if (idObj._id == player._id) {
+                return player;
+            }
+            else if (idObj._id == friend._id) {
+                return friend;
+            }
+
+            return null;
+        });
+    
+        const response = await request(app).delete('/player/' + player._id + '/friend/' + friend._id);
+
+        expect(response.status).toBe(204);
+        expect(mockCollection.updateOne).toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id });
+    });
+
+    /**
+     * Input: a player id and a the id of another player who isn't a friend
+     * Expected status code: 404
+     * Expected behaviour: the server responds with an error
+     * Expected output: An empty message with status 404
+     */
+    test("Remove a friend", async () => {
+        const friend = mockPlayer("Friend");
+        const player = mockPlayer("Player");
+
+        mockCollection.findOne.mockImplementation((idObj) => {
+            if (idObj._id == player._id) {
+                return player;
+            }
+            else if (idObj._id == friend._id) {
+                return friend;
+            }
+
+            return null;
+        });
+    
+        const response = await request(app).delete('/player/' + player._id + '/friend/' + friend._id);
+
+        expect(response.status).toBe(404);
+        expect(mockCollection.updateOne).toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id });
+    });
+
+    /**
+     * Input: a player id and a friend id that doesn't exist
+     * Expected status code: 404
+     * Expected behaviour: the server responds with an error
+     * Expected output: An empty message with status 404
+     */
+    test("Add a nonexistent friend", async () => {
+        const player = mockPlayer("Player");
+
+        mockCollection.findOne.mockImplementation((idObj) => {
+            if (idObj._id == player._id) {
+                return player;
+            }
+
+            return null;
+        });
+    
+        const response = await request(app).delete('/player/' + player._id + '/friend/' + (player._id + 1));
+
+        expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id + 1 });
+    });
+
+    /**
+     * Input: a player id that doesn't exist and a friend id
+     * Expected status code: 404
+     * Expected behaviour: the server responds with an error
+     * Expected output: An empty message with status 404
+     */
+    test("Add a friend to a nonexistent player", async () => {
+        const friend = mockPlayer("Player");
+
+        mockCollection.findOne.mockImplementation((idObj) => {
+            if (idObj._id == friend._id) {
+                return friend;
+            }
+
+            return null;
+        });
+    
+        const response = await request(app).delete('/player/' + (friend._id + 1) + '/friend/' + friend._id);
+
+        expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id + 1 });
+    });
+
+    /**
+     * Input: N/A
+     * Expected status code: 500
+     * Expected behaviour: The server should error out
+     * Expected output: An internal server error response
+     */
+    test("Database retrieval error", async () => {
+        mockCollection.findOne.mockRejectedValue(new Error("Test error"));
+
+        const response = await request(app).delete('/player/20/friend/30');
+        expect(response.status).toBe(500);
+    });
+});
+
+
 function mockPlayer(
     name = "Julia Rubin", 
     _id = randomInt(1000000).toString(), 
@@ -264,28 +477,17 @@ function mockPlayer(
     gamesWon = randomInt(1000000), 
     gamesLost = randomInt(1000000), 
     avgGameDuration = randomInt(1000000), 
-    avgGamePathLength = randomInt(1000000)
+    avgGamePathLength = randomInt(1000000),
+    friends = null
 ) {
-    return {
-        _id,
-        name,
-        elo,
-        gamesWon,
-        gamesLost,
-        avgGameDuration,
-        avgGamePathLength
-    };
-}
+    if (!friends) {
+        friends = [];
 
-function mockPlayer2(
-    name = "John Robin", 
-    _id = randomInt(1000000), 
-    elo = randomInt(1000000), 
-    gamesWon = randomInt(1000000), 
-    gamesLost = randomInt(1000000), 
-    avgGameDuration = randomInt(1000000), 
-    avgGamePathLength = randomInt(1000000)
-) {
+        for (var i = 0; i < randomInt(5); i++) {
+            friends.push(randomInt(1000000));
+        }
+    }
+
     return {
         _id,
         name,
@@ -293,6 +495,7 @@ function mockPlayer2(
         gamesWon,
         gamesLost,
         avgGameDuration,
-        avgGamePathLength
+        avgGamePathLength,
+        friends
     };
 }

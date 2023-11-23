@@ -157,7 +157,7 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 		const playerId = req.params.playerId;
 		const friendId = req.params.friendId;
 
-		if(!(await playerManager.playerExists(playerId) && await playerManager.playerExists(friendId))){
+		if(!((await playerManager.playerExists(playerId)) && (await playerManager.playerExists(friendId)))){
 			res.status(404);
 			res.send();
 			return;
@@ -183,10 +183,11 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 			friends
 		);
 	
-		res.status(204);
+		res.status(201);
 		res.send();
 	} 
-	catch {
+	catch (err) {
+		console.log(err.message);
 		res.status(500);
 		res.send();
 	}
@@ -245,9 +246,9 @@ app.get('/player/:id/friend', async (req, res) => {
 		}
 
 		const friends = (await playerManager.getPlayerInfo(id)).friends;
-		let friendInfo = await friends.map(async (friendId) => await playerManager.getPlayerInfo(friendId))
+		let friendInfo = await friends.map(async (friendId) => await playerManager.getPlayerInfo(friendId));
 	
-		res.status(204);
+		res.status(200);
 		res.send(friendInfo);
 	} 
 	catch {
