@@ -169,7 +169,7 @@ app.get('/player/:id', async (req, res) => {
 		const id = req.params.id;
    
 		if(!(await playerManager.playerExists(id))){
-			res.status(405);
+			res.status(404);
 			res.send();
 			return;
 		}
@@ -190,7 +190,7 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 		const friendId = req.params.friendId;
 
 		if(!((await playerManager.playerExists(playerId)) && (await playerManager.playerExists(friendId)))){
-			res.status();
+			res.status(404);
 			res.send();
 			return;
 		}
@@ -231,7 +231,7 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 		const friendId = req.params.friendId;
 
 		if(!(await playerManager.playerExists(playerId) && await playerManager.playerExists(friendId))){
-			res.status(405);
+			res.status(404);
 			res.send();
 			return;
 		}
@@ -242,7 +242,7 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 		const friendIndex = friends.indexOf(friendId);
 
 		if (friendIndex < 0) {
-			res.status(405)
+			res.status(404)
 			res.send();
 			return;
 		}
@@ -272,7 +272,7 @@ app.get('/player/:id/friend', async (req, res) => {
 		const id = req.params.id;
 
 		if(!(await playerManager.playerExists(id))) {
-			res.status(405);
+			res.status(404);
 			res.send();
 			return;
 		}
