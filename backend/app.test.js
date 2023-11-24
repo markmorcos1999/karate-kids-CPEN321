@@ -415,7 +415,7 @@ describe("Remove a friend", () => {
      * Expected behaviour: the server responds with an error
      * Expected output: An empty message with status 404
      */
-    test("Add a nonexistent friend", async () => {
+    test("Remove a nonexistent friend", async () => {
         const player = mockPlayer("Player");
 
         mockCollection.findOne.mockImplementation((idObj) => {
@@ -438,7 +438,7 @@ describe("Remove a friend", () => {
      * Expected behaviour: the server responds with an error
      * Expected output: An empty message with status 404
      */
-    test("Add a friend to a nonexistent player", async () => {
+    test("Remove a friend from a nonexistent player", async () => {
         const friend = mockPlayer("Player");
 
         mockCollection.findOne.mockImplementation((idObj) => {
@@ -465,6 +465,101 @@ describe("Remove a friend", () => {
         mockCollection.findOne.mockRejectedValue(new Error("Test error"));
 
         const response = await request(app).delete('/player/20/friend/30');
+        expect(response.status).toBe(500);
+    });
+});
+
+
+// Interface GET /player/{id}/friend
+describe("Retrieve a player's friend list", () => {
+    /**
+     * Input: a player's id
+     * Expected status code: 200
+     * Expected behaviour: server responds with the friends of the player
+     * Expected output: A response containing an array with the ids of the player's friends
+     */
+    test("Retrieve player friends", async () => {
+        const player = mockPlayer("Player");
+        const friends = [ mockPlayer("Friend1"), mockPlayer("Friend2"), mockPlayer("Friend3") ];
+        player.friends = friends.map((friend) => friend._id);
+
+        mockCollection.findOne.mockImplementation((idObj) => {
+            id = idObj._id;
+
+            if (id == player._id) {
+                return player;
+            }
+            else {
+                for (const friend of friends) {
+                    if (friend._id == id) {
+                        return friend;
+                    }
+                }
+            }
+
+            throw new Error("Test error");
+        });
+
+        const response = await request(app).get('/player/' + player._id + '/friend');
+
+        expect(response.status).toBe(200);
+        expect(response.body).toBeInstanceOf(Array);
+        expect(response.body.length).toBe(friends.length);
+        expect(JSON.stringify(response.body)).toBe(JSON.stringify(friends));
+        expect(mockCollection.findOne).toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
+
+        for (const friend of friends) {
+            expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id });
+        }
+    });
+
+    /**
+     * Input: a player's id
+     * Expected status code: 200
+     * Expected behaviour: server responds with an empty list
+     * Expected output: A response containing an array with the ids of the player's friends
+     */
+    test("Retrieve friends of a player with no friends", async () => {
+        const player = mockPlayer("Player");
+        player.friends = [];
+
+        mockCollection.findOne.mockReturnValue(player);
+
+        const response = await request(app).get('/player/' + player._id + '/friend');
+
+        expect(response.status).toBe(200);
+        expect(response.body).toBeInstanceOf(Array);
+        expect(response.body.length).toBe(0);
+        expect(mockCollection.findOne).toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
+    });
+
+    /**
+     * Input: a nonexistend player id
+     * Expected status code: 404
+     * Expected behaviour: server responds with an error
+     * Expected output: an empty 404 response
+     */
+    test("Retrieve friends of a player that doesn't exist", async () => {
+        mockCollection.findOne.mockReturnValue(null);
+
+        const response = await request(app).get('/player/20/friend');
+
+        expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: '20'});
+    });
+
+    /**
+     * Input: N/A
+     * Expected status code: 500
+     * Expected behaviour: The server should error out
+     * Expected output: An internal server error response
+     */
+    test("Database retrieval error", async () => {
+        mockCollection.findOne.mockRejectedValue(new Error("Test error"));
+
+        const response = await request(app).get('/player/20/friend');
         expect(response.status).toBe(500);
     });
 });

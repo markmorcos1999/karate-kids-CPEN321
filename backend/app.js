@@ -246,7 +246,7 @@ app.get('/player/:id/friend', async (req, res) => {
 		}
 
 		const friends = (await playerManager.getPlayerInfo(id)).friends;
-		let friendInfo = await friends.map(async (friendId) => await playerManager.getPlayerInfo(friendId));
+		let friendInfo = await Promise.all(friends.map(async (friendId) => await playerManager.getPlayerInfo(friendId)));
 	
 		res.status(200);
 		res.send(friendInfo);
