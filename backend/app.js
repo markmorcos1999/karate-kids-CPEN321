@@ -25,29 +25,22 @@ var port = 8081;
 
 
 //app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-function parseBody(bdy) {
-  return JSON.parse(Object.keys(bdy)[0])
-}
+app.use(bodyParser.json());
 
 app.post('/signIn/:id', async (req, res) => {
 	
-  console.log("signIn")
+	console.log("signIn")
 	
 	try {
 		
 		const id = req.params.id;
 		var player;
 
-    console.log(req.params)
-    console.log(JSON.stringify(req.params))
+    
 
-    console.log(req.body)
+		const message = req.body;
+		console.log(message);
 
-		const message = parseBody(req.body);
-		console.log(message)
-    console.log(req.params)
     
 		if(await playerManager.playerExists(id)) {
       console.log("Player exists")
@@ -79,7 +72,7 @@ app.post('/signIn/:id', async (req, res) => {
 
 app.post('/game', async (req, res) => {
 	try {
-	  const message = parseBody(req.body);
+	  const message = req.body;
 
 		const type = message.mode;
 		const id = message.id;
@@ -126,7 +119,7 @@ app.post('/game', async (req, res) => {
 
 app.put('/game', async (req, res) => {
 	try {
-	  const message = parseBody(req.body);
+	  const message = req.body;
 
 		if(!gameManager.checkForPlayer(message.id)){
 			res.status(400);
