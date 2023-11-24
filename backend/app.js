@@ -21,12 +21,16 @@ var port = 8081;
 app.use(express.json());
 
 app.post('/signIn/:id', async (req, res) => {
+	
+
+	
 	try {
+		
 		const id = req.params.id;
 		var player;
 
-		const message = JSON.parse(req.body);
-
+		const message = req.body;
+		
 		if(await playerManager.playerExists(id)) {
 			player = await playerManager.getPlayerInfo(id);			
 		}
@@ -43,7 +47,8 @@ app.post('/signIn/:id', async (req, res) => {
 		}
 						
 		gameManager.addPlayer(player, message.token)
-		res.send({ id })
+		res.status(200);
+		res.send({_id: id})
 	}
 	catch {
 		res.status(500);
@@ -53,21 +58,20 @@ app.post('/signIn/:id', async (req, res) => {
 
 app.post('/game', async (req, res) => {
 	try {
-		const message = JSON.parse(req.body);
+		const message = req.body;
 
-		const type = message.type;
+		const type = message.mode;
 		const id = message.id;
-						
 		
 		if(!gameManager.checkForPlayer(id)) {
 			res.status(400);
 			res.send();
 			return;
 		}
-		
 		//Here, we use "604" as a message code to say "try again later", letting the front end know
 		//that no other player was found.
 		if(type == "multi") {
+			
 			gameManager.playerFindGame(message.id).then(
 			(resolve) => res.send(resolve.getMessage()), 
 			(reject) => res.send("604"));
@@ -90,7 +94,8 @@ app.post('/game', async (req, res) => {
 			res.send(game.getMessage());
 		}
 	}
-	catch {
+	catch (e){
+		console.error(e);
 		res.status(500);
 		res.send();
 	}
@@ -100,7 +105,7 @@ app.post('/game', async (req, res) => {
 
 app.put('/game', async (req, res) => {
 	try {
-		const message = JSON.parse(req.body);
+		const message = req.body;
 
 		if(!gameManager.checkForPlayer(message.id)){
 			res.status(400);
@@ -120,7 +125,19 @@ app.put('/game', async (req, res) => {
 	catch {
 		res.status(500);
 		res.send();
+		
 	}
+});
+
+app.get('/game/:id', async(req,res) =>{
+	
+	const id = req.params.id;
+	
+	gameManager.checkForPlayer(id);
+	
+	var result = gameManager.playerEndGame(id);
+	res.send(result);
+	
 });
 
 app.get('/leaderboard', async (req, res) => {
@@ -136,7 +153,7 @@ app.get('/leaderboard', async (req, res) => {
 app.get('/player/:id', async (req, res) => {
 	try {
 		const id = req.params.id;
-
+		
 		if(!(await playerManager.playerExists(id))){
 			res.status(404);
 			res.send();

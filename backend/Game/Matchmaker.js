@@ -36,7 +36,7 @@ class MatchMaker {
 			this.matchingInProgress = true;
 			this.matchPlayers();
 		}
-
+		
 		return player.matchPromise;
 	}
 	
@@ -58,11 +58,12 @@ class MatchMaker {
 	// that need to be matched.
 	// ChatGPT usage: Partial
 	async matchPlayers() {
+		
 		if (this.waitingPlayers.length == 0) {
 			this.matchingInProgress = false;
 			return;
 		}
-
+		//matching for normal players
 		if (this.waitingPlayers.length >= 2) {
 			// Sort players in order of increasing elo
 			this.waitingPlayers.sort((p1, p2) => p1.elo - p2.elo);
@@ -89,7 +90,7 @@ class MatchMaker {
 			}
 		}
 		
-		//Matching for the normal players
+		//timeout for the normal players
 		for (i = 0; i < this.waitingPlayers.length; i++) {
 			const curPlayer = this.waitingPlayers[i];
 

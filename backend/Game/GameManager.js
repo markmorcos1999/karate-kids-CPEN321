@@ -17,6 +17,7 @@ module.exports = class GameManager{
     }
 	//ChatGPT usage: No
 	addPlayer(init, deviceToken){
+		
 		var id = init._id;
 		this.playerList[id] = new Player(init, deviceToken);
 	}
@@ -31,7 +32,7 @@ module.exports = class GameManager{
 
 		}
 		else{
-			newPlayer = {
+			var newPlayer = {
 				_id: id, 
 				name: "Guest", 
 				elo: 0, 
@@ -46,6 +47,7 @@ module.exports = class GameManager{
 	}
 	//ChatGPT usage: No
 	playerFindGame(id){
+
 		return this.matchmaker.findMatch(id, this.playerList[id].elo);
 	}
 	//ChatGPT usage: No
@@ -102,6 +104,7 @@ module.exports = class GameManager{
 		var pageList = this.pageMan.getDailyPage()
 		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		
+
 		var game = new Game(sessionId, players, pageList, path, this)
 		
 		this.sessionList[sessionId] = game
@@ -114,6 +117,7 @@ module.exports = class GameManager{
 		
 		var players = []
 		players.push(this.playerList[id])
+		
 		var pageList = await this.pageMan.getRandomPages()
 		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		var game = new Game(sessionId, players, pageList, path, this)
