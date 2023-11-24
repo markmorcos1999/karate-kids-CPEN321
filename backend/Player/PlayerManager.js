@@ -61,6 +61,8 @@ class PlayerManager {
             friends
         };
 
+        console.log(id);
+        console.log(updatedProperties);
         const result = await this.collection.updateOne(
             { _id: id },
             { $set: updatedProperties } 

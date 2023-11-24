@@ -237,6 +237,7 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 		}
 
 		const playerInfo = await playerManager.getPlayerInfo(playerId);
+		console.log()
 		
 		let friends = playerInfo.friends;
 		const friendIndex = friends.indexOf(friendId);
@@ -254,7 +255,7 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 			playerInfo.gamesWon,
 			playerInfo.gamesLost,
 			playerInfo.avgGameDuration,
-			playerInfo.avgGamePath,
+			playerInfo.avgGamePathLength,
 			friends
 		);
 	
