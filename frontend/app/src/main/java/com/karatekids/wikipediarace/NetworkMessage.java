@@ -1,5 +1,7 @@
 package com.karatekids.wikipediarace;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,7 +49,10 @@ public final class NetworkMessage {
             data = new JSONObject();
             data.put("name", name);
             data.put("id", id);
-            data.put("subject", "player");
+            StringBuilder str = new StringBuilder();
+            str.append("player/");
+            str.append(id);
+            data.put("subject", str.toString());
             data.put("method", "GET");
         }
         catch(JSONException e) {
@@ -88,8 +93,11 @@ public final class NetworkMessage {
             data.put("name", name);
             data.put("id", id);
             data.put("token", token);
-            data.put("subject", "signIn");
-            data.put("method","GET");
+            StringBuilder str = new StringBuilder();
+            str.append("signIn/");
+            str.append(id);
+            data.put("subject", str.toString());
+            data.put("method","POST");
         }
         catch(JSONException e) {
         }
@@ -102,8 +110,63 @@ public final class NetworkMessage {
             data = new JSONObject();
             data.put("name", name);
             data.put("id", id);
-            data.put("subject", "game");
-            data.put("method","GET");
+            StringBuilder str = new StringBuilder();
+            str.append("game/");
+            str.append(id);
+            data.put("subject", str.toString());
+            data.put("method", "GET");
+        }
+        catch(JSONException e) {
+        }
+        return data;
+    }
+
+    public static JSONObject addFriend(String name, String id, String friendId){
+        try {
+            data = new JSONObject();
+            data.put("name", name);
+            data.put("id", id);
+            StringBuilder str = new StringBuilder();
+            str.append("player/");
+            str.append(id);
+            str.append("/friend/");
+            str.append(friendId);
+            data.put("subject", str.toString());
+            data.put("method","POST");
+        }
+        catch(JSONException e) {
+        }
+        return data;
+    }
+    public static JSONObject removeFriend(String name, String id, String friendId){
+        try {
+            data = new JSONObject();
+            data.put("name", name);
+            data.put("id", id);
+            StringBuilder str = new StringBuilder();
+            str.append("player/");
+            str.append(id);
+            str.append("/friend/");
+            str.append(friendId);
+            data.put("subject", str.toString());
+            data.put("method","DELETE");
+        }
+        catch(JSONException e) {
+        }
+        return data;
+    }
+
+    public static JSONObject getFriends(String name, String id){
+        try {
+            data = new JSONObject();
+            data.put("name", name);
+            data.put("id", id);
+            StringBuilder str = new StringBuilder();
+            str.append("player/");
+            str.append(id);
+            str.append("/friend");
+            data.put("subject", str.toString());
+            data.put("method","DELETE");
         }
         catch(JSONException e) {
         }

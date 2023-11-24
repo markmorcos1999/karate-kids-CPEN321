@@ -3,6 +3,11 @@ var fs = require('fs');
 
 const express = require('express');
 
+const bodyParser = require('body-parser');
+
+
+
+
 var PlayerManager = require('./Player/PlayerManager.js');
 var GameManager = require('./Game/GameManager.js');
 
@@ -18,23 +23,38 @@ var gameManager = new GameManager(playerManager);
 var app = express();
 var port = 8081;
 
-app.use(express.json());
+
+//app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+function parseBody(bdy) {
+  return JSON.parse(Object.keys(bdy)[0])
+}
 
 app.post('/signIn/:id', async (req, res) => {
 	
-
+  console.log("signIn")
 	
 	try {
 		
 		const id = req.params.id;
 		var player;
 
-		const message = req.body;
-		
+    console.log(req.params)
+    console.log(JSON.stringify(req.params))
+
+    console.log(req.body)
+
+		const message = parseBody(req.body);
+		console.log(message)
+    console.log(req.params)
+    
 		if(await playerManager.playerExists(id)) {
+      console.log("Player exists")
 			player = await playerManager.getPlayerInfo(id);			
 		}
 		else {
+       console.log("Creating new player")
 			playerManager.createNewPlayer(id, message.name);
 			player = {
 				_id: id, 
@@ -50,7 +70,8 @@ app.post('/signIn/:id', async (req, res) => {
 		res.status(200);
 		res.send({_id: id})
 	}
-	catch {
+	catch (e){
+    console.log(e);
 		res.status(500);
 		res.send();
 	}
@@ -58,7 +79,7 @@ app.post('/signIn/:id', async (req, res) => {
 
 app.post('/game', async (req, res) => {
 	try {
-		const message = req.body;
+	  const message = parseBody(req.body);
 
 		const type = message.mode;
 		const id = message.id;
@@ -105,7 +126,7 @@ app.post('/game', async (req, res) => {
 
 app.put('/game', async (req, res) => {
 	try {
-		const message = req.body;
+	  const message = parseBody(req.body);
 
 		if(!gameManager.checkForPlayer(message.id)){
 			res.status(400);
@@ -153,16 +174,17 @@ app.get('/leaderboard', async (req, res) => {
 app.get('/player/:id', async (req, res) => {
 	try {
 		const id = req.params.id;
-		
+   
 		if(!(await playerManager.playerExists(id))){
-			res.status(404);
+			res.status(405);
 			res.send();
 			return;
 		}
 	
 		res.send(await playerManager.getPlayerInfo(id)); //here add the "database get playerinfo
 	}
-	catch {
+	catch (e){
+    console.error(e)
 		res.status(500);
 		res.send();
 	}
@@ -175,7 +197,7 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 		const friendId = req.params.friendId;
 
 		if(!((await playerManager.playerExists(playerId)) && (await playerManager.playerExists(friendId)))){
-			res.status(404);
+			res.status();
 			res.send();
 			return;
 		}
@@ -216,7 +238,7 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 		const friendId = req.params.friendId;
 
 		if(!(await playerManager.playerExists(playerId) && await playerManager.playerExists(friendId))){
-			res.status(404);
+			res.status(405);
 			res.send();
 			return;
 		}
@@ -227,7 +249,7 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 		const friendIndex = friends.indexOf(friendId);
 
 		if (friendIndex < 0) {
-			res.status(404)
+			res.status(405)
 			res.send();
 			return;
 		}
@@ -257,7 +279,7 @@ app.get('/player/:id/friend', async (req, res) => {
 		const id = req.params.id;
 
 		if(!(await playerManager.playerExists(id))) {
-			res.status(404);
+			res.status(405);
 			res.send();
 			return;
 		}

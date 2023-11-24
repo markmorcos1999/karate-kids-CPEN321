@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -138,6 +140,50 @@ public final class Networker {
 
         thread.start();
     }
+
+    //Adds a friend, takes in the friends ID
+    public static void addFriend(String friendId){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.addFriend(name, id, friendId));
+
+                //What to do after a post? status code returned?
+            }
+        });
+
+        thread.start();
+
+    }
+
+    //removes a Friend, takes in the friends ID
+    public static void removeFriend(String friendId){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.removeFriend(name, id, friendId));
+
+                //What to do after a post? status code returned?
+            }
+        });
+
+        thread.start();
+    }
+
+    //@TODO here we need to put in a activity or a callback with a function that we can put the new friends into.
+    public static void getFriends(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.getFriends(name, id));
+
+                //FindFriendActivity.addFriends(ret) or something like that.
+            }
+        });
+
+        thread.start();
+    }
+
     //ChatGPT usage: No
     //This method comes from https://stackoverflow.com/questions/1359689/how-to-send-http-request-in-java
     //To help with executing a post
@@ -146,7 +192,7 @@ public final class Networker {
         String method = "POST";
         String slug = "";
         String urlParameters = data.toString();
-
+       Log.d(TAG, urlParameters);
         StringBuilder str = new StringBuilder();
 
         try {
@@ -157,42 +203,35 @@ public final class Networker {
             str.append("/");
             str.append(slug);
 
-            if(method.equals("GET")) {
-               str.append("/");
-               str.append(data.getString("id"));
-            }
-
         }
         catch(JSONException e) {
         }
 
         String targetURL = str.toString();
-
+        Log.d(TAG, targetURL);
         try {
             //Create connection
             URL url = new URL(targetURL);
             connection = (HttpURLConnection) url.openConnection();
+
+
+            ;
             connection.setRequestMethod(method);
-            connection.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
-            connection.setRequestProperty("Content-Length",
-                    Integer.toString(urlParameters.getBytes().length));
-            connection.setRequestProperty("Content-Language", "en-US");
 
-            connection.setUseCaches(false);
-
-
-            if(!method.equals("GET")){
-
+            //From https://stackoverflow.com/questions/44305351/how-do-you-send-data-in-a-request-body-using-httpurlconnection
+            if(!method.equals("GET")) {
                 connection.setDoOutput(true);
+                OutputStream os = connection.getOutputStream();
+                OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+                osw.write(data.toString());
+                osw.flush();
+                osw.close();
+                os.close();
+            }//don't forget to close the OutputStream
+            connection.connect();
 
-                //Send request
-                DataOutputStream wr = new DataOutputStream (
-                        connection.getOutputStream());
-                wr.writeBytes(urlParameters);
-                wr.close();
+            Log.d(TAG, String.valueOf(connection.getResponseCode()));
 
-            }
             //Get Response
             InputStream is = connection.getInputStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
@@ -205,15 +244,18 @@ public final class Networker {
             rd.close();
 
             String res = response.toString();
-
+            Log.d(TAG, res);
             //Checking if the response was "try again" in which we resend the request
             if(res.equals("604")){
-                return executePost(targetURL, urlParameters);
+                return executePost(targetURL, data);
             }
 
             return res;
         } catch (Exception e) {
-            return executePost(targetURL, urlParameters);
+            e.printStackTrace();
+            return "error";
+            //return executePost(URL, data);
+
         } finally {
             if (connection != null) {
                 connection.disconnect();
