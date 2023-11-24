@@ -19,8 +19,7 @@ class PageManager {
             });
             return Promise.all(titlePromises);
         } catch (error) {
-            console.error(error);
-            return [];
+            throw error;
         }
     }
 	
