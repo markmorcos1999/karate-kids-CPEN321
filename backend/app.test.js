@@ -74,6 +74,7 @@ node_fetch.mockReturnValue(
 const app = require('./app.js');
 const { randomInt } = require('crypto');
 
+
 // Interface GET /leaderboard
 describe("Retrieve the leaderboard", () => {
 	
@@ -423,18 +424,17 @@ describe("Testing completing a game", () => {
 		player = mockPlayer(elo = 10);	
 		player2 = mockPlayer2(elo = 11);
 		
-		console.log(player._id)
-		console.log(player2._id)
-		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
 		
 		//Now start game
-        await request(app).post('/game').send({id:player2._id, name:player2.name, mode: "Multi"});
-        await request(app).post('/game').send({id:player._id, name:player.name, mode: "Multi"});
+        var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
+        
+		var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
 
-		console.log(promise1)
-		console.log(promise2)
+		await Promise.all([promise1, promise2]);
+
+		console.log("No longer awaiting games")
 
 		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexican_cuisine"});
 		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexico"});

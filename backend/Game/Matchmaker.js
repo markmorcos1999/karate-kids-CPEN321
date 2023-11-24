@@ -36,7 +36,7 @@ class MatchMaker {
 			this.matchingInProgress = true;
 			this.matchPlayers();
 		}
-
+		
 		return player.matchPromise;
 	}
 	
@@ -63,7 +63,7 @@ class MatchMaker {
 			this.matchingInProgress = false;
 			return;
 		}
-
+		//matching for normal players
 		if (this.waitingPlayers.length >= 2) {
 			// Sort players in order of increasing elo
 			this.waitingPlayers.sort((p1, p2) => p1.elo - p2.elo);
@@ -74,9 +74,8 @@ class MatchMaker {
 
 				const diff = p1.elo - p2.elo;
 				const allowedDiff = this.allowedEloDiff(p1.waitStartTime, p2.waitStartTime);
-				console.log(allowedDiff)
+				
 				if (diff <= allowedDiff) {
-					console.log("madeMatch!")
 					var game = this.gameManager.startGame(p1.id, p2.id);
 
 					p1.matchPromiseResolve(game);
@@ -91,7 +90,7 @@ class MatchMaker {
 			}
 		}
 		
-		//Matching for the normal players
+		//timeout for the normal players
 		for (i = 0; i < this.waitingPlayers.length; i++) {
 			const curPlayer = this.waitingPlayers[i];
 

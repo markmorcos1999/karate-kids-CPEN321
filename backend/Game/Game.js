@@ -84,7 +84,6 @@ module.exports = class Game{
 			endTitle: this.end.title,
 			players: this.players
 		}
-
 		return messageInfo;
 	}
     

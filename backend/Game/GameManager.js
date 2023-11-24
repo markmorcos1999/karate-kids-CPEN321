@@ -47,6 +47,7 @@ module.exports = class GameManager{
 	}
 	//ChatGPT usage: No
 	playerFindGame(id){
+
 		return this.matchmaker.findMatch(id, this.playerList[id].elo);
 	}
 	//ChatGPT usage: No
@@ -56,9 +57,6 @@ module.exports = class GameManager{
 	}
 	//ChatGPT usage: No
 	playerEndGame(id){
-		console.log(id);
-		console.log(this.sessionList);
-		console.log(this.playerList);
 		var sessionId = this.playerList[id].sessionId
 		return this.sessionList[sessionId].playerEndGame(id)
 	}

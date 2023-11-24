@@ -68,12 +68,10 @@ app.post('/game', async (req, res) => {
 			res.send();
 			return;
 		}
-		
 		//Here, we use "604" as a message code to say "try again later", letting the front end know
 		//that no other player was found.
 		if(type == "multi") {
-			console.log("MultiGame with:")
-			console.log(id) //error here, I believe @TODO
+			
 			gameManager.playerFindGame(message.id).then(
 			(resolve) => res.send(resolve.getMessage()), 
 			(reject) => res.send("604"));
