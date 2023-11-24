@@ -340,8 +340,11 @@ describe("Testing game requests", () => {
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
 
 		//Now start game
-        request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
-        const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
+        var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
+        var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
+		
+		const[response, r2] = await Promise.all([promise1, promise2]);
+		
 		
 		expect(response.status).toBe(200);
 
@@ -353,7 +356,6 @@ describe("Testing game requests", () => {
         
     });
 });
-
 
 
 // Interface GET /game
@@ -373,8 +375,8 @@ describe("Testing completing a game", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer(elo = 10);	
-		player2 = mockPlayer(elo = 11);
+		player = mockPlayer(_id = "1000", elo = 10);	
+		player2 = mockPlayer(_id = "2000", elo = 11);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
