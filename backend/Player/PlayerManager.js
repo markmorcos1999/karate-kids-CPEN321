@@ -10,7 +10,7 @@ class PlayerManager {
     // ChatGPT usage: Partial
     async connect() {
         await this.client.connect();
-        this.collection = this.client.db('user').collection('leaderboard');
+        this.collection = this.client.db('wikipedia-race').collection('user');
         console.log("Successfully connected to the leaderboard database");
     }
 
@@ -45,18 +45,20 @@ class PlayerManager {
             gamesWon: 0,
             gamesLost: 0,
             avgGameDuration: null,
-            avgGamePathLength: null
+            avgGamePathLength: null,
+            friends: []
         });
     }
 
     // ChatGPT usage: Partial
-    async updatePlayer(id, elo, gamesWon, gamesLost, avgGameDuration, avgGamePathLength) {
+    async updatePlayer(id, elo, gamesWon, gamesLost, avgGameDuration, avgGamePathLength, friends) {
         const updatedProperties = {
             elo,
             gamesWon,
             gamesLost,
             avgGameDuration,
-            avgGamePathLength
+            avgGamePathLength,
+            friends
         };
 
         const result = await this.collection.updateOne(

@@ -1,5 +1,7 @@
 package com.karatekids.wikipediarace;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,108 +13,164 @@ public final class NetworkMessage {
     private static JSONObject data;
 
     //ChatGPT usage: No
-    public static String gameRequest(String name, String id, String gameMode) { // private constructor
+    public static JSONObject gameRequest(String name, String id, String gameMode) { // private constructor
 
        try {
            data = new JSONObject();
            data.put("name", name);
            data.put("id", id);
            data.put("mode", gameMode);
-           message = new JSONObject();
-           message.put("subject", "requestGame");
-           message.put("data", data);
+           data.put("subject", "game");
+           data.put("method", "POST");
        }
        catch(JSONException e) {
        }
-        return message.toString();
+        return data;
     }
     //ChatGPT usage: No
-    public static String friendGameRequest(String name, String id, String friendId) { // private constructor
+    public static JSONObject friendGameRequest(String name, String id, String friendId) { // private constructor
 
         try {
             data = new JSONObject();
             data.put("name", name);
             data.put("id", id);
             data.put("friendId", friendId);
-            message = new JSONObject();
-            message.put("subject", "friendGame");
-            message.put("data", data);
+            data.put("mode", "friend");
+            data.put("subject", "game");
+            data.put("method", "POST");
         }
         catch(JSONException e) {
         }
-        return message.toString();
+        return data;
     }
     //ChatGPT usage: No
-    public static String statsRequest(String name, String id){
+    public static JSONObject statsRequest(String name, String id){
         try {
             data = new JSONObject();
             data.put("name", name);
             data.put("id", id);
-            message = new JSONObject();
-            message.put("subject", "statsRequest");
-            message.put("data", data);
+            StringBuilder str = new StringBuilder();
+            str.append("player/");
+            str.append(id);
+            data.put("subject", str.toString());
+            data.put("method", "GET");
         }
         catch(JSONException e) {
         }
-        return message.toString();
+        return data;
     }
     //ChatGPT usage: No
-    public static String pagePost(String name, String id, String URL){
+    public static JSONObject pagePost(String name, String id, String URL){
         try {
             data = new JSONObject();
             data.put("name", name);
             data.put("id", id);
             data.put("URL", URL);
-            message = new JSONObject();
-            message.put("subject", "page");
-            message.put("data", data);
+            data.put("subject", "game");
+            data.put("method", "PUT");
         }
         catch(JSONException e) {
             e.printStackTrace();
         }
-        return message.toString();
+        return data;
     }
     //ChatGPT usage: No
-    public static String leaderboardRequest(){
+    public static JSONObject leaderboardRequest(){
         try {
             data = new JSONObject();
-            message = new JSONObject();
-            message.put("subject", "leaderboard");
-            message.put("data", data);
+            data.put("subject", "leaderboard");
+            data.put("method","GET");
         }
         catch(JSONException e) {
         }
-        return message.toString();
+        return data;
     }
+
     //ChatGPT usage: No
-    public static String signInMessage(String name, String id, String token){
+    public static JSONObject signInMessage(String name, String id, String token){
         try {
             data = new JSONObject();
             data.put("name", name);
             data.put("id", id);
             data.put("token", token);
-            message = new JSONObject();
-            message.put("subject", "signIn");
-            message.put("data", data);
+            StringBuilder str = new StringBuilder();
+            str.append("signIn/");
+            str.append(id);
+            data.put("subject", str.toString());
+            data.put("method","POST");
         }
         catch(JSONException e) {
         }
-        return message.toString();
+        return data;
     }
 
     //ChatGPT usage: No
-    public static String endGame(String name, String id){
+    public static JSONObject endGame(String name, String id){
         try {
             data = new JSONObject();
             data.put("name", name);
             data.put("id", id);
-            message = new JSONObject();
-            message.put("subject", "endGame");
-            message.put("data", data);
+            StringBuilder str = new StringBuilder();
+            str.append("game/");
+            str.append(id);
+            data.put("subject", str.toString());
+            data.put("method", "GET");
         }
         catch(JSONException e) {
         }
-        return message.toString();
+        return data;
+    }
+
+    public static JSONObject addFriend(String name, String id, String friendId){
+        try {
+            data = new JSONObject();
+            data.put("name", name);
+            data.put("id", id);
+            StringBuilder str = new StringBuilder();
+            str.append("player/");
+            str.append(id);
+            str.append("/friend/");
+            str.append(friendId);
+            data.put("subject", str.toString());
+            data.put("method","POST");
+        }
+        catch(JSONException e) {
+        }
+        return data;
+    }
+    public static JSONObject removeFriend(String name, String id, String friendId){
+        try {
+            data = new JSONObject();
+            data.put("name", name);
+            data.put("id", id);
+            StringBuilder str = new StringBuilder();
+            str.append("player/");
+            str.append(id);
+            str.append("/friend/");
+            str.append(friendId);
+            data.put("subject", str.toString());
+            data.put("method","DELETE");
+        }
+        catch(JSONException e) {
+        }
+        return data;
+    }
+
+    public static JSONObject getFriends(String name, String id){
+        try {
+            data = new JSONObject();
+            data.put("name", name);
+            data.put("id", id);
+            StringBuilder str = new StringBuilder();
+            str.append("player/");
+            str.append(id);
+            str.append("/friend");
+            data.put("subject", str.toString());
+            data.put("method","DELETE");
+        }
+        catch(JSONException e) {
+        }
+        return data;
     }
 
 }
