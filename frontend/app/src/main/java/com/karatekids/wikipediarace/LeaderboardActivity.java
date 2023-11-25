@@ -90,6 +90,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
 
+    // https://github.com/ISchwarz23/SortableTableView/tree/master
     private class ProfileClickListener implements TableDataClickListener<String[]> {
         @Override
         public void onDataClicked(int rowIndex, String[] player) {
