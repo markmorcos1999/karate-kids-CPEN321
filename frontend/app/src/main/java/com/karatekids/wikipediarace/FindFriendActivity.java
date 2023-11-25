@@ -86,11 +86,25 @@ public class FindFriendActivity extends AppCompatActivity {
 
                 Networker.addFriend(friend_id.getText().toString());
 
-                Networker.getFriends();
+//                Networker.getFriends();
 
                 if(friends != null && !friends.isEmpty()) {
                     try {
                         JSONArray friendsArr = new JSONArray(friends);
+
+                        int friendsCount = friendsArr.length();
+
+                        while(friendsArr.length() == friendsCount) {
+                            Networker.getFriends();
+                            friendsArr = new JSONArray(friends);
+                        }
+
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+
 
                         String[][] friendsData = new String[friendsArr.length()][2];
 
@@ -107,12 +121,6 @@ public class FindFriendActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                 }
-
-                finish();
-                startActivity(getIntent());
-//
-//                //TODO: check if friend id is valid and friend is playing
-
             }
         });
 
