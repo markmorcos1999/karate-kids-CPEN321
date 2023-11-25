@@ -14,9 +14,4 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.WikipediaRace.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
 </resources>
