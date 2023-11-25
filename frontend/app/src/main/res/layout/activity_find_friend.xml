@@ -8,68 +8,62 @@
     android:layout_height="match_parent"
     tools:layout_editor_absoluteY="81dp">
 
-    <EditText
-        android:id="@+id/friend_id_bar"
+    <TextView
+        android:id="@+id/user_id_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Insert Friend ID"
-        android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/validate_friend_id_bt"
+        android:layout_marginTop="228dp"
+        android:text="@string/user_id_st"
+        app:layout_constraintEnd_toStartOf="@+id/user_id_value_tv"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/friend_id_instructions"
-        app:layout_constraintVertical_bias="0.607" />
-
-    <TextView
-        android:id="@+id/friend_id_instructions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/friend_id_instruct"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.813" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/validate_friend_id_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
         android:text="@string/validate_friend_id_st"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/friend_id_bar"
-        app:layout_constraintTop_toBottomOf="@+id/friend_id_instructions"
-        app:layout_constraintVertical_bias="0.631" />
+        app:layout_constraintTop_toBottomOf="@+id/friend_id_instructions" />
 
-    <TextView
-        android:id="@+id/user_id_tv"
+    <EditText
+        android:id="@+id/friend_id_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/user_id_st"
-        app:layout_constraintBottom_toTopOf="@+id/friend_id_instructions"
-        app:layout_constraintEnd_toStartOf="@+id/user_id_value_tv"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Insert Friend ID"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@+id/validate_friend_id_bt"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.931" />
+        app:layout_constraintTop_toBottomOf="@+id/friend_id_instructions" />
+
+    <TextView
+        android:id="@+id/friend_id_instructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/friend_id_instruct"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_id_tv" />
 
     <TextView
         android:id="@+id/user_id_value_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="228dp"
         android:text="@string/user_id_value_st"
-        app:layout_constraintBottom_toTopOf="@+id/friend_id_instructions"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/user_id_tv"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.929" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <de.codecrafters.tableview.TableView
         android:id="@+id/friends_table"
@@ -90,34 +84,55 @@
         android:id="@+id/friend_game_bt"
         android:layout_width="132dp"
         android:layout_height="49dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
+        android:enabled="false"
         android:text="@string/start_game_st"
         app:layout_constraintEnd_toEndOf="parent"
-        android:enabled="false"
         app:layout_constraintTop_toBottomOf="@+id/clicked_friend_tv" />
 
     <TextView
         android:id="@+id/clicked_friend_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="244dp"
+        android:layout_marginTop="32dp"
         android:text="@string/click_friend_st"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/selected_friend_tv"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/clicked_friend_id_tv"
+        app:layout_constraintTop_toBottomOf="@+id/select_friend_instruction_tv" />
 
     <TextView
         android:id="@+id/selected_friend_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="244dp"
+        android:layout_marginTop="32dp"
         android:text="@string/selected_friend_st"
-        app:layout_constraintEnd_toStartOf="@+id/clicked_friend_tv"
+        app:layout_constraintEnd_toStartOf="@+id/clicked_friend_id_tv"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/select_friend_instruction_tv" />
+
+    <TextView
+        android:id="@+id/select_friend_instruction_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="@string/select_friend_instruction_st"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/friend_id_bar" />
+
+    <TextView
+        android:id="@+id/clicked_friend_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/click_friend_id_st"
+        app:layout_constraintEnd_toStartOf="@+id/clicked_friend_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/selected_friend_tv"
+        app:layout_constraintTop_toBottomOf="@+id/select_friend_instruction_tv" />
 
     <!--    <androidx.recyclerview.widget.RecyclerView-->
     <!--        android:layout_width="414dp"-->
