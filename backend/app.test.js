@@ -61,15 +61,12 @@ function examplePages(title){
 	return "https://en.wikipedia.org/wiki/" + title
 }
 
-//function examplePages(title){
-//	return ["https://en.wikipedia.org/wiki/Taco", "https://en.wikipedia.org/wiki/Mexico"]
-//}
-
-
-
 function mockPages (title){
 	return {
-		then: () => {return examplePages(title)}
+		then: (cb) => {
+			console.log(cb({url:()=>{return}}))
+			return examplePages(title)
+			}
 	}
 }
 
