@@ -108,8 +108,17 @@ public class InSinglePlayerGameTest {
 
         onWebView()
                 .withElement(findElement(Locator.ID, "firstHeading"))
-                .check(webMatches(getText(), containsString("British English")));;
+                .check(webMatches(getText(), containsString("British English")));
 
+        onWebView()
+                .withElement(findElement(Locator.CSS_SELECTOR, "a[href=\"/wiki/English_language\"]")) // similar to onView(withId(...))
+                .perform(webClick());
+
+        onWebView()
+                .withElement(findElement(Locator.ID, "firstHeading"))
+                .check(webMatches(getText(), containsString("English language")));
+
+        ///wiki/English_language
         while (true) {
             try {
                 onView(withText("00:05")).perform().check(matches(isDisplayed()));
@@ -124,9 +133,21 @@ public class InSinglePlayerGameTest {
             } catch (Exception e) {
             }
         }
+
         onView(withId(R.id.wikipedia_page_view))
                 .perform(pressBack());
+        onWebView()
+                .withElement(findElement(Locator.ID, "firstHeading"))
+                .check(webMatches(getText(), containsString("British English")));
 
+        onView(withId(R.id.wikipedia_page_view))
+                .perform(pressBack());
+        onWebView()
+                .withElement(findElement(Locator.ID, "firstHeading"))
+                .check(webMatches(getText(), containsString("Taco")));
+
+        onView(withId(R.id.wikipedia_page_view))
+                .perform(pressBack());
         intended(hasComponent(PlayGameActivity.class.getName()));
     }
 }
