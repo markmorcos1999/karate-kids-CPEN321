@@ -92,6 +92,8 @@ describe("Retrieve the leaderboard", () => {
         expect(response.body).toBeInstanceOf(Array);
         expect(response.body.length).toBe(1);
         expect(JSON.stringify(response.body[0])).toBe(JSON.stringify(player));
+        expect(mockCollection.find).toHaveBeenCalled();
+        expect(mockCollection.find).toHaveBeenCalledTimes(1);
         expect(toArray).toHaveBeenCalled();
         expect(limit).toHaveBeenCalledWith(10);
         expect(sort).toHaveBeenCalled();
@@ -115,6 +117,8 @@ describe("Retrieve the leaderboard", () => {
         expect(response.status).toBe(200);
         expect(response.body).toBeInstanceOf(Array);
         expect(response.body.length).toBe(0);
+        expect(mockCollection.find).toHaveBeenCalled();
+        expect(mockCollection.find).toHaveBeenCalledTimes(1);
         expect(toArray).toHaveBeenCalled();
         expect(limit).toHaveBeenCalledWith(10);
         expect(sort).toHaveBeenCalled();
@@ -157,6 +161,8 @@ describe("Retrieve a player's information", () => {
         const response = await request(app).get('/player/' + player._id);
         expect(response.status).toBe(200);
         expect(JSON.stringify(response.body)).toBe(JSON.stringify(player));
+        expect(mockCollection.findOne).toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalledTimes(2);
         expect(mockCollection.findOne).toHaveBeenCalledWith({_id: player._id})
     });
 
@@ -171,6 +177,8 @@ describe("Retrieve a player's information", () => {
 
         const response = await request(app).get('/player/300');
         expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalledTimes(1);
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: "300" })
     });
 
@@ -445,6 +453,7 @@ describe("Add a friend", () => {
 
         expect(response.status).toBe(201);
         expect(mockCollection.updateOne).toHaveBeenCalled();
+        expect(mockCollection.updateOne).toHaveBeenCalledTimes(1);
         expect(mockCollection.updateOne).toHaveBeenCalledWith(
             { _id: player._id },
             { 
@@ -458,6 +467,8 @@ describe("Add a friend", () => {
                 } 
             }
         );
+        expect(mockCollection.findOne).toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalledTimes(3);
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id });
     });
@@ -488,6 +499,7 @@ describe("Add a friend", () => {
         const response = await request(app).post('/player/' + player._id + '/friend/' + friend._id);
 
         expect(response.status).toBe(409);
+        expect(mockCollection.findOne).toHaveBeenCalled();
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
     });
 
@@ -511,6 +523,7 @@ describe("Add a friend", () => {
         const response = await request(app).post('/player/' + player._id + '/friend/' + (player._id + 1));
 
         expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalled();
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id + 1 });
     });
 
@@ -534,6 +547,7 @@ describe("Add a friend", () => {
         const response = await request(app).post('/player/' + (friend._id + 1) + '/friend/' + friend._id);
 
         expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalled();
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id + 1 });
     });
 
@@ -582,9 +596,11 @@ describe("Remove a friend", () => {
         const response = await request(app).delete('/player/' + player._id + '/friend/' + friend._id);
 
         expect(response.status).toBe(204);
+        expect(mockCollection.findOne).toHaveBeenCalled();
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id });
         expect(mockCollection.updateOne).toHaveBeenCalled();
+        expect(mockCollection.updateOne).toHaveBeenCalledTimes(1);
         expect(mockCollection.updateOne).toHaveBeenCalledWith(
             { _id: player._id },
             { 
@@ -624,6 +640,8 @@ describe("Remove a friend", () => {
         const response = await request(app).delete('/player/' + player._id + '/friend/' + friend._id);
 
         expect(response.status).toBe(404);
+        expect(mockCollection.updateOne).not.toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalled();
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
     });
 
@@ -647,6 +665,8 @@ describe("Remove a friend", () => {
         const response = await request(app).delete('/player/' + player._id + '/friend/' + (player._id + 1));
 
         expect(response.status).toBe(404);
+        expect(mockCollection.updateOne).not.toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalled();
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id + 1 });
     });
 
@@ -670,6 +690,8 @@ describe("Remove a friend", () => {
         const response = await request(app).delete('/player/' + (friend._id + 1) + '/friend/' + friend._id);
 
         expect(response.status).toBe(404);
+        expect(mockCollection.updateOne).not.toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalled();
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id + 1 });
     });
 
@@ -686,7 +708,6 @@ describe("Remove a friend", () => {
         expect(response.status).toBe(500);
     });
 });
-
 
 // Interface GET /player/{id}/friend
 describe("Retrieve a player's friend list", () => {
@@ -729,6 +750,7 @@ describe("Retrieve a player's friend list", () => {
         expect(response.body.length).toBe(friends.length);
         expect(JSON.stringify(response.body)).toBe(JSON.stringify(friends));
         expect(mockCollection.findOne).toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalledTimes(2 + player.friends.length);
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
 
         for (const friend of friends) {
@@ -754,6 +776,7 @@ describe("Retrieve a player's friend list", () => {
         expect(response.body).toBeInstanceOf(Array);
         expect(response.body.length).toBe(0);
         expect(mockCollection.findOne).toHaveBeenCalled();
+        expect(mockCollection.findOne).toHaveBeenCalledTimes(2);
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
     });
 
@@ -769,6 +792,7 @@ describe("Retrieve a player's friend list", () => {
         const response = await request(app).get('/player/20/friend');
 
         expect(response.status).toBe(404);
+        expect(mockCollection.findOne).toHaveBeenCalled();
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: '20'});
     });
 
