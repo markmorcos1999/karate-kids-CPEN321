@@ -85,15 +85,17 @@ public class FindFriendActivity extends AppCompatActivity {
 
                         int friendsCount = friendsArr.length();
 
-                        while(friendsArr.length() == friendsCount) {
+                        int count = 0;
+
+                        while(friendsArr.length() == friendsCount && count < 6) {
                             Networker.getFriends();
                             friendsArr = new JSONArray(friends);
-                        }
-
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            count++;
                         }
 
 
@@ -150,6 +152,7 @@ public class FindFriendActivity extends AppCompatActivity {
                 selectedFriendName = obj.getString("name");
                 ((TextView) findViewById(R.id.clicked_friend_tv)).setText(selectedFriendName);
                 selectedFriendId = obj.getString("_id");
+                ((TextView) findViewById(R.id.clicked_friend_id_tv)).setText(selectedFriendId);
                 ((Button) findViewById(R.id.friend_game_bt)).setEnabled(true);
             } catch (JSONException e) {
                 throw new RuntimeException(e);

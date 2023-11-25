@@ -64,7 +64,7 @@
     <string name="friend_mode_wait_st">Waiting for Friend and Finding Pages...</string>
     <string name="friend_mode_look_up_friend_by_id">Input Friend ID:</string>
     <string name="play_game_st">Play a Game</string>
-    <string name="friend_id_instruct">Insert Friend ID to Add a Friend</string>
+    <string name="friend_id_instruct">Insert Friend ID to Add a Friend to the Friends List</string>
     <string name="player_id_st">Player ID</string>
     <string name="player_id_value_st">cccc</string>
     <string name="validate_friend_id_st">Add Friend</string>
@@ -80,4 +80,6 @@
     <string name="selected_friend_st">Selected Friend:</string>
     <string name="click_friend_st">None</string>
     <string name="friend_game_st">Start Game</string>
+    <string name="select_friend_instruction_st">Click on a Friend From the List Above to Start a Game</string>
+    <string name="click_friend_id_st">0000000</string>
 </resources>
