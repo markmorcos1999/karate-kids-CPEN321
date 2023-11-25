@@ -48,6 +48,7 @@ public class PlayGameActivity extends AppCompatActivity {
             //ChatGPT usage: No
             @Override
             public void onClick(View view) {
+                Networker.getFriends();
                 Intent findFriendIntent = new Intent(PlayGameActivity.this, FindFriendActivity.class);
                 startActivity(findFriendIntent);
             }
