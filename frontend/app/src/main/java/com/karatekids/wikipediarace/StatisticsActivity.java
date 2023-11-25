@@ -17,8 +17,8 @@ import org.json.JSONObject;
 public class StatisticsActivity extends AppCompatActivity {
 
     private final static String TAG = "StatisticsActivity";
-    private static final int SILVER_THRESHOLD = 8;
-    private static final int GOLD_THRESHOLD = 10;
+    private static final int SILVER_THRESHOLD = 3;
+    private static final int GOLD_THRESHOLD = 6;
 
     //ChatGPT usage: No
     @Override
