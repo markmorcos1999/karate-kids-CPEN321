@@ -42,7 +42,6 @@ public class InSinglePlayerGameTest {
             .putExtra("end_page", "Mexico")
             .putExtra("start_url", "https://en.wikipedia.org/wiki/Taco")
             .putExtra("end_url", "https://en.wikipedia.org/wiki/Mexico");
-        Date beforeActivity = new Date();
         activityRule.launchActivity(test);
 
         onView(withText("Destination Page: Mexico")).check(matches(isDisplayed()));
