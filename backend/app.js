@@ -211,7 +211,7 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 			playerInfo.gamesWon,
 			playerInfo.gamesLost,
 			playerInfo.avgGameDuration,
-			playerInfo.avgGamePath,
+			playerInfo.avgGamePathLength,
 			friends
 		);
 	
