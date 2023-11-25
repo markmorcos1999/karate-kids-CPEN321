@@ -77,10 +77,7 @@ class MatchMaker {
 	// that need to be matched.
 	// ChatGPT usage: Partial	
 	async matchPlayers() {
-		console.log(this.checkEmptyFriends())
-		console.log(this.friendList)
 		
-		console.log(this.waitingPlayers.length)
 		if (this.waitingPlayers.length == 0 && this.checkEmptyFriends()) {
 			this.matchingInProgress = false;
 			return
