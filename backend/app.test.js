@@ -64,7 +64,7 @@ function examplePages(title){
 function mockPages (title){
 	return {
 		then: (cb) => {
-			console.log(cb({url:()=>{return}}))
+			cb({url:()=>{return}})
 			return examplePages(title)
 			}
 	}
@@ -1132,18 +1132,7 @@ function mockTitles(){
 }
 
 
-//creating a response object
-var mockResponse = {
-	json: () => {
-		return new Promise((resolve, reject) => {
-        setTimeout(() => {
-			//Creating a map object
-            resolve({paths:[{ map:()=>{return ["Taco", "Mexican Food", "Mexico"]} }]});
-			//resolve("test")
-		}, 200);
-    });
-	}
-}
+
 
 function mockPath(){
     return new Promise((resolve, reject) => {
@@ -1158,4 +1147,70 @@ function sleep(milliseconds) {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
   });
+}
+
+var sampleFetchData = {
+  isSourceRedirected: false,
+  isTargetRedirected: false,
+  pages: {
+    '1': {
+      description: 'Indo-European language',
+      thumbnailUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Idioma_Griego.PNG/160px-Idioma_Griego.PNG',
+      title: 'Taco',
+      url: 'https://en.wikipedia.org/wiki/Greek_language'
+    },
+    '2': {
+      description: 'Premature cell death',
+      thumbnailUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Structural_changes_of_cells_undergoing_necrosis_or_apoptosis.png/160px-Structural_changes_of_cells_undergoing_necrosis_or_apoptosis.png',
+      title: 'Mexican Food',
+      url: 'https://en.wikipedia.org/wiki/Necrosis'
+    },
+    '3': {
+      description: 'Pandemic in the Byzantine Empire, later northern Europe',
+      thumbnailUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Plaguet03.jpg/160px-Plaguet03.jpg',
+      title: 'Mexico',
+      url: 'https://en.wikipedia.org/wiki/Plague_of_Justinian'
+    },
+    '5982415': {
+      description: 'Genus of arachnids',
+      thumbnailUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Long-legged_Sac_Spider_-_Cheiracanthium_sp.%2C_Pateros%2C_Washington.jpg/160px-Long-legged_Sac_Spider_-_Cheiracanthium_sp.%2C_Pateros%2C_Washington.jpg',
+      title: 'Cheiracanthium',
+      url: 'https://en.wikipedia.org/wiki/Cheiracanthium'
+    },
+    '8611983': {
+      description: 'Wikimedia list article',
+      title: 'List of medical roots, suffixes and prefixes',
+      url: 'https://en.wikipedia.org/wiki/List_of_medical_roots,_suffixes_and_prefixes'
+    },
+    '19352117': {
+      description: 'Ancient Greek philosopher',
+      title: 'Asclepiades of Phlius',
+      url: 'https://en.wikipedia.org/wiki/Asclepiades_of_Phlius'
+    },
+    '42147537': {
+      description: 'Species of arachnid',
+      title: 'Cheiracanthium campestre',
+      url: 'https://en.wikipedia.org/wiki/Cheiracanthium_campestre'
+    }
+  },
+  paths: [
+    [ 1, 2, 3],
+    [ 19352117, 11887, 548536, 39936, 5982415, 42147537 ]
+  ],
+  sourcePageTitle: 'Asclepiades of Phlius',
+  targetPageTitle: 'Cheiracanthium campestre'
+}
+
+//creating a response object
+//Sample code from stack overflow
+var mockResponse = {
+	json: () => {
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				//Creating a map object
+				resolve(sampleFetchData);
+				//resolve("test")
+			}, 200);
+		});
+	}
 }
