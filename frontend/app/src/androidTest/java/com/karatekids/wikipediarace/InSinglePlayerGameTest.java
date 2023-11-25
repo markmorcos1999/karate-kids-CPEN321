@@ -29,20 +29,19 @@ import org.junit.runner.RunWith;
 import java.util.Date;
 
 @RunWith(AndroidJUnit4.class)
-public class InGameTest {
+public class InSinglePlayerGameTest {
     @Rule
     public IntentsTestRule<InGameActivity> activityRule =
             new IntentsTestRule<>(InGameActivity.class, false, false);
 
     @Test
-    public void testPage() throws InterruptedException {
+    public void inSinglePlayerGameTest() throws InterruptedException {
         Intent test = new Intent();
         test
             .putExtra("start_page", "Taco")
             .putExtra("end_page", "Mexico")
             .putExtra("start_url", "https://en.wikipedia.org/wiki/Taco")
             .putExtra("end_url", "https://en.wikipedia.org/wiki/Mexico");
-        Date beforeActivity = new Date();
         activityRule.launchActivity(test);
 
         onView(withText("Destination Page: Mexico")).check(matches(isDisplayed()));
@@ -56,6 +55,14 @@ public class InGameTest {
         onWebView()
                 .check(webMatches(getCurrentUrl(), containsString("British_English")));
 
+        //ensure that timer is incrementing
+        while (true) {
+            try {
+                onView(withText("00:5")).perform().check(matches(isDisplayed()));
+                break;
+            } catch (Exception e) {
+            }
+        }
         while (true) {
             try {
                 onView(withText("00:10")).perform().check(matches(isDisplayed()));
@@ -64,6 +71,7 @@ public class InGameTest {
             }
         }
 
+        //check back button functionality
         onView(withId(R.id.wikipedia_page_view))
                 .perform(pressBack());
 

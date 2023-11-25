@@ -40,27 +40,20 @@ jest.mock('firebase-admin');
 admin.messaging = jest.fn().mockReturnValue('');
 admin.credential.cert.mockReturnValue('');
 
-
-
 jest.mock('wikijs');
 var mockWiki = {
 	page: jest.fn(),
 	random: jest.fn()
-	
 }
 var mockTitle = {
 	map: jest.fn()
 }
-
 Wikijs.default.mockReturnValue(mockWiki)
 
 //Wikijs.default = mockWiki;
 
 var node_fetch = require('node-fetch');
-
 jest.mock('node-fetch');
-
-
 
 node_fetch.mockReturnValue(
 	new Promise((resolve, reject) => {
@@ -70,15 +63,11 @@ node_fetch.mockReturnValue(
     })
 );
 
-
 const app = require('./app.js');
 const { randomInt } = require('crypto');
 
-
 // Interface GET /leaderboard
 describe("Retrieve the leaderboard", () => {
-	
-	
     /**
      * Input: N/A
      * Expected status code: 200
@@ -233,8 +222,6 @@ describe("Testing player signIn", () => {
 
 // Interface POST /game
 describe("Testing game requests", () => {
-   
-
     /** 
      * Input: Single Game Request
      * Expected status code: 200
@@ -528,9 +515,22 @@ describe("Remove a friend", () => {
         const response = await request(app).delete('/player/' + player._id + '/friend/' + friend._id);
 
         expect(response.status).toBe(204);
-        expect(mockCollection.updateOne).toHaveBeenCalled();
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id });
+        expect(mockCollection.updateOne).toHaveBeenCalled();
+        expect(mockCollection.updateOne).toHaveBeenCalledWith(
+            { _id: player._id },
+            { 
+                $set: {
+                    elo: player.elo,
+                    gamesWon: player.gamesWon,
+                    gamesLost: player.gamesLost,
+                    avgGameDuration: player.avgGameDuration,
+                    avgGamePathLength: player.avgGamePathLength,
+                    friends: []
+                } 
+            }
+        );
     });
 
     /**
@@ -539,7 +539,7 @@ describe("Remove a friend", () => {
      * Expected behaviour: the server responds with an error
      * Expected output: An empty message with status 404
      */
-    test("Remove a friend", async () => {
+    test("Remove a friend who isn't a friend", async () => {
         const friend = mockPlayer("Friend");
         const player = mockPlayer("Player");
 
@@ -748,7 +748,7 @@ describe("Testing putting pages into games", () => {
 
         mockCollection.findOne.mockReturnValue(player);
 
-        request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
+        await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
         
 		await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}))
 		.then(response => {
@@ -781,7 +781,7 @@ function mockPlayer(
         friends = [];
 
         for (var i = 0; i < randomInt(5); i++) {
-            friends.push(randomInt(1000000));
+            friends.push(randomInt(1000000).toString());
         }
     }
 
@@ -815,12 +815,9 @@ var mockResponse = {
 }
 
 function mockPath(){
-
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve(mockResponse);
         }, 1000);
     });
-
-
 }
