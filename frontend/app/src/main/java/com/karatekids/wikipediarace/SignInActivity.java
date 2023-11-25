@@ -135,8 +135,7 @@ public class SignInActivity extends AppCompatActivity {
                             // Log and toast
                             String msg = getString(R.string.msg_token_fmt, token);
                             Log.d(TAG, msg);
-                            int id = (int) Math.floor(1000_0000 + (Math.random() * 9000_0000));
-                            Networker.serverSignIn(Integer.toString(id), account.getDisplayName(), token,SignInActivity.this);
+                            Networker.serverSignIn(account.getId().substring(0, 8), account.getDisplayName(), token,SignInActivity.this);
                         }
                     });
         } catch (ApiException e) {
