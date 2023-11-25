@@ -177,7 +177,7 @@ public final class Networker {
             public void run() {
                 String ret = executePost(URL, NetworkMessage.getFriends(name, id));
 
-                //FindFriendActivity.addFriends(ret) or something like that.
+                FindFriendActivity.friends = ret;// or something like that.
             }
         });
 

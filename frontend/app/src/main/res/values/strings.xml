@@ -64,13 +64,20 @@
     <string name="friend_mode_wait_st">Waiting for Friend and Finding Pages...</string>
     <string name="friend_mode_look_up_friend_by_id">Input Friend ID:</string>
     <string name="play_game_st">Play a Game</string>
-    <string name="friend_id_instruct">Insert Friend ID of Friend Below</string>
+    <string name="friend_id_instruct">Insert Friend ID to Add a Friend</string>
     <string name="player_id_st">Player ID</string>
     <string name="player_id_value_st">cccc</string>
-    <string name="validate_friend_id_st">Submit</string>
+    <string name="validate_friend_id_st">Add Friend</string>
     <string name="guest_signin_st">Sign in as a Guest</string>
     <string name="user_id_st">Your ID:</string>
     <string name="user_id_value_st">abc</string>
     <string name="shortest_path_text_st">Shortest Path Possible:</string>
     <string name="match_found_st">Match Found!</string>
+    <string name="game_details_toast_st"></string>
+    <string name="friends">Friends</string>
+    <string name="friends_id">Friend ID</string>
+    <string name="friends_name">Friend Name</string>
+    <string name="selected_friend_st">Selected Friend:</string>
+    <string name="click_friend_st">None</string>
+    <string name="friend_game_st">Start Game</string>
 </resources>
