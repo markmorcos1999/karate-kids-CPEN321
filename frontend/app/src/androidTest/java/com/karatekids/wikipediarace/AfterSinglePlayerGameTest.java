@@ -1,13 +1,13 @@
 package com.karatekids.wikipediarace;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Intent;
@@ -16,7 +16,6 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +30,22 @@ public class AfterSinglePlayerGameTest {
             new IntentsTestRule<>(ResultsActivity.class, false, false);
 
     @Test
-    public void afterSinglePlayerGameTest() throws JSONException {
+    public void afterSinglePlayerGameTestWithBack() throws JSONException {
+        afterSinglePlayerGameTacoMexicoTestCase();
+        onView(withId(R.id.shortest_path_text))
+                .perform(pressBack());
+        intended(hasComponent(MainActivity.class.getName()));
+    }
+
+    @Test
+    public void afterSinglePlayerTacoMexicoWithButton () throws JSONException {
+        afterSinglePlayerGameTacoMexicoTestCase();
+        onView(withText("Return to Main Page"))
+                .perform(click());
+        intended(hasComponent(MainActivity.class.getName()));
+    }
+
+    public void afterSinglePlayerGameTacoMexicoTestCase() throws JSONException {
         Intent test = new Intent();
         int pagesVisitedCount = 3;
         ArrayList<String> pagesVisited = new ArrayList<>();
@@ -53,8 +67,5 @@ public class AfterSinglePlayerGameTest {
                 .check(matches(isDisplayed()));
         onView(withText("Position: 1")).check(matches(isDisplayed()));
         onView(withText("Seconds: 30\n")).check(matches(isDisplayed()));
-        onView(withId(R.id.shortest_path_text))
-                .perform(pressBack());
-        intended(hasComponent(MainActivity.class.getName()));
     }
 }
