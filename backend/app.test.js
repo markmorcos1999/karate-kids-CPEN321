@@ -68,6 +68,10 @@ const { randomInt } = require('crypto');
 
 // Interface GET /leaderboard
 describe("Retrieve the leaderboard", () => {
+    beforeEach(() => {
+        resetConnectionMocks();
+    });
+
     /**
      * Input: N/A
      * Expected status code: 200
@@ -123,7 +127,7 @@ describe("Retrieve the leaderboard", () => {
      * Expected output: An internal server error response
      */
     test("Database retrieval error", async () => {
-        var toArray = jest.fn().mockRejectedValue(new Error('Test Error'));
+        mockCollection.find.mockRejectedValue(new Error("Test Error"));
 
         // Perform actions to set up the scenario with no players (e.g., clear database)
         const response = await request(app).get('/leaderboard');
@@ -135,6 +139,10 @@ describe("Retrieve the leaderboard", () => {
 
 // Interface GET /player/:id
 describe("Retrieve a player's information", () => {
+    beforeEach(() => {
+        resetConnectionMocks();
+    });
+
     /**
      * Input: A player's id
      * Expected status code: 200
@@ -222,6 +230,10 @@ describe("Testing player signIn", () => {
 
 // Interface POST /game
 describe("Testing game requests", () => {
+    beforeEach(() => {
+        resetConnectionMocks();
+    });
+
     /** 
      * Input: Single Game Request
      * Expected status code: 200
@@ -347,6 +359,10 @@ describe("Testing game requests", () => {
 
 // Interface GET /game
 describe("Testing completing a game", () => {
+    beforeEach(() => {
+        resetConnectionMocks();
+    });
+
 	 /** 
      * Input: Completing a game after pages have been aded
      * Expected status code: 200
@@ -399,6 +415,10 @@ describe("Testing completing a game", () => {
 
 // Interface POST /player/{playerId}/friend/{friendId}
 describe("Add a friend", () => {
+    beforeEach(() => {
+        resetConnectionMocks();
+    });
+
     /**
      * Input: a player id and a friend id
      * Expected status code: 201
@@ -408,6 +428,7 @@ describe("Add a friend", () => {
     test("Add a friend", async () => {
         const player = mockPlayer("Player");
         const friend = mockPlayer("Friend");
+        const friends = [...player.friends, friend._id];
 
         mockCollection.findOne.mockImplementation((idObj) => {
             if (idObj._id == player._id) {
@@ -424,8 +445,50 @@ describe("Add a friend", () => {
 
         expect(response.status).toBe(201);
         expect(mockCollection.updateOne).toHaveBeenCalled();
+        expect(mockCollection.updateOne).toHaveBeenCalledWith(
+            { _id: player._id },
+            { 
+                $set: {
+                    elo: player.elo,
+                    gamesWon: player.gamesWon,
+                    gamesLost: player.gamesLost,
+                    avgGameDuration: player.avgGameDuration,
+                    avgGamePathLength: player.avgGamePathLength,
+                    friends: friends
+                } 
+            }
+        );
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id });
+    });
+
+    /**
+     * Input: a player id and the id of an existing friend
+     * Expected status code: 409
+     * Expected behaviour: the server responds with an error
+     * Expected output: An empty message with status 409
+     */
+    test("Add a friend who is already a friend", async () => {
+        const player = mockPlayer("Player");
+        const friend = mockPlayer("Friend");
+        
+        player.friends.push(friend._id);
+
+        mockCollection.findOne.mockImplementation((idObj) => {
+            if (idObj._id == player._id) {
+                return player;
+            }
+            else if (idObj._id == friend._id) {
+                return friend;
+            }
+
+            return null;
+        });
+    
+        const response = await request(app).post('/player/' + player._id + '/friend/' + friend._id);
+
+        expect(response.status).toBe(409);
+        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
     });
 
     /**
@@ -490,6 +553,10 @@ describe("Add a friend", () => {
 
 // Interface DELETE /player/{playerId}/friend/{friendId}
 describe("Remove a friend", () => {
+    beforeEach(() => {
+        resetConnectionMocks();
+    });
+
     /**
      * Input: a player id and a friend id
      * Expected status code: 201
@@ -557,9 +624,7 @@ describe("Remove a friend", () => {
         const response = await request(app).delete('/player/' + player._id + '/friend/' + friend._id);
 
         expect(response.status).toBe(404);
-        expect(mockCollection.updateOne).toHaveBeenCalled();
         expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: player._id });
-        expect(mockCollection.findOne).toHaveBeenCalledWith({ _id: friend._id });
     });
 
     /**
@@ -625,6 +690,10 @@ describe("Remove a friend", () => {
 
 // Interface GET /player/{id}/friend
 describe("Retrieve a player's friend list", () => {
+    beforeEach(() => {
+        resetConnectionMocks();
+    });
+
     /**
      * Input: a player's id
      * Expected status code: 200
@@ -719,6 +788,10 @@ describe("Retrieve a player's friend list", () => {
 
 // Interface PUT /game
 describe("Testing putting pages into games", () => {
+    beforeEach(() => {
+        resetConnectionMocks();
+    });
+
 	 /** 
      * Input: testing adding pages to a game in progress.
      * Expected status code: 200
@@ -726,8 +799,6 @@ describe("Testing putting pages into games", () => {
      * Expected output: A success response code
      */
     test("Page Put Message", async () => {
-		
-		
 		var player = mockPlayer();
 	
 		
@@ -763,9 +834,15 @@ describe("Testing putting pages into games", () => {
         expect(mockWiki.random).toHaveBeenCalledTimes(0)
         
     });
-	
 });
 
+
+function resetConnectionMocks() {
+    mockCollection.findOne = jest.fn();
+    mockCollection.find = jest.fn();
+    mockCollection.insertOne = jest.fn();
+    mockCollection.updateOne = jest.fn();
+}
 
 function mockPlayer(
     name = "Julia Rubin", 

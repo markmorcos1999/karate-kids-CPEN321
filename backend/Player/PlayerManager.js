@@ -22,11 +22,8 @@ class PlayerManager {
 
     // ChatGPT usage: Partial
     async getTopPlayers(limit = 10) {
-        return await this.collection
-            .find()
-            .sort({ elo: -1 }) // Assuming you have an 'elo' field in your documents
-            .limit(limit)
-            .toArray();
+        const players = await this.collection.find();
+        return players.sort({ elo: -1 }).limit(limit).toArray();
     }
 
     //ChatGPT usage: Partial
