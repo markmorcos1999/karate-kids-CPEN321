@@ -252,9 +252,9 @@ public final class Networker {
 
             return res;
         } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
-            //return executePost(URL, data);
+            //e.printStackTrace();
+            //return "error";
+            return executePost(URL, data);
 
         } finally {
             if (connection != null) {
