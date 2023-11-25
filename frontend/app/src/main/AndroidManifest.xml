@@ -44,6 +44,10 @@
             android:name=".StatisticsActivity"
             android:exported="false" />
         <activity
+            android:name=".LeaderboardStatisticsActivity"
+            android:theme="@style/Theme.WikipediaRace.Dialog"
+            android:exported="false" />
+        <activity
             android:name=".LeaderboardActivity"
             android:exported="false" />
 

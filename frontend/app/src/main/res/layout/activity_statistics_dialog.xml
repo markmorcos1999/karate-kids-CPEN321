@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ga"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingVertical="200px">
+
+    <TextView
+        android:id="@+id/games_lost_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/games_lost_st"
+        android:layout_marginStart="200px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/badge_iv"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/games_won_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/games_lost_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/games_lost_value_st"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/badge_iv"
+        app:layout_constraintTop_toBottomOf="@+id/games_won_value_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/games_won_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/games_won_value_st"
+        app:layout_constraintBottom_toTopOf="@+id/games_lost_value_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/badge_iv"
+        app:layout_constraintTop_toBottomOf="@+id/elo_value_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/elo_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/elo_st"
+        app:layout_constraintBottom_toTopOf="@+id/games_won_tv"
+        app:layout_constraintEnd_toEndOf="@+id/games_won_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_id_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/games_won_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/games_won_st"
+        android:layout_marginStart="200px"
+        app:layout_constraintBottom_toTopOf="@+id/games_lost_tv"
+        app:layout_constraintEnd_toStartOf="@+id/badge_iv"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/elo_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/elo_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/elo_value_st"
+        app:layout_constraintBottom_toTopOf="@+id/games_won_value_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/badge_iv"
+        app:layout_constraintTop_toBottomOf="@+id/player_id_value_tv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <ImageView
+        android:id="@+id/badge_iv"
+        android:layout_width="86dp"
+        android:layout_height="123dp"
+        android:layout_marginTop="150px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bronze_badge" />
+
+    <TextView
+        android:id="@+id/player_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/player_id_st"
+        android:layout_marginTop="150px"
+        app:layout_constraintBottom_toTopOf="@+id/elo_tv"
+        app:layout_constraintEnd_toStartOf="@+id/badge_iv"
+        app:layout_constraintHorizontal_bias="0.682"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/badge_iv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/player_id_value_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="200px"
+        android:layout_marginTop="150px"
+        android:text="@string/player_id_value_st"
+        app:layout_constraintBottom_toTopOf="@+id/elo_value_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/badge_iv"
+        app:layout_constraintTop_toBottomOf="@+id/badge_iv"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/player_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
