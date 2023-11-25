@@ -399,7 +399,7 @@ describe("Testing completing a game", () => {
 
 		await Promise.all([promise1, promise2]);
 
-		console.log("No longer awaiting games")
+		console.log("No longer awaiting games");
 
 		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexican_cuisine"});
 		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.wikipedia.org/wiki/Mexico"});

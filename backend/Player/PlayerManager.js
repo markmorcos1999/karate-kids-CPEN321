@@ -49,14 +49,17 @@ class PlayerManager {
 
     // ChatGPT usage: Partial
     async updatePlayer(id, elo, gamesWon, gamesLost, avgGameDuration, avgGamePathLength, friends) {
-        const updatedProperties = {
+        let updatedProperties = {
             elo,
             gamesWon,
             gamesLost,
             avgGameDuration,
-            avgGamePathLength,
-            friends
+            avgGamePathLength
         };
+
+        if (friends) {
+            updatedProperties.friends = friends;
+        }
 
         const result = await this.collection.updateOne(
             { _id: id },
