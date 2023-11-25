@@ -46,16 +46,7 @@ public class FindFriendActivity extends AppCompatActivity {
         tableView.setDataRowBackgroundProvider(TableDataRowBackgroundProviders.alternatingRowColors(colorEvenRows, colorOddRows));
 
         tableView.addDataClickListener(new FriendsListListener());
-//        JSONArray arr = new JSONArray(friends);
-        //{{"id1", "name1"}, {"id2", "name2"}, {"id2", "name2"}, {"id2", "name2"}, {"id2", "name2"}, {"id2", "name2"}};
 
-        while(friends == null || friends.isEmpty()) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
             try {
                 JSONArray friendsArr = new JSONArray(friends);
 
