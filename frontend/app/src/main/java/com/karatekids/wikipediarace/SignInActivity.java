@@ -63,8 +63,8 @@ public class SignInActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<String> task) {
                     if (!task.isSuccessful()) {
                         Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                        int range = Integer.MAX_VALUE;
-                        Networker.serverSignIn( Integer.toString((int)(Math.random() * range)), "Guest", "a",SignInActivity.this);
+                        int id = (int) Math.floor(1000_0000 + (Math.random() * 9000_0000));
+                        Networker.serverSignIn( Integer.toString(id), "Guest", "a",SignInActivity.this);
                         return;
                     }
 
@@ -74,8 +74,8 @@ public class SignInActivity extends AppCompatActivity {
                     // Log and toast
                     String msg = getString(R.string.msg_token_fmt, token);
                     Log.d(TAG, msg);
-                    int range = Integer.MAX_VALUE;
-                    Networker.serverSignIn(Integer.toString((int)(Math.random() * range)), "Guest", token,SignInActivity.this);
+                    int id = (int) Math.floor(1000_0000 + (Math.random() * 9000_0000));
+                    Networker.serverSignIn(Integer.toString(id), "Guest", token,SignInActivity.this);
                 }
             });
     }
@@ -135,7 +135,8 @@ public class SignInActivity extends AppCompatActivity {
                             // Log and toast
                             String msg = getString(R.string.msg_token_fmt, token);
                             Log.d(TAG, msg);
-                            Networker.serverSignIn(account.getId(), account.getDisplayName(), token,SignInActivity.this);
+                            int id = (int) Math.floor(1000_0000 + (Math.random() * 9000_0000));
+                            Networker.serverSignIn(Integer.toString(id), account.getDisplayName(), token,SignInActivity.this);
                         }
                     });
         } catch (ApiException e) {
