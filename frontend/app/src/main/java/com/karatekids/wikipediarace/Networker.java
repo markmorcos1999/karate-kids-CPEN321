@@ -214,9 +214,9 @@ public final class Networker {
             URL url = new URL(targetURL);
             connection = (HttpURLConnection) url.openConnection();
 
-
-            ;
             connection.setRequestMethod(method);
+            connection.setRequestProperty("Content-Type",
+                    "application/json");
 
             //From https://stackoverflow.com/questions/44305351/how-do-you-send-data-in-a-request-body-using-httpurlconnection
             if(!method.equals("GET")) {

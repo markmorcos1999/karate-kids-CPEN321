@@ -25,29 +25,22 @@ var port = 8081;
 
 
 //app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-function parseBody(bdy) {
-  return JSON.parse(Object.keys(bdy)[0])
-}
+app.use(bodyParser.json());
 
 app.post('/signIn/:id', async (req, res) => {
 	
-  console.log("signIn")
+	console.log("signIn")
 	
 	try {
 		
 		const id = req.params.id;
 		var player;
 
-    console.log(req.params)
-    console.log(JSON.stringify(req.params))
+    
 
-    console.log(req.body)
+		const message = req.body;
+		console.log(message);
 
-		const message = parseBody(req.body);
-		console.log(message)
-    console.log(req.params)
     
 		if(await playerManager.playerExists(id)) {
       console.log("Player exists")
@@ -79,7 +72,7 @@ app.post('/signIn/:id', async (req, res) => {
 
 app.post('/game', async (req, res) => {
 	try {
-	  const message = parseBody(req.body);
+	  const message = req.body;
 
 		const type = message.mode;
 		const id = message.id;
@@ -126,7 +119,7 @@ app.post('/game', async (req, res) => {
 
 app.put('/game', async (req, res) => {
 	try {
-	  const message = parseBody(req.body);
+	  const message = req.body;
 
 		if(!gameManager.checkForPlayer(message.id)){
 			res.status(400);
@@ -176,7 +169,7 @@ app.get('/player/:id', async (req, res) => {
 		const id = req.params.id;
    
 		if(!(await playerManager.playerExists(id))){
-			res.status(405);
+			res.status(404);
 			res.send();
 			return;
 		}
@@ -197,7 +190,7 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 		const friendId = req.params.friendId;
 
 		if(!((await playerManager.playerExists(playerId)) && (await playerManager.playerExists(friendId)))){
-			res.status();
+			res.status(404);
 			res.send();
 			return;
 		}
@@ -238,18 +231,19 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 		const friendId = req.params.friendId;
 
 		if(!(await playerManager.playerExists(playerId) && await playerManager.playerExists(friendId))){
-			res.status(405);
+			res.status(404);
 			res.send();
 			return;
 		}
 
 		const playerInfo = await playerManager.getPlayerInfo(playerId);
+		console.log()
 		
 		let friends = playerInfo.friends;
 		const friendIndex = friends.indexOf(friendId);
 
 		if (friendIndex < 0) {
-			res.status(405)
+			res.status(404)
 			res.send();
 			return;
 		}
@@ -261,7 +255,7 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 			playerInfo.gamesWon,
 			playerInfo.gamesLost,
 			playerInfo.avgGameDuration,
-			playerInfo.avgGamePath,
+			playerInfo.avgGamePathLength,
 			friends
 		);
 	
@@ -279,7 +273,7 @@ app.get('/player/:id/friend', async (req, res) => {
 		const id = req.params.id;
 
 		if(!(await playerManager.playerExists(id))) {
-			res.status(405);
+			res.status(404);
 			res.send();
 			return;
 		}
