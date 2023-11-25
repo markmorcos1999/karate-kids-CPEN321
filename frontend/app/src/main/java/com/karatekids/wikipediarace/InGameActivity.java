@@ -15,6 +15,7 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class InGameActivity extends AppCompatActivity {
 
@@ -23,9 +24,13 @@ public class InGameActivity extends AppCompatActivity {
 
     private static ArrayList<String> pagesVisited;
 
+    private static Stack<String> lastVisitedPages;
+
     private final static String TAG = "InGameActivity";
 
     private static Chronometer clock;
+
+    private WebView web;
 
     //ChatGPT usage: No
     // Followed along with: https://technotalkative.com/android-webviewclient-example/
@@ -43,13 +48,13 @@ public class InGameActivity extends AppCompatActivity {
         TextView destination = (TextView)  findViewById(R.id.destination_page);
         destination.append(" "+b.getString("end_page"));
 
-        WebView web;
         web = (WebView) findViewById(R.id.wikipedia_page_view);
         web.setWebViewClient(new MyWebClient());
         web.getSettings().setJavaScriptEnabled(true);
         web.loadUrl(b.getString("start_url"));
         count = -1;
         pagesVisited = new ArrayList<>();
+        lastVisitedPages = new Stack<>();
 
         // https://medium.com/native-mobile-bits/easily-build-a-chronometer-a-simple-stopwatch-1f83aa361ee7
         clock = (Chronometer) findViewById(R.id.chronometer);
@@ -64,8 +69,8 @@ public class InGameActivity extends AppCompatActivity {
             super.onPageStarted(view, url, favicon);
         }
 
-        //ChatGPT usage: No
-        // display the information from the url embedded in the app instead of opening a web viewer external application
+        //ChatGPT usage: Nothe url embedded
+        //        // display the information from  in the app instead of opening a web viewer external application
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             if(!request.getUrl().getHost().equals("en.m.wikipedia.org")){
@@ -84,7 +89,8 @@ public class InGameActivity extends AppCompatActivity {
 
             Log.d(TAG, "The number of clicked links is: " + count);
 
-            pagesVisited.add(view.getTitle().substring(0, view.getTitle().indexOf("-")));
+            pagesVisited.add(view.getTitle().substring(0, view.getTitle().indexOf("-")-1));
+            lastVisitedPages.push(view.getUrl());
 
             Bundle b = getIntent().getExtras();
 
@@ -119,8 +125,14 @@ public class InGameActivity extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
-        startActivity(new Intent(InGameActivity.this, PlayGameActivity.class));
-        finish();
+        if(lastVisitedPages.size()>1) {
+            lastVisitedPages.pop();
+            String s = lastVisitedPages.pop();
+            web.loadUrl(s);
+        }
+        else {
+            startActivity(new Intent(InGameActivity.this, PlayGameActivity.class));
+            finish();
+        }
     }
 }
