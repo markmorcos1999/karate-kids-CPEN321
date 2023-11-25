@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:table="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/friends_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:layout_editor_absoluteY="81dp">
@@ -19,7 +21,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/friend_id_instructions"
-        app:layout_constraintVertical_bias="0.234" />
+        app:layout_constraintVertical_bias="0.607" />
 
     <TextView
         android:id="@+id/friend_id_instructions"
@@ -31,7 +33,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.356" />
+        app:layout_constraintVertical_bias="0.813" />
 
     <Button
         android:id="@+id/validate_friend_id_bt"
@@ -43,7 +45,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/friend_id_bar"
         app:layout_constraintTop_toBottomOf="@+id/friend_id_instructions"
-        app:layout_constraintVertical_bias="0.237" />
+        app:layout_constraintVertical_bias="0.631" />
 
     <TextView
         android:id="@+id/user_id_tv"
@@ -54,7 +56,8 @@
         app:layout_constraintEnd_toStartOf="@+id/user_id_value_tv"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.931" />
 
     <TextView
         android:id="@+id/user_id_value_tv"
@@ -65,6 +68,194 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/user_id_tv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.929" />
+
+    <de.codecrafters.tableview.TableView
+        android:id="@+id/friends_table"
+        android:layout_width="409dp"
+        android:layout_height="220dp"
+        android:divider="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        table:flow_horizontalAlign="center"
+        table:flow_verticalAlign="center"
+        table:tableView_columnCount="3"
+        table:tableView_headerColor="@color/DarkGray"
+        table:tableView_headerElevation="10" />
+
+    <Button
+        android:id="@+id/friend_game_bt"
+        android:layout_width="132dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/start_game_st"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:enabled="false"
+        app:layout_constraintTop_toBottomOf="@+id/clicked_friend_tv" />
+
+    <TextView
+        android:id="@+id/clicked_friend_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="244dp"
+        android:text="@string/click_friend_st"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/selected_friend_tv"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/selected_friend_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="244dp"
+        android:text="@string/selected_friend_st"
+        app:layout_constraintEnd_toStartOf="@+id/clicked_friend_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:layout_width="414dp"-->
+    <!--        android:layout_height="230dp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
+
+    <!--        <TextView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="gggggg"/>-->
+    <!--    </androidx.recyclerview.widget.RecyclerView>-->
+    <!--    <ScrollView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="307dp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
+    <!--        <TableLayout-->
+    <!--            android:layout_width="407dp"-->
+    <!--            android:layout_height="284dp"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent">-->
+
+    <!--            <View-->
+    <!--                android:layout_width="fill_parent"-->
+    <!--                android:layout_height="1dp"-->
+    <!--                android:background="@android:color/black" />-->
+
+    <!--            <TableRow-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:layout_margin="0dp"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:background="@color/LightGrey">-->
+
+    <!--                <View-->
+    <!--                    android:layout_width="1dp"-->
+    <!--                    android:layout_height="fill_parent"-->
+    <!--                    android:layout_column="0"-->
+    <!--                    android:background="@android:color/black" />-->
+
+    <!--                <TextView-->
+    <!--                    android:layout_width="0dp"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_weight="4"-->
+    <!--                    android:gravity="center_horizontal"-->
+    <!--                    android:padding="10sp"-->
+    <!--                    android:text="@string/friends"-->
+    <!--                    android:textStyle="bold"-->
+    <!--                    android:textColor="@color/black"-->
+    <!--                    android:textSize="14sp" />-->
+
+    <!--                <View-->
+    <!--                    android:layout_width="fill_parent"-->
+    <!--                    android:layout_height="1dp"-->
+    <!--                    android:background="@android:color/black" />-->
+    <!--            </TableRow>-->
+
+    <!--            <View-->
+    <!--                android:layout_width="fill_parent"-->
+    <!--                android:layout_height="1dp"-->
+    <!--                android:background="@android:color/black" />-->
+
+    <!--            <TableRow-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent">-->
+
+    <!--                <View-->
+    <!--                    android:layout_width="1dp"-->
+    <!--                    android:layout_height="fill_parent"-->
+    <!--                    android:layout_column="0"-->
+    <!--                    android:background="@android:color/black" />-->
+
+    <!--                <TextView-->
+    <!--                    android:layout_width="55dp"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_weight="4"-->
+    <!--                    android:gravity="center_horizontal"-->
+    <!--                    android:padding="10sp"-->
+    <!--                    android:text="@string/player_id_st"-->
+    <!--                    android:textSize="14sp" />-->
+
+    <!--                <View-->
+    <!--                    android:layout_width="1dp"-->
+    <!--                    android:layout_height="fill_parent"-->
+    <!--                    android:layout_column="0"-->
+    <!--                    android:background="@android:color/black" />-->
+    <!--                <TextView-->
+    <!--                    android:layout_width="208dp"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_weight="4"-->
+    <!--                    android:gravity="center_horizontal"-->
+    <!--                    android:padding="10sp"-->
+    <!--                    android:text="@string/table_name_st"-->
+    <!--                    android:textSize="14sp" />-->
+
+    <!--            </TableRow>-->
+
+    <!--                <TableRow-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content">-->
+
+    <!--                    <View-->
+    <!--                        android:layout_width="1dp"-->
+    <!--                        android:layout_height="fill_parent"-->
+    <!--                        android:layout_column="0"-->
+    <!--                        android:background="@android:color/black" />-->
+
+    <!--                    <TextView-->
+    <!--                        android:layout_width="55dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_weight="4"-->
+    <!--                        android:gravity="center_horizontal"-->
+    <!--                        android:padding="10sp"-->
+    <!--                        android:text="@string/player_id_st"-->
+    <!--                        android:textSize="14sp" />-->
+
+    <!--                    <View-->
+    <!--                        android:layout_width="1dp"-->
+    <!--                        android:layout_height="fill_parent"-->
+    <!--                        android:layout_column="0"-->
+    <!--                        android:background="@android:color/black" />-->
+    <!--                    <TextView-->
+    <!--                        android:layout_width="208dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_weight="4"-->
+    <!--                        android:gravity="center_horizontal"-->
+    <!--                        android:padding="10sp"-->
+    <!--                        android:text="@string/table_name_st"-->
+    <!--                        android:textSize="14sp" />-->
+
+    <!--                </TableRow>-->
+
+    <!--        </TableLayout>-->
+    <!--    </ScrollView>-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

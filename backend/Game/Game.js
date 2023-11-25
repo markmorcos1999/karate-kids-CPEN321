@@ -21,23 +21,13 @@ module.exports = class Game{
     }
 
 	//ChatGPT usage: No
-	addPlayers(newPlayers){
-		for(var i in newPlayers){
-			var pl = newPlayers[i]
-			pl.sessionId = this.id;
-			pl.pageList = {};
-			this.players.push(pl)
-		}
-		
-	}
-	//ChatGPT usage: No
 	playerToPage(id, page){
 		for(var i in this.players){
 			var pl = this.players[i]
 			if(pl.id == id){
 				pl.pageList.push(page);
-
-				if (page == this.end) {
+				
+				if (page == this.end.url) {
 					return true;
 				}
 				//Consider: If player reaches end page, should it be done here?
@@ -69,7 +59,6 @@ module.exports = class Game{
 			}
 		}
 		
-		return 0;
 	}
 	//ChatGPT usage: No
 	gameOver(){

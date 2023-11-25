@@ -29,7 +29,6 @@ app.use(bodyParser.json());
 
 app.post('/signIn/:id', async (req, res) => {
 	
-	console.log("signIn")
 	
 	try {
 		
@@ -39,15 +38,13 @@ app.post('/signIn/:id', async (req, res) => {
     
 
 		const message = req.body;
-		console.log(message);
 
     
 		if(await playerManager.playerExists(id)) {
-      console.log("Player exists")
+     
 			player = await playerManager.getPlayerInfo(id);			
 		}
 		else {
-       console.log("Creating new player")
 			playerManager.createNewPlayer(id, message.name);
 			player = {
 				_id: id, 
@@ -64,7 +61,7 @@ app.post('/signIn/:id', async (req, res) => {
 		res.send({_id: id})
 	}
 	catch (e){
-    console.log(e);
+    
 		res.status(500);
 		res.send();
 	}
@@ -77,31 +74,40 @@ app.post('/game', async (req, res) => {
 		const type = message.mode;
 		const id = message.id;
 		
-		if(!gameManager.checkForPlayer(id)) {
-			res.status(400);
-			res.send();
-			return;
-		}
+		gameManager.checkForPlayer(id)
+
 		//Here, we use "604" as a message code to say "try again later", letting the front end know
 		//that no other player was found.
 		if(type == "multi") {
 			
 			gameManager.playerFindGame(message.id).then(
-			(resolve) => res.send(resolve.getMessage()), 
-			(reject) => res.send("604"));
+			(resolve) => res.send(resolve.getMessage()),
+			(reject) => {
+				res.status(604)
+				res.send()
+				
+			});
 		}
 		else if(type == "daily") {
 			const game = await gameManager.startDaily(id);
 			res.send(game.getMessage());
 		}
 		else if (type == "friend") {
+			
+			
+			
 			const friendId = message.friendId;
+			
 			gameManager.friendSearch(id, friendId).then(
 			(resolve) => res.send(resolve.getMessage()),
-			(reject) => res.send("604")
-			)
-			const game = await gameManager.friendSearch(id, friendId);
-			res.send(game.getMessage());
+			(reject) => {
+				res.status(604)
+				res.send()
+				
+			});
+
+			//const game = await gameManager.friendSearch(id, friendId);
+			//res.send(game.getMessage());
 		}
 		else {
 			const game = await gameManager.startSingle(id);
@@ -109,9 +115,11 @@ app.post('/game', async (req, res) => {
 		}
 	}
 	catch (e){
-		console.error(e);
+
+
 		res.status(500);
 		res.send();
+		
 	}
 	
 	//res.send({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
@@ -121,15 +129,11 @@ app.put('/game', async (req, res) => {
 	try {
 	  const message = req.body;
 
-		if(!gameManager.checkForPlayer(message.id)){
-			res.status(400);
-			res.send();
-			return;
-		}
-						
+		gameManager.checkForPlayer(message.id)			
 		if (gameManager.playerPagePost(message)) {
-			var result = gameManager.playerEndGame(message.id);
-			res.send(result);
+			//Later, here verify player actually wins
+			//var result = gameManager.playerEndGame(message.id);
+			res.send(200);
 		}
 		else {
 			res.status(200);
@@ -177,7 +181,7 @@ app.get('/player/:id', async (req, res) => {
 		res.send(await playerManager.getPlayerInfo(id)); //here add the "database get playerinfo
 	}
 	catch (e){
-    console.error(e)
+
 		res.status(500);
 		res.send();
 	}
@@ -219,7 +223,6 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 		res.send();
 	} 
 	catch (err) {
-		console.log(err.message);
 		res.status(500);
 		res.send();
 	}
@@ -237,7 +240,6 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 		}
 
 		const playerInfo = await playerManager.getPlayerInfo(playerId);
-		console.log()
 		
 		let friends = playerInfo.friends;
 		const friendIndex = friends.indexOf(friendId);

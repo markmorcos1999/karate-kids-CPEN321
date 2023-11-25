@@ -7,8 +7,9 @@ class PageManager {
     async getRandomPages(limit = 2) { 
         try {
             const randomTitles = await wiki().random(limit);
-            const titlePromises = randomTitles.map(async (title) => {
-                var url = await wiki().page(title).then(page => page.url());
+		            
+			const titlePromises = randomTitles.map(async (title) => {
+                var url = await wiki().page(title).then(page => page.url()); //Statement here
 				url = url.slice(0, 10) + ".m" + url.slice(10);
                 const pageInfo = { 
                     title, 
@@ -19,8 +20,7 @@ class PageManager {
             });
             return Promise.all(titlePromises);
         } catch (error) {
-            console.error(error);
-            return [];
+            throw error;
         }
     }
 	
@@ -43,7 +43,7 @@ class PageManager {
         )
         .then(response => response.json())
         .then((data) => {
-            return data.paths[0].map(id => data.pages[id.toString()].title);
+            return data.paths[0].map(id => data.pages[id.toString()].title); //Statement here
         })
         .catch((error) => {
             throw error;
