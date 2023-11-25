@@ -43,11 +43,6 @@
         <activity
             android:name=".StatisticsActivity"
             android:exported="false" />
-<!--        https://stackoverflow.com/questions/41511214/hide-or-remove-action-bar-on-specific-activity-android-->
-        <activity
-            android:name=".LeaderboardStatisticsActivity"
-            android:theme="@style/Theme.WikipediaRace.Dialog"
-            android:exported="false" />
         <activity
             android:name=".LeaderboardActivity"
             android:exported="false" />

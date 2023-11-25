@@ -14,10 +14,4 @@
         <!-- Customize your theme here. -->
     </style>
 
-<!--    https://stackoverflow.com/questions/41511214/hide-or-remove-action-bar-on-specific-activity-android-->
-    <style name="Theme.WikipediaRace.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
 </resources>

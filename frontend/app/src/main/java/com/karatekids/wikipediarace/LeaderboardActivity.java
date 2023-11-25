@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -35,6 +37,9 @@ public class LeaderboardActivity extends AppCompatActivity {
     private final static String TAG = "LeaderboardActivity";
 
     public static String JSON_String = "";
+
+    private static final int SILVER_THRESHOLD = 8;
+    private static final int GOLD_THRESHOLD = 10;
 
     private static final int[] TABLE_HEADERS = {R.string.table_ranking_st, R.string.table_name_st, R.string.table_score_st};
 
@@ -98,12 +103,38 @@ public class LeaderboardActivity extends AppCompatActivity {
                 // turn the JSON String into an array
                 JSONArray arr = new JSONArray(LeaderboardActivity.JSON_String);
 
-                JSONObject element = arr.getJSONObject(rowIndex);
+                JSONObject obj = arr.getJSONObject(rowIndex);
 
-                Intent leaderboardStatisticsIntent = new Intent(LeaderboardActivity.this, LeaderboardStatisticsActivity.class);
-                leaderboardStatisticsIntent.putExtra("playerStats", element.toString());
-                startActivity(leaderboardStatisticsIntent);
+                // https://stackoverflow.com/questions/16191562/display-textview-in-alert-dialog
+                // create a dialog and set teh custom view
+                Dialog dialog = new Dialog(LeaderboardActivity.this);
+                dialog.setContentView(R.layout.activity_statistics_dialog);
 
+                // find and set all the text values based on the person chosen from the leaderboard
+                TextView games_won = (TextView) dialog.findViewById(R.id.games_won_value_tv);
+                TextView games_lost = (TextView) dialog.findViewById(R.id.games_lost_value_tv);
+                TextView elo = (TextView) dialog.findViewById(R.id.elo_value_tv);
+                TextView player_id = (TextView) dialog.findViewById(R.id.player_id_value_tv);
+                TextView player_name = (TextView) dialog.findViewById(R.id.player_name_tv);
+
+                games_won.setText(obj.getString("gamesWon"));
+                games_lost.setText(obj.getString("gamesLost"));
+                elo.setText(obj.getString("elo"));
+                player_id.setText(obj.getString("_id"));
+                player_name.setText(obj.getString("name"));
+
+                int gamesWon = Integer.parseInt(obj.getString("gamesWon"));
+
+                if(gamesWon >= GOLD_THRESHOLD) {
+                    ImageView image = (ImageView) findViewById(R.id.badge_iv);
+                    image.setImageResource(R.drawable.gold_badge);
+                } else if (gamesWon < GOLD_THRESHOLD && gamesWon >= SILVER_THRESHOLD) {
+                    ImageView image = (ImageView) findViewById(R.id.badge_iv);
+                    image.setImageResource(R.drawable.silver_badge);
+                }
+
+                // show the dialog
+                dialog.show();
 
             } catch (JSONException e) {
                 Log.d(TAG, "Unable to parse leaderboard data from server");
