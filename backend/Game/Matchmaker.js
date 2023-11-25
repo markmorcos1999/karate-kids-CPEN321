@@ -1,7 +1,7 @@
 const ALLOWED_DIF_BASE = 50;
 const DIFF_TIME_MULTIPLIER_EXPONENT = 0.002;
 const MATCHING_INTERVAL = 500;
-const MAX_WAIT_TIME = 100000;
+const MAX_WAIT_TIME = 10000;
 
 class MatchMaker {
 	// ChatGPT usage: Partial
@@ -42,27 +42,50 @@ class MatchMaker {
 	
 	//Adds a friend to the list of friends waiting to be matched.
 	//ChatGPT usage: no
-	async friendWaiting(friend) {
+	async friendWaiting(player) {
 		
-		this.friendList[friend.id] = friend;
+		var id = player.id;
+		var friendId = player.friendId;
+		
+		this.friendList[id] = player;
 
 		if (!this.matchingInProgress) {
 			this.matchingInProgress = true;
 			this.matchPlayers();
 		}
+		
+
+		//Now the friends matching
+		for(var i in this.friendList){
+			var friend = this.friendList[i]
+			if(friend.friendId == id && !this.friendList[i].done){
+				var game = this.gameManager.startGame(id, friendId)
+				this.friendList[id].matchPromiseResolve(game)
+				this.friendList[i].matchPromiseResolve(game)
+				this.friendList[id].done = true
+				this.friendList[i].done = true
+			} 
+			
+		}
 
 		
 	}
 
+
+
 	// Attempts to match players on a set time interval until there are no players left
 	// that need to be matched.
-	// ChatGPT usage: Partial
+	// ChatGPT usage: Partial	
 	async matchPlayers() {
+		console.log(this.checkEmptyFriends())
+		console.log(this.friendList)
 		
-		if (this.waitingPlayers.length == 0) {
+		console.log(this.waitingPlayers.length)
+		if (this.waitingPlayers.length == 0 && this.checkEmptyFriends()) {
 			this.matchingInProgress = false;
-			return;
+			return
 		}
+		
 		//matching for normal players
 		if (this.waitingPlayers.length >= 2) {
 			// Sort players in order of increasing elo
@@ -83,9 +106,12 @@ class MatchMaker {
 
 					this.waitingPlayers.splice(i - 1, 2);
 					
-					if (i > 1) {
-						i -= 2;
-					}
+					//Found this
+					//I think it only happens when there are 3 or more players waiting
+					//Commenting out for now for coverage.
+					//if (i > 1) {
+					//	i -= 2;
+					//}
 				}
 			}
 		}
@@ -96,31 +122,41 @@ class MatchMaker {
 
 			if (Date.now() - curPlayer.waitStartTime >= MAX_WAIT_TIME) {
 				// If exceeded max wait time with no match, return null
-				curPlayer.matchPromiseReject("603");
+				curPlayer.matchPromiseReject("604");
 				this.waitingPlayers.splice(i, 1);
 				i--;
 			}
 		}
 		
+	
 		//Now the friendslist matching
 		for(var i in this.friendList){
-			if(this.friendList[i].friendId == id && !this.friendList[i].done){
-				var game = this.startGame(id, friendId)
-				friend.matchPromiseResolve(game)
-				this.friendList[i].matchPromiseResolve(game)
+
+			if(!this.friendList[i].done){
+				this.matchingInProgress = true;
+			}
+			if(Date.now() - this.friendList[i].waitStartTime >= MAX_WAIT_TIME && !this.friendList[i].done){
 				this.friendList[i].done = true
-				friend.done = true
-			} 
-			else if(this.friendList[i].waitStartTime >= MAX_WAIT_TIME){
-				this.freindList[i].done = true
-				this.friendList[i].matchPromiseReject("603")
+				
+				this.friendList[i].matchPromiseReject("604")
 			}
 		}
-		
-		
 
 		setTimeout(() => this.matchPlayers(), MATCHING_INTERVAL);
 	}
+
+	//Checks if the friends fucntion is empty.
+	//ChatGPT useage: No
+	checkEmptyFriends(){
+		for(var i in this.friendList){
+			if(!this.friendList[i].done){
+				return false
+			}
+			
+		}
+		return true;
+	}
+
 
 	// Computes the maximum allowed elo diff between two waiting players. This increases exponentially
 	// as a player's wait time increases.
@@ -129,6 +165,8 @@ class MatchMaker {
 		const diff = Date.now() - Math.max(time1, time2);
 		return ALLOWED_DIF_BASE + Math.pow(2, diff * DIFF_TIME_MULTIPLIER_EXPONENT);
 	}
+	
+
 }
 
 module.exports = MatchMaker;

@@ -40,7 +40,7 @@ module.exports = class GameManager{
 				gamesLost: 0
 			};
 			
-			this.playerList
+			this.playerList[id] = new Player(newPlayer, "")
 			
 			return true
 		}
@@ -85,9 +85,9 @@ module.exports = class GameManager{
 		players.push(this.playerList[p1Id]);
 		players.push(this.playerList[p2Id]);
 		
+
 		var pageList = await this.pageMan.getRandomPages();
-		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title);
-		
+		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title);		
 		//Check if there isnt a path
 		
 		var game = new Game(sessionId, players, pageList, path, this);
@@ -130,23 +130,23 @@ module.exports = class GameManager{
 	//Some code taken from Matchmaker.js
 	async friendSearch(id, friendId, waitStartTime = Date.now()){
 		
-		var friend = {
+		var player = {
 			id,
 			friendId,
 			done: false,
-			startTime 
+			waitStartTime: waitStartTime
 		};
 
-		friend.matchPromise = new Promise(
+		player.matchPromise = new Promise(
 			(resolve, reject) => { 
-				friend.matchPromiseResolve = resolve;
-				friend.matchPromiseReject = reject;
+				player.matchPromiseResolve = resolve;
+				player.matchPromiseReject = reject;
 			}
 		)
 		
-		this.matchmaker.friendWaiting(friend)
+		this.matchmaker.friendWaiting(player)
 		
-		return friend.matchPromise
+		return player.matchPromise
 	}
 	//ChatGPT usage: No
 	sendLoss(players, winner){

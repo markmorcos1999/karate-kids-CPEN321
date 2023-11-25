@@ -9,9 +9,7 @@ class FCMNotifier {
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount)
         });
-		console.log(admin);
-		console.log(admin.messaging);
-		console.log(admin.messaging());
+		
         this.messaging = admin.messaging();
     }
 
@@ -25,13 +23,10 @@ class FCMNotifier {
                 },
                 token: deviceToken,
             };
-			console.log("SENDING MESSAGE")
-			console.log(message)
+
             const response = await this.messaging.send(message);
-			console.log(response)
             return true;
         } catch (error) {
-            console.error('Error sending notification:', error);
             return false;
         }
     }	
