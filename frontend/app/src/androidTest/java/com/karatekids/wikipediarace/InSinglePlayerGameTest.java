@@ -12,16 +12,22 @@ import static androidx.test.espresso.web.assertion.WebViewAssertions.webMatches;
 import static androidx.test.espresso.web.model.Atoms.getCurrentUrl;
 import static androidx.test.espresso.web.sugar.Web.onWebView;
 import static androidx.test.espresso.web.webdriver.DriverAtoms.findElement;
+import static androidx.test.espresso.web.webdriver.DriverAtoms.getText;
 import static androidx.test.espresso.web.webdriver.DriverAtoms.webClick;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Intent;
+import android.util.Log;
 
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.web.webdriver.Locator;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,9 +36,57 @@ import java.util.Date;
 
 @RunWith(AndroidJUnit4.class)
 public class InSinglePlayerGameTest {
+    private static final String TAG = "InSinglePlayerGameTest";
     @Rule
     public IntentsTestRule<InGameActivity> activityRule =
             new IntentsTestRule<>(InGameActivity.class, false, false);
+
+    //https://newsletter.automationhacks.io/p/hello-espresso-part-5-automating
+    @Test
+    public void inSinglePlayerGameDelayTest() {
+        //https://wikiroulette.co/?p=Shane_Morrison
+        String [] [] pagesToVisit = {
+            {"Rekha (1943 film)", "https://en.wikipedia.org/wiki/Rekha_(1943_film)"},
+            {"John Morrison Forbes", "https://en.wikipedia.org/wiki/John_Morrison_Forbes"},
+            {"States of Jersey Customs and Immigration Service", "https://en.wikipedia.org/wiki/States_of_Jersey_Customs_and_Immigration_Service"},
+            {"Yo Soy (Peruvian TV series)", "https://en.wikipedia.org/wiki/Yo_Soy_(Peruvian_TV_series)"},
+            {"Bulgarian National-Patriotic Party", "https://en.wikipedia.org/wiki/Bulgarian_National-Patriotic_Party"},
+            {"Backshore", "https://en.wikipedia.org/wiki/Backshore"},
+            {"Totten Key", "https://en.wikipedia.org/wiki/Totten_Key"},
+            {"Mary of the Movies", "https://en.wikipedia.org/wiki/Mary_of_the_Movies"},
+            {"Empress Dowager Bo", "https://en.wikipedia.org/wiki/Empress_Dowager_Bo"},
+            {"Shane Morrison", "https://en.wikipedia.org/wiki/Shane_Morrison"},
+        };
+        float [] pagesDelay = new float[pagesToVisit.length];
+        float avg = 0;
+
+        for (int i = 0; i < pagesToVisit.length; i++) {
+            Intent test = new Intent();
+            test
+                    .putExtra("start_page", pagesToVisit[i][0])
+                    .putExtra("end_page", "Destination Article")
+                    .putExtra("start_url", pagesToVisit[i][1])
+                    .putExtra("end_url", "Destination Article URL");
+
+            activityRule.launchActivity(test);
+
+            Date beforeLoading = new Date();
+            onWebView()
+                    .withElement(findElement(Locator.ID, "firstHeading"))
+                    .check(webMatches(getText(), containsString(pagesToVisit[i][0])));
+            Date afterLoading = new Date();
+            pagesDelay[i] = (afterLoading.getTime() - beforeLoading.getTime())/1000f;
+
+            Log.d(TAG, "Elapsed Time: " + pagesDelay[i]+ "\n");
+            activityRule.finishActivity();
+
+            avg += pagesDelay[i];
+
+            assertTrue(pagesDelay[i] < 2f);
+        }
+
+        assertTrue(avg/10f < 1f);
+    }
 
     @Test
     public void inSinglePlayerGameTest() throws InterruptedException {
@@ -53,12 +107,12 @@ public class InSinglePlayerGameTest {
                 .perform(webClick());
 
         onWebView()
-                .check(webMatches(getCurrentUrl(), containsString("British_English")));
+                .withElement(findElement(Locator.ID, "firstHeading"))
+                .check(webMatches(getText(), containsString("British English")));;
 
-        //ensure that timer is incrementing
         while (true) {
             try {
-                onView(withText("00:5")).perform().check(matches(isDisplayed()));
+                onView(withText("00:05")).perform().check(matches(isDisplayed()));
                 break;
             } catch (Exception e) {
             }
@@ -70,17 +124,9 @@ public class InSinglePlayerGameTest {
             } catch (Exception e) {
             }
         }
-
-        //check back button functionality
         onView(withId(R.id.wikipedia_page_view))
                 .perform(pressBack());
 
         intended(hasComponent(PlayGameActivity.class.getName()));
-
-
-        //requires changes to simulator (in developer options)
-//        onView(withId(R.id.wikipedia_page_view))
-//                .perform(scrollTo())
-//                .check(matches(isDisplayed()));
     }
 }
