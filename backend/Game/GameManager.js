@@ -11,22 +11,43 @@ module.exports = class GameManager{
         this.playerManager = _playerManager 
 		this.firebaseNotifier = new FCKNotifier()
 		this.playerList = {}
-		this.friendList = {}
 		this.sessionList = {}
 		this.pageMan = new PageManager()
 		this.matchmaker = new Matchmaker(this)
     }
 	//ChatGPT usage: No
 	addPlayer(init, deviceToken){
+		
 		var id = init._id;
 		this.playerList[id] = new Player(init, deviceToken);
 	}
 	//ChatGPT usage: No
+	//Because there is no gracefull way for the frontend to recover when it has lost its ID
+	//We are instead going to allow the player to continue without their id.
 	checkForPlayer(id){
-		return this.playerList[id] && id !== 0;
+		
+		if(this.playerList[id]){
+		
+			return true
+
+		}
+		else{
+			var newPlayer = {
+				_id: id, 
+				name: "Guest", 
+				elo: 0, 
+				gamesWon: 0, 
+				gamesLost: 0
+			};
+			
+			this.playerList
+			
+			return true
+		}
 	}
 	//ChatGPT usage: No
 	playerFindGame(id){
+
 		return this.matchmaker.findMatch(id, this.playerList[id].elo);
 	}
 	//ChatGPT usage: No
@@ -83,6 +104,7 @@ module.exports = class GameManager{
 		var pageList = this.pageMan.getDailyPage()
 		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		
+
 		var game = new Game(sessionId, players, pageList, path, this)
 		
 		this.sessionList[sessionId] = game
@@ -95,6 +117,7 @@ module.exports = class GameManager{
 		
 		var players = []
 		players.push(this.playerList[id])
+		
 		var pageList = await this.pageMan.getRandomPages()
 		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		var game = new Game(sessionId, players, pageList, path, this)
@@ -105,11 +128,13 @@ module.exports = class GameManager{
 	}
 	//ChatGPT usage: No
 	//Some code taken from Matchmaker.js
-	async friendSearch(id, friendId){
+	async friendSearch(id, friendId, waitStartTime = Date.now()){
+		
 		var friend = {
 			id,
 			friendId,
-			done: false
+			done: false,
+			startTime 
 		};
 
 		friend.matchPromise = new Promise(
@@ -117,19 +142,10 @@ module.exports = class GameManager{
 				friend.matchPromiseResolve = resolve;
 				friend.matchPromiseReject = reject;
 			}
-		);
+		)
 		
-		for(var i in this.friendList){
-			if(this.friendList[i].friendId == id && !this.friendList[i].done){
-				var game = this.startGame(id, friendId)
-				friend.matchPromiseResolve(game)
-				this.friendList[i].matchPromiseResolve(game)
-				this.friendList[i].done = true
-				friend.done = true
-			}
-		}
+		this.matchmaker.friendWaiting(friend)
 		
-		this.friendList[id] = friend
 		return friend.matchPromise
 	}
 	//ChatGPT usage: No

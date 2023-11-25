@@ -3,10 +3,15 @@ package com.karatekids.wikipediarace;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -79,7 +84,7 @@ public final class Networker {
     //ChatGPT usage: No
     public static void joinWithFriend(LobbyActivity lobby, String friendId) {
 
-        Log.d(TAG, NetworkMessage.friendGameRequest(name, id, friendId));
+        //Log.d(TAG, NetworkMessage.friendGameRequest(name, id, friendId));
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -135,32 +140,97 @@ public final class Networker {
 
         thread.start();
     }
+
+    //Adds a friend, takes in the friends ID
+    public static void addFriend(String friendId){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.addFriend(name, id, friendId));
+
+                //What to do after a post? status code returned?
+            }
+        });
+
+        thread.start();
+
+    }
+
+    //removes a Friend, takes in the friends ID
+    public static void removeFriend(String friendId){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.removeFriend(name, id, friendId));
+
+                //What to do after a post? status code returned?
+            }
+        });
+
+        thread.start();
+    }
+
+    //@TODO here we need to put in a activity or a callback with a function that we can put the new friends into.
+    public static void getFriends(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String ret = executePost(URL, NetworkMessage.getFriends(name, id));
+
+                //FindFriendActivity.addFriends(ret) or something like that.
+            }
+        });
+
+        thread.start();
+    }
+
     //ChatGPT usage: No
     //This method comes from https://stackoverflow.com/questions/1359689/how-to-send-http-request-in-java
     //To help with executing a post
-    private static String executePost(String targetURL, String urlParameters) {
+    private static String executePost(String URL, JSONObject data) {
         HttpURLConnection connection = null;
+        String method = "POST";
+        String slug = "";
+        String urlParameters = data.toString();
+       Log.d(TAG, urlParameters);
+        StringBuilder str = new StringBuilder();
 
+        try {
+            method = data.getString("method");
+            slug = data.getString("subject");
+
+            str.append(URL);
+            str.append("/");
+            str.append(slug);
+
+        }
+        catch(JSONException e) {
+        }
+
+        String targetURL = str.toString();
+        Log.d(TAG, targetURL);
         try {
             //Create connection
             URL url = new URL(targetURL);
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
+
+            connection.setRequestMethod(method);
             connection.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
+                    "application/json");
 
-            connection.setRequestProperty("Content-Length",
-                    Integer.toString(urlParameters.getBytes().length));
-            connection.setRequestProperty("Content-Language", "en-US");
+            //From https://stackoverflow.com/questions/44305351/how-do-you-send-data-in-a-request-body-using-httpurlconnection
+            if(!method.equals("GET")) {
+                connection.setDoOutput(true);
+                OutputStream os = connection.getOutputStream();
+                OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+                osw.write(data.toString());
+                osw.flush();
+                osw.close();
+                os.close();
+            }//don't forget to close the OutputStream
+            connection.connect();
 
-            connection.setUseCaches(false);
-            connection.setDoOutput(true);
-
-            //Send request
-            DataOutputStream wr = new DataOutputStream (
-                    connection.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.close();
+            Log.d(TAG, String.valueOf(connection.getResponseCode()));
 
             //Get Response
             InputStream is = connection.getInputStream();
@@ -172,10 +242,20 @@ public final class Networker {
                 response.append('\r');
             }
             rd.close();
-            return response.toString();
+
+            String res = response.toString();
+            Log.d(TAG, res);
+            //Checking if the response was "try again" in which we resend the request
+            if(res.equals("604")){
+                return executePost(targetURL, data);
+            }
+
+            return res;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "error";
+            //return executePost(URL, data);
+
         } finally {
             if (connection != null) {
                 connection.disconnect();

@@ -8,6 +8,7 @@ class MatchMaker {
 	constructor(manager) {
 		this.waitingPlayers = [];
 		this.matchingInProgress = false;
+		this.friendList = {}
 		this.gameManager = manager;
 	}
 
@@ -35,19 +36,34 @@ class MatchMaker {
 			this.matchingInProgress = true;
 			this.matchPlayers();
 		}
-
+		
 		return player.matchPromise;
+	}
+	
+	//Adds a friend to the list of friends waiting to be matched.
+	//ChatGPT usage: no
+	async friendWaiting(friend) {
+		
+		this.friendList[friend.id] = friend;
+
+		if (!this.matchingInProgress) {
+			this.matchingInProgress = true;
+			this.matchPlayers();
+		}
+
+		
 	}
 
 	// Attempts to match players on a set time interval until there are no players left
 	// that need to be matched.
 	// ChatGPT usage: Partial
 	async matchPlayers() {
+		
 		if (this.waitingPlayers.length == 0) {
 			this.matchingInProgress = false;
 			return;
 		}
-
+		//matching for normal players
 		if (this.waitingPlayers.length >= 2) {
 			// Sort players in order of increasing elo
 			this.waitingPlayers.sort((p1, p2) => p1.elo - p2.elo);
@@ -74,16 +90,34 @@ class MatchMaker {
 			}
 		}
 		
+		//timeout for the normal players
 		for (i = 0; i < this.waitingPlayers.length; i++) {
 			const curPlayer = this.waitingPlayers[i];
 
 			if (Date.now() - curPlayer.waitStartTime >= MAX_WAIT_TIME) {
 				// If exceeded max wait time with no match, return null
-				curPlayer.matchPromiseReject();
+				curPlayer.matchPromiseReject("603");
 				this.waitingPlayers.splice(i, 1);
 				i--;
 			}
 		}
+		
+		//Now the friendslist matching
+		for(var i in this.friendList){
+			if(this.friendList[i].friendId == id && !this.friendList[i].done){
+				var game = this.startGame(id, friendId)
+				friend.matchPromiseResolve(game)
+				this.friendList[i].matchPromiseResolve(game)
+				this.friendList[i].done = true
+				friend.done = true
+			} 
+			else if(this.friendList[i].waitStartTime >= MAX_WAIT_TIME){
+				this.freindList[i].done = true
+				this.friendList[i].matchPromiseReject("603")
+			}
+		}
+		
+		
 
 		setTimeout(() => this.matchPlayers(), MATCHING_INTERVAL);
 	}

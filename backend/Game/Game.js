@@ -19,10 +19,7 @@ module.exports = class Game{
 		this.shortestPath = _shortestPath
 		return this;
     }
-	//ChatGPT usage: No
-	getId(){
-		return this.id;
-    }
+
 	//ChatGPT usage: No
 	addPlayers(newPlayers){
 		for(var i in newPlayers){
@@ -87,7 +84,6 @@ module.exports = class Game{
 			endTitle: this.end.title,
 			players: this.players
 		}
-
 		return messageInfo;
 	}
     
