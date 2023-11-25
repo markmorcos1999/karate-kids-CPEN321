@@ -51,13 +51,13 @@
     <string name="player_9_score">20</string>
     <string name="player_10_score">10</string>
     <string name="games_won_st">Number of Games Won:</string>
-    <string name="games_won_value_st">aaaa</string>
+    <string name="games_won_value_st">0</string>
     <string name="games_lost_st">Number of Games Lost:</string>
-    <string name="games_lost_value_st">bbbb</string>
+    <string name="games_lost_value_st">0</string>
     <string name="avg_traversal_length_st">Average Traversal Length:</string>
-    <string name="avg_traversal_length_value_st">dddd</string>
+    <string name="avg_traversal_length_value_st">0</string>
     <string name="elo_st">Elo:</string>
-    <string name="elo_value_st">eeee</string>
+    <string name="elo_value_st">0</string>
     <string name="daily_challenge_st">Daily Challenge</string>
     <string name="loading_daily_challenge_st">Finding Daily Pages:</string>
     <string name="friend_mode_st">Play Against a Friend</string>
@@ -66,7 +66,7 @@
     <string name="play_game_st">Play a Game</string>
     <string name="friend_id_instruct">Insert Friend ID to Add a Friend to the Friends List</string>
     <string name="player_id_st">Player ID</string>
-    <string name="player_id_value_st">cccc</string>
+    <string name="player_id_value_st">0</string>
     <string name="validate_friend_id_st">Add Friend</string>
     <string name="guest_signin_st">Sign in as a Guest</string>
     <string name="user_id_st">Your ID:</string>
