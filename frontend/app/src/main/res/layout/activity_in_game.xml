@@ -22,10 +22,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
+        android:paddingEnd="60dp"
         android:text="@string/destination_page_st"
-        android:textAlignment="center"
+        android:textAlignment="viewStart"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/wikipedia_page_view"
+        app:layout_constraintEnd_toStartOf="@+id/chronometer"
+        app:layout_constraintHorizontal_bias="0.006"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,7 +45,6 @@
         app:layout_constraintBottom_toTopOf="@+id/wikipedia_page_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/destination_page"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.476"
         tools:text="00.16" />
