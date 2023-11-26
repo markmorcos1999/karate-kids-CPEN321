@@ -2,6 +2,7 @@ package com.karatekids.wikipediarace.SinglePlayerTests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.pressBack;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -14,6 +15,7 @@ import static androidx.test.espresso.web.sugar.Web.onWebView;
 import static androidx.test.espresso.web.webdriver.DriverAtoms.findElement;
 import static androidx.test.espresso.web.webdriver.DriverAtoms.getText;
 import static androidx.test.espresso.web.webdriver.DriverAtoms.webClick;
+import static androidx.test.espresso.web.webdriver.DriverAtoms.webScrollIntoView;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertTrue;
@@ -125,6 +127,7 @@ public class InSinglePlayerGameTest {
         float largestDelay = (afterLoading.getTime() - beforeLoading.getTime())/1000f;
         Log.d(TAG, "Elapsed Time: " + largestDelay + "\n");
         assertTrue(largestDelay < 3.5f);
+        activityRule.finishActivity();
     }
 
     //ChatGPT usage: No
@@ -160,7 +163,11 @@ public class InSinglePlayerGameTest {
                 .check(webMatches(getText(), containsString("English language")));
 
         onWebView()
-                .withElement(findElement(Locator.CSS_SELECTOR, "a[href=\"http://www.oxfordlearnersdictionaries.com/\"]")) // similar to onView(withId(...))
+                .withElement(findElement(Locator.ID, "Bibliography"))
+                .perform(webScrollIntoView())
+                .perform(webClick())
+                .withElement(findElement(Locator.CSS_SELECTOR, "a[href=\"http://www.oxfordlearnersdictionaries.com/\"]"))
+                .perform(webScrollIntoView())
                 .perform(webClick())
                 .withElement(findElement(Locator.ID, "firstHeading"))
                 .check(webMatches(getText(), containsString("English language")));
