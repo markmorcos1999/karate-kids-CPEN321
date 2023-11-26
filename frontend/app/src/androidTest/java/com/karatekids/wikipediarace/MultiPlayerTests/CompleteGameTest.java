@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.content.Intent;
 import android.view.View;
 
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -26,6 +27,8 @@ import org.junit.runner.RunWith;
 import com.karatekids.wikipediarace.MobileViewMatchers;
 import com.karatekids.wikipediarace.SignInActivity;
 
+import java.util.ArrayList;
+
 @RunWith(AndroidJUnit4.class)
 public class CompleteGameTest {
     @Rule
@@ -40,6 +43,37 @@ public class CompleteGameTest {
 
     @Test
     public void winnerMultiplayerGameTest() throws InterruptedException {
+        multiplayerGameTestHelper();
+        while (true) {
+            try {
+                onView(withSubstring("Shortest Path Possible")).check(matches(isDisplayed()));
+                break;
+            } catch (Exception e) {
+            }
+        }
+
+        onView(withSubstring("Number of Links to Reach Destination:")).check(matches(isDisplayed()));
+        onView(withText("Position: 1")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void loserMultiplayerGameTest() throws InterruptedException {
+        multiplayerGameTestHelper();
+
+        while (true) {
+            try {
+                onView(withSubstring("Game Over! You lost.")).check(matches(isDisplayed()));
+                onView(withSubstring("END GAME")).perform(click());
+                break;
+            } catch (Exception e) {
+            }
+        }
+
+        onView(withSubstring("Number of Links to Reach Destination:")).check(matches(isDisplayed()));
+        onView(withText("Position: 2")).check(matches(isDisplayed()));
+    }
+
+    public void multiplayerGameTestHelper() throws InterruptedException {
         //verify sign in as guest button
         onView(withText("Sign in as a Guest"))
                 .check(matches(isDisplayed()))
@@ -99,14 +133,6 @@ public class CompleteGameTest {
         while (true) {
             try {
                 onView(withSubstring("Destination Page: ")).perform().check(matches(isDisplayed()));
-                break;
-            } catch (Exception e) {
-            }
-        }
-
-        while (true) {
-            try {
-                onView(withSubstring("Shortest Path Possible")).check(matches(isDisplayed()));
                 break;
             } catch (Exception e) {
             }
