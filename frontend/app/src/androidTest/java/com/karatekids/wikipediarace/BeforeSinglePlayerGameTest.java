@@ -3,6 +3,8 @@ package com.karatekids.wikipediarace;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -12,6 +14,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import android.util.Log;
 import android.view.View;
 
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -41,10 +44,11 @@ public class BeforeSinglePlayerGameTest {
 
     @Test
     public void beforeSinglePlayerGameTest() throws InterruptedException {
+        Intents.init();
         onView(withText("Sign in as a Guest")).check(matches(isDisplayed()));
         onView(withText("Sign in as a Guest")).perform(click());
 
-        Thread.sleep(1000);
+        Thread.sleep(3000);
 
         onView(withText("Play a Game")).check(matches(isDisplayed()));
         onView(withText("Play a Game")).perform(click());
@@ -59,7 +63,7 @@ public class BeforeSinglePlayerGameTest {
 
         while (true) {
             try {
-                isToastMessageDisplayed("Starting Page: ");//).inRoot(withDecorView(not(activityRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
+                isToastMessageDisplayed("Starting Page: ");
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -78,5 +82,6 @@ public class BeforeSinglePlayerGameTest {
             } catch (Exception e) {
             }
         }
+        intended(hasComponent(InGameActivity.class.getName()));
     }
 }

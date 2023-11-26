@@ -254,6 +254,9 @@ public final class Networker {
         } catch (Exception e) {
             //e.printStackTrace();
             //return "error";
+            try{
+                Thread.sleep(3000);
+            } catch (Exception exception) {}
             return executePost(URL, data);
 
         } finally {
