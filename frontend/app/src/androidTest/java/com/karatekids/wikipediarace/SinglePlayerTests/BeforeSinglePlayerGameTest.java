@@ -1,4 +1,4 @@
-package com.karatekids.wikipediarace;
+package com.karatekids.wikipediarace.SinglePlayerTests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -18,6 +18,10 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.karatekids.wikipediarace.MobileViewMatchers;
+import com.karatekids.wikipediarace.R;
+import com.karatekids.wikipediarace.SignInActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.Rule;
@@ -56,7 +60,8 @@ public class BeforeSinglePlayerGameTest {
         onView(withText("Join a Single Player Game")).check(matches(isDisplayed()));
         onView(withText("Join a Single Player Game")).perform(click());
 
-        onView(withId(R.id.loading_pb))
+        //check loading animation is visible
+        onView(ViewMatchers.withId(R.id.loading_pb))
                 .check(matches(isDisplayed()))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         onView(withText("Finding Start and End Pages...")).check(matches(isDisplayed()));

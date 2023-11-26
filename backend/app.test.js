@@ -101,6 +101,7 @@ describe("Retrieve the leaderboard", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: N/A
      * Expected status code: 200
      * Expected behaviour: The stats of the 10 players with the highest elo are retrieved
@@ -128,6 +129,7 @@ describe("Retrieve the leaderboard", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: N/A
      * Expected status code: 200
      * Expected behaviour: The stats of the 10 players with the highest elo are retrieved
@@ -153,6 +155,7 @@ describe("Retrieve the leaderboard", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: N/A
      * Expected status code: 500
      * Expected behaviour: The server should error out
@@ -176,6 +179,7 @@ describe("Retrieve a player's information", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: A player's id
      * Expected status code: 200
      * Expected behaviour: The player's information should be retrieved
@@ -195,6 +199,7 @@ describe("Retrieve a player's information", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: A nonexistent player id (300)
      * Expected status code: 404
      * Expected behaviour: The server should simply return a 404 error
@@ -211,6 +216,7 @@ describe("Retrieve a player's information", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: N/A
      * Expected status code: 500
      * Expected behaviour: The server should error out
@@ -229,6 +235,7 @@ describe("Retrieve a player's information", () => {
 // Interface POST /signIn/:id
 describe("Testing player signIn", () => {
     /**
+     * ChatGPT usage: No
      * Input: A player's id
      * Expected status code: 200
      * Expected behaviour: The player should be "signed in" and can now enter games.
@@ -246,6 +253,7 @@ describe("Testing player signIn", () => {
     });
 
     /**
+     * ChatGPT usage: No
      * Input: A player ID
      * Expected status code: 500
      * Expected behaviour: The server should error out
@@ -271,6 +279,7 @@ describe("Testing game requests", () => {
     });
 
     /** 
+     * ChatGPT usage: No
      * Input: Single Game Request
      * Expected status code: 200
      * Expected behaviour: The server should check on the game and send back details
@@ -300,7 +309,8 @@ describe("Testing game requests", () => {
 		
     });
 	
-	 /** 
+	/** 
+     * ChatGPT usage: No
      * Input: Single Game Request
      * Expected status code: 500
      * Expected behaviour: The server should run into a fetch error and return error
@@ -326,7 +336,8 @@ describe("Testing game requests", () => {
 		
     });
 	
-	 /** 
+	/** 
+     * ChatGPT usage: No
      * Input: Single Game Request
      * Expected status code: 500
      * Expected behaviour: The server should run into a wiki error and return error
@@ -352,7 +363,8 @@ describe("Testing game requests", () => {
 		
     });
 	
-	 /** 
+	/**
+     * ChatGPT usage: No
      * Input: Daily Game Request
      * Expected status code: 200
      * Expected behaviour: The server should create a game using the Current Daily pages
@@ -384,7 +396,8 @@ describe("Testing game requests", () => {
          
     });
 	
-     /** 
+    /**
+     * ChatGPT usage: No 
      * Input: Multi Game Request
      * Expected status code: 200
      * Expected behaviour: The server should create a game with the two players
@@ -420,7 +433,8 @@ describe("Testing game requests", () => {
         await sleep(1000);
     });
 	
-	 /** 
+	/**
+     * ChatGPT usage: No 
      * Input: Two Friend Game Requests
      * Expected status code: 200
      * Expected behaviour: The server should create a game with the two players, as friends
@@ -457,7 +471,8 @@ describe("Testing game requests", () => {
     });	
 	
 	
-	/** 
+	/**
+     * ChatGPT usage: No
      * Input: One Multi Game Request
      * Expected status code: 200
      * Expected behaviour: The server should return a "604" message, signalling there are no other players online
@@ -484,7 +499,8 @@ describe("Testing game requests", () => {
         
     }, 20000);
 	
-			 /** 
+	/**
+     * ChatGPT usage: No 
      * Input: One Friend Game Request
      * Expected status code: 200
      * Expected behaviour: The server should return a "604" message, signalling there are no other players online
@@ -520,7 +536,8 @@ describe("Testing completing a game", () => {
         resetConnectionMocks();
     });
 
-	 /** 
+	/**
+     * ChatGPT usage: No
      * Input: Completing a game after pages have been aded
      * Expected status code: 200
      * Expected behaviour: The server should create a game with both players.
@@ -564,7 +581,8 @@ describe("Testing completing a game", () => {
 		
     });
 	
-	 /** 
+	/**
+     * ChatGPT usage: No 
      * Input: Completing a complete game, but with a message failure
      * Expected status code: 200
      * Expected behaviour: The server should continue as normal, despite the failure
@@ -619,6 +637,7 @@ describe("Add a friend", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a player id and a friend id
      * Expected status code: 201
      * Expected behaviour: the server adds the friend id to the player's friends list
@@ -665,6 +684,7 @@ describe("Add a friend", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a player id and the id of an existing friend
      * Expected status code: 409
      * Expected behaviour: the server responds with an error
@@ -695,6 +715,7 @@ describe("Add a friend", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a player id and a friend id that doesn't exist
      * Expected status code: 404
      * Expected behaviour: the server responds with an error
@@ -719,6 +740,7 @@ describe("Add a friend", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a player id that doesn't exist and a friend id
      * Expected status code: 404
      * Expected behaviour: the server responds with an error
@@ -743,6 +765,7 @@ describe("Add a friend", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: N/A
      * Expected status code: 500
      * Expected behaviour: The server should error out
@@ -763,6 +786,7 @@ describe("Remove a friend", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a player id and a friend id
      * Expected status code: 201
      * Expected behaviour: the server adds the friend id to the player's friends list
@@ -808,6 +832,7 @@ describe("Remove a friend", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a player id and a the id of another player who isn't a friend
      * Expected status code: 404
      * Expected behaviour: the server responds with an error
@@ -837,6 +862,7 @@ describe("Remove a friend", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a player id and a friend id that doesn't exist
      * Expected status code: 404
      * Expected behaviour: the server responds with an error
@@ -862,6 +888,7 @@ describe("Remove a friend", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a player id that doesn't exist and a friend id
      * Expected status code: 404
      * Expected behaviour: the server responds with an error
@@ -887,6 +914,7 @@ describe("Remove a friend", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: N/A
      * Expected status code: 500
      * Expected behaviour: The server should error out
@@ -907,6 +935,7 @@ describe("Retrieve a player's friend list", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a player's id
      * Expected status code: 200
      * Expected behaviour: server responds with the friends of the player
@@ -950,6 +979,7 @@ describe("Retrieve a player's friend list", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a player's id
      * Expected status code: 200
      * Expected behaviour: server responds with an empty list
@@ -972,6 +1002,7 @@ describe("Retrieve a player's friend list", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: a nonexistend player id
      * Expected status code: 404
      * Expected behaviour: server responds with an error
@@ -988,6 +1019,7 @@ describe("Retrieve a player's friend list", () => {
     });
 
     /**
+     * ChatGPT usage: Partial
      * Input: N/A
      * Expected status code: 500
      * Expected behaviour: The server should error out
@@ -1007,7 +1039,8 @@ describe("Testing putting pages into games", () => {
         resetConnectionMocks();
     });
 
-	 /** 
+	/**
+     * ChatGPT usage: No
      * Input: testing adding pages to a game in progress.
      * Expected status code: 200
      * Expected behaviour: The server should add the game to its internal page list
@@ -1047,7 +1080,8 @@ describe("Testing putting pages into games", () => {
         
     });
 	
-	/** 
+	/**
+     * ChatGPT usage: No
      * Input: testing adding pages to a game in progress.
      * Expected status code: 500
      * Expected behaviour: The server should error because of incorrect inputs
