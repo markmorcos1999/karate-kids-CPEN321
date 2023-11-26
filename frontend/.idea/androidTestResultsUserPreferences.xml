@@ -57,6 +57,21 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-1579610561">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="CPEN_321_Tutorials" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_3_API_29" value="120" />
+                  <entry key="Status" value="80" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1505215054">
           <value>
             <AndroidTestResultsTableState>
@@ -157,6 +172,21 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-381518310">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="CPEN_321_Tutorials" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_3_API_29" value="120" />
+                  <entry key="Status" value="80" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-297589793">
           <value>
             <AndroidTestResultsTableState>
@@ -198,6 +228,19 @@
           </value>
         </entry>
         <entry key="1129080626">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="CPEN_321_Tutorials" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1254091135">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
