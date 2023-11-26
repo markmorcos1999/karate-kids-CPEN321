@@ -1,4 +1,4 @@
-package com.karatekids.wikipediarace;
+package com.karatekids.wikipediarace.SinglePlayerTests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.pressBack;
@@ -19,8 +19,13 @@ import static org.hamcrest.Matchers.containsString;
 import android.content.Intent;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.web.webdriver.Locator;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.karatekids.wikipediarace.InGameActivity;
+import com.karatekids.wikipediarace.PlayGameActivity;
+import com.karatekids.wikipediarace.R;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -72,7 +77,7 @@ public class InSinglePlayerGameTest {
         }
 
         //check back button functionality
-        onView(withId(R.id.wikipedia_page_view))
+        onView(ViewMatchers.withId(R.id.wikipedia_page_view))
                 .perform(pressBack());
 
         intended(hasComponent(PlayGameActivity.class.getName()));

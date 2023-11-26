@@ -1,16 +1,21 @@
 package com.karatekids.wikipediarace;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
@@ -49,7 +54,39 @@ public class InGameActivity extends AppCompatActivity {
         destination.append(" "+b.getString("end_page"));
 
         web = (WebView) findViewById(R.id.wikipedia_page_view);
-        web.setWebViewClient(new MyWebClient());
+        web.setWebViewClient(new MyWebClient()
+            {
+
+                @Override
+                public void onReceivedError(final WebView view, int errorCode, String description,
+                final String failingUrl) {
+                //control you layout, show something like a retry button, and
+                //call view.loadUrl(failingUrl) to reload.
+                    AlertDialog.Builder builder = new AlertDialog.Builder(InGameActivity.this);
+
+                    // Set the message show for the Alert time
+                    builder.setMessage("Do you want to reconnect");
+
+                    // Set Alert Title
+                    builder.setTitle("Error!");
+
+                    // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
+                    builder.setCancelable(false);
+
+                    // Set the positive button with yes name Lambda OnClickListener method is use of DialogInterface interface.
+                    builder.setPositiveButton("Retry", (DialogInterface.OnClickListener) (dialog, which) -> {
+                        // When the user click yes button then app will close
+                        web.loadUrl(failingUrl);
+                    });
+
+                    // Set the Negative button with No name Lambda OnClickListener method is use of DialogInterface interface.
+
+                    // Create the Alert dialog
+                    AlertDialog alertDialog = builder.create();
+                    // Show the Alert Dialog box
+                    alertDialog.show();
+                super.onReceivedError(view, errorCode, description, failingUrl);
+            }});
         web.getSettings().setJavaScriptEnabled(true);
         web.loadUrl(b.getString("start_url"));
         count = -1;
@@ -60,6 +97,15 @@ public class InGameActivity extends AppCompatActivity {
         clock = (Chronometer) findViewById(R.id.chronometer);
         clock.setBase(SystemClock.elapsedRealtime());
         clock.start();
+    }
+
+    @Override protected void onSaveInstanceState(Bundle outState ) { super.onSaveInstanceState(outState); web.saveState(outState); }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onSaveInstanceState(savedInstanceState);
+        web.restoreState(savedInstanceState);
     }
 
     public class MyWebClient extends WebViewClient {
