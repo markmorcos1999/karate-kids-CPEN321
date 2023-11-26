@@ -4,12 +4,21 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+<<<<<<< HEAD
 import android.app.Dialog;
+=======
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+>>>>>>> dfe19059a38ac331a06b8f5499578c3861eda520
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
+<<<<<<< HEAD
+=======
+import android.net.NetworkInfo;
+>>>>>>> dfe19059a38ac331a06b8f5499578c3861eda520
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -37,11 +46,17 @@ public class InGameActivity extends AppCompatActivity {
 
     private final static String TAG = "InGameActivity";
 
+    public Bundle b;
+
     private static Chronometer clock;
 
+<<<<<<< HEAD
     private MyWebClient c;
 
     private WebView web;
+=======
+    private static CustomWebViewClient web;
+>>>>>>> dfe19059a38ac331a06b8f5499578c3861eda520
 
     //ChatGPT usage: No
     // Followed along with: https://technotalkative.com/android-webviewclient-example/
@@ -90,15 +105,6 @@ public class InGameActivity extends AppCompatActivity {
         });
     }
 
-    @Override protected void onSaveInstanceState(Bundle outState ) { super.onSaveInstanceState(outState); web.saveState(outState); }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        super.onSaveInstanceState(savedInstanceState);
-        web.restoreState(savedInstanceState);
-    }
-
     public class MyWebClient extends WebViewClient {
         //ChatGPT usage: No
         @Override
@@ -134,14 +140,11 @@ public class InGameActivity extends AppCompatActivity {
             pagesVisited.add(view.getTitle().substring(0, view.getTitle().indexOf("-")-1));
             lastVisitedPages.push(view.getUrl());
 
-            Bundle b = getIntent().getExtras();
-
+            b = getIntent().getExtras();
+            CustomWebViewClient.setBundle(b, clock, InGameActivity.this);
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
-            if(url.equals(b.getString("end_url"))){
-                clock.stop();
-                endGame(InGameActivity.this);
-            }
+
         }
     }
 
