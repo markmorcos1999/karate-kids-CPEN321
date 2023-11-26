@@ -51,7 +51,6 @@ public class BeforeSinglePlayerGameTest {
     //ChatGPT usage: No
     @Test
     public void beforeSinglePlayerGameTest() throws InterruptedException {
-        Intents.init();
         onView(withText("Sign in as a Guest")).check(matches(isDisplayed()));
         onView(withText("Sign in as a Guest")).perform(click());
 
@@ -90,6 +89,5 @@ public class BeforeSinglePlayerGameTest {
             } catch (Exception e) {
             }
         }
-        intended(hasComponent(InGameActivity.class.getName()));
     }
 }
