@@ -63,7 +63,7 @@ public class CompleteGameTest {
         while (true) {
             try {
                 onView(withSubstring("Game Over! You lost.")).check(matches(isDisplayed()));
-                onView(withSubstring("END GAME")).perform(click());
+                onView(withSubstring("End Game")).perform(click());
                 break;
             } catch (Exception e) {
             }
