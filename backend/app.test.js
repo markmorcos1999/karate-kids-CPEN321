@@ -497,7 +497,7 @@ describe("Testing game requests", () => {
 
 		
         
-    }, 20000);
+    }, 15000);
 	
 	/**
      * ChatGPT usage: No 
@@ -525,7 +525,7 @@ describe("Testing game requests", () => {
 
 		
         
-    }, 20000);
+    }, 15000);
 	
 });
 
