@@ -45,18 +45,14 @@ public class BeforeSinglePlayerGameTest {
 
     @Test
     public void beforeSinglePlayerGameTest() throws InterruptedException {
-
-        //doesn't need espresso
         onView(withText("Sign in as a Guest")).check(matches(isDisplayed()));
         onView(withText("Sign in as a Guest")).perform(click());
 
         Thread.sleep(1000);
 
-        //check play game button is visible
         onView(withText("Play a Game")).check(matches(isDisplayed()));
         onView(withText("Play a Game")).perform(click());
 
-        //check single player game button is visible
         onView(withText("Join a Single Player Game")).check(matches(isDisplayed()));
         onView(withText("Join a Single Player Game")).perform(click());
 
@@ -64,29 +60,21 @@ public class BeforeSinglePlayerGameTest {
         onView(ViewMatchers.withId(R.id.loading_pb))
                 .check(matches(isDisplayed()))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-
-        //check single player game button is visible
         onView(withText("Finding Start and End Pages...")).check(matches(isDisplayed()));
-//        onView(withText("Finding Start and End Pages...")).perform(click());
 
-        StringBuilder str;
         while (true) {
             try {
-                str = new StringBuilder(isToastMessageDisplayed("Starting Page: "));//).inRoot(withDecorView(not(activityRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
+                isToastMessageDisplayed("Starting Page: ");//).inRoot(withDecorView(not(activityRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        Log.e("TEST", str.toString());
-        //check loading animation is not visible
         onView(withId(R.id.loading_pb))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         onView(withText("Pages Found!")).perform().check(matches(isDisplayed()));
-        //check text is gone
-//        onView(withText("Finding Start and End Pages...")).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         while (true) {
             try {
@@ -95,8 +83,5 @@ public class BeforeSinglePlayerGameTest {
             } catch (Exception e) {
             }
         }
-
-        //check that wikipedia page is displayed
-
     }
 }

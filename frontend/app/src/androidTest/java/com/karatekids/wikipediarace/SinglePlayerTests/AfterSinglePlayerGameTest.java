@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Intent;
 
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -35,7 +36,7 @@ public class AfterSinglePlayerGameTest {
             new IntentsTestRule<>(ResultsActivity.class, false, false);
 
     @Test
-    public void afterSinglePlayerGameTestWithBack() throws JSONException {
+    public void afterSinglePlayerTacoMexicoWithBack() throws JSONException {
         afterSinglePlayerGameTacoMexicoTestCase();
         onView(ViewMatchers.withId(R.id.shortest_path_text))
                 .perform(pressBack());
@@ -47,6 +48,23 @@ public class AfterSinglePlayerGameTest {
         afterSinglePlayerGameTacoMexicoTestCase();
         onView(withText("Return to Main Page"))
                 .perform(click());
+        intended(hasComponent(MainActivity.class.getName()));
+    }
+
+    @Test
+    public void afterSinglePlayerGameCneoridiumJuanWithButton () throws JSONException {
+        afterSinglePlayerGameCneoridiumJuanTestCase();
+        onView(withText("Return to Main Page"))
+                .perform(ViewActions.scrollTo())
+                .perform(click());
+        intended(hasComponent(MainActivity.class.getName()));
+    }
+
+    @Test
+    public void afterSinglePlayerGameCneoridiumJuanWithBack () throws JSONException {
+        afterSinglePlayerGameCneoridiumJuanTestCase();
+        onView(withId(R.id.shortest_path_text))
+                .perform(pressBack());
         intended(hasComponent(MainActivity.class.getName()));
     }
 
@@ -72,5 +90,57 @@ public class AfterSinglePlayerGameTest {
                 .check(matches(isDisplayed()));
         onView(withText("Position: 1")).check(matches(isDisplayed()));
         onView(withText("Seconds: 30\n")).check(matches(isDisplayed()));
+    }
+
+    public void afterSinglePlayerGameCneoridiumJuanTestCase() throws JSONException {
+        Intent test = new Intent();
+        int pagesVisitedCount = 5;
+        ArrayList<String> pagesVisited = new ArrayList<>();
+        pagesVisited.add("Cneoridium dumosum (Nuttall) Hooker F. Collected March 26, 1960, " +
+                "at an Elevation of about 1450 Meters on Cerro Quemazón, 15 Miles South of Bahía " +
+                "de Los Angeles, Baja California, México, Apparently for a Southeastward Range " +
+                "Extension of Some 140 Miles");
+        pagesVisited.add("Cneoridium");
+        pagesVisited.add("California quail");
+        pagesVisited.add("Coronado Islands");
+        pagesVisited.add("Juan Rodríguez Cabrillo");
+
+
+        test
+                .putExtra("data", "{\"gamePosition\":1,\"shortestPath\":[\"Cneoridium" +
+                        " dumosum (Nuttall) Hooker F. Collected March 26, 1960, at an Elevation" +
+                        " of about 1450 Meters on Cerro Quemazón, 15 Miles South of Bahía de" +
+                        " Los Angeles, Baja California, México, Apparently for a Southeastward" +
+                        " Range Extension of Some 140 Miles\",\"Cneoridium\",\"California quail\"," +
+                        "\"Coronado Islands\",\"Juan Rodríguez Cabrillo\"]}")
+                .putExtra("count", pagesVisitedCount)
+                .putExtra("visited_list", pagesVisited)
+                .putExtra("time", "02:30");
+        activityRule.launchActivity(test);
+
+        onView(withText("Number of Links to Reach Destination: 5\n")).check(matches(isDisplayed()));
+        onView(withText("Your Path Traversal:\n\nCneoridium dumosum (Nuttall) Hooker" +
+                " F. Collected March 26, 1960, at an Elevation of about 1450 Meters on " +
+                "Cerro Quemazón, 15 Miles South of Bahía de Los Angeles, Baja California, " +
+                "México, Apparently for a Southeastward Range Extension of Some 140 Miles\n|\nV\n" +
+                "Cneoridium\n|\nV\n" +
+                "California quail\n|\nV\n" +
+                "Coronado Islands\n|\nV\n" +
+                "Juan Rodríguez Cabrillo\n"))
+                .check(matches(isDisplayed()));
+        onView(withText("Shortest Path Possible:\n\n" +
+                "Cneoridium dumosum (Nuttall) Hooker" +
+                " F. Collected March 26, 1960, at an Elevation of about 1450 Meters on " +
+                "Cerro Quemazón, 15 Miles South of Bahía de Los Angeles, Baja California, " +
+                "México, Apparently for a Southeastward Range Extension of Some 140 Miles\n|\nV\n" +
+                "Cneoridium\n|\nV\n" +
+                "California quail\n|\nV\n" +
+                "Coronado Islands\n|\nV\n" +
+                "Juan Rodríguez Cabrillo\n"))
+                .check(matches(isDisplayed()));
+        onView(withText("Position: 1")).perform(ViewActions.scrollTo())
+                .check(matches(isDisplayed()));
+        onView(withText("Seconds: 150\n")).perform(ViewActions.scrollTo())
+                .check(matches(isDisplayed()));
     }
 }
