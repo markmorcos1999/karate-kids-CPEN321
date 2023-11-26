@@ -1,18 +1,36 @@
 package com.karatekids.wikipediarace;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+<<<<<<< HEAD
+import android.app.Dialog;
+=======
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+>>>>>>> dfe19059a38ac331a06b8f5499578c3861eda520
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+<<<<<<< HEAD
+=======
+import android.net.NetworkInfo;
+>>>>>>> dfe19059a38ac331a06b8f5499578c3861eda520
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -28,9 +46,17 @@ public class InGameActivity extends AppCompatActivity {
 
     private final static String TAG = "InGameActivity";
 
+    public Bundle b;
+
     private static Chronometer clock;
 
+<<<<<<< HEAD
+    private MyWebClient c;
+
     private WebView web;
+=======
+    private static CustomWebViewClient web;
+>>>>>>> dfe19059a38ac331a06b8f5499578c3861eda520
 
     //ChatGPT usage: No
     // Followed along with: https://technotalkative.com/android-webviewclient-example/
@@ -49,9 +75,11 @@ public class InGameActivity extends AppCompatActivity {
         destination.append(" "+b.getString("end_page"));
 
         web = (WebView) findViewById(R.id.wikipedia_page_view);
-        web.setWebViewClient(new MyWebClient());
+        c = new MyWebClient();
+        web.setWebViewClient(c);
         web.getSettings().setJavaScriptEnabled(true);
         web.loadUrl(b.getString("start_url"));
+
         count = -1;
         pagesVisited = new ArrayList<>();
         lastVisitedPages = new Stack<>();
@@ -60,6 +88,21 @@ public class InGameActivity extends AppCompatActivity {
         clock = (Chronometer) findViewById(R.id.chronometer);
         clock.setBase(SystemClock.elapsedRealtime());
         clock.start();
+    }
+
+    private void displayLostConnectionPopup (WebView view,WebResourceRequest request) {
+        ContextCompat.getMainExecutor(InGameActivity.this).execute(() -> {
+            AlertDialog.Builder  builder = new AlertDialog.Builder(InGameActivity.this);
+            builder.setTitle("Network Issue");
+            builder.setMessage("Please check your internet connection and try again later");
+            builder.setCancelable(false);
+            builder.setNegativeButton("Retry", (DialogInterface.OnClickListener) (dialog, which) -> {
+                view.getWebViewClient().shouldOverrideUrlLoading(view, request);
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        });
     }
 
     public class MyWebClient extends WebViewClient {
@@ -73,13 +116,18 @@ public class InGameActivity extends AppCompatActivity {
         //        // display the information from  in the app instead of opening a web viewer external application
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            if(!request.getUrl().getHost().equals("en.m.wikipedia.org")){
-               return true;
+            if (!DetectConnection.checkInternetConnection(InGameActivity.this)) {
+                displayLostConnectionPopup(view, request);
             }
-            Log.d(TAG, "URL host: "+request.getUrl());
-            Networker.sendPage(String.valueOf(request.getUrl()));
-            view.loadUrl(String.valueOf(request.getUrl()));
-            return true;
+            else {
+                if (!request.getUrl().getHost().equals("en.m.wikipedia.org")) {
+                    return true;
+                }
+                Log.d(TAG, "URL host: " + request.getUrl());
+                Networker.sendPage(String.valueOf(request.getUrl()));
+                view.loadUrl(String.valueOf(request.getUrl()));
+            }
+                return true;
         }
 
         //ChatGPT usage: No
@@ -92,14 +140,11 @@ public class InGameActivity extends AppCompatActivity {
             pagesVisited.add(view.getTitle().substring(0, view.getTitle().indexOf("-")-1));
             lastVisitedPages.push(view.getUrl());
 
-            Bundle b = getIntent().getExtras();
-
+            b = getIntent().getExtras();
+            CustomWebViewClient.setBundle(b, clock, InGameActivity.this);
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
-            if(url.equals(b.getString("end_url"))){
-                clock.stop();
-                endGame(InGameActivity.this);
-            }
+
         }
     }
 
@@ -136,3 +181,4 @@ public class InGameActivity extends AppCompatActivity {
         }
     }
 }
+
