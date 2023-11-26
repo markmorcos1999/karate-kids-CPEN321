@@ -9,7 +9,7 @@ class FCMNotifier {
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount)
         });
-
+		
         this.messaging = admin.messaging();
     }
 
@@ -27,10 +27,9 @@ class FCMNotifier {
             const response = await this.messaging.send(message);
             return true;
         } catch (error) {
-            console.error('Error sending notification:', error);
             return false;
         }
-    }
+    }	
 }
 
 module.exports = FCMNotifier;

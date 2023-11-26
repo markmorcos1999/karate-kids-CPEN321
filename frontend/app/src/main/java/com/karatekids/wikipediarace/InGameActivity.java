@@ -1,10 +1,14 @@
 package com.karatekids.wikipediarace;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -15,6 +19,7 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class InGameActivity extends AppCompatActivity {
 
@@ -23,9 +28,17 @@ public class InGameActivity extends AppCompatActivity {
 
     private static ArrayList<String> pagesVisited;
 
+    private static Stack<String> lastVisitedPages;
+
     private final static String TAG = "InGameActivity";
 
+    public Bundle b;
+
     private static Chronometer clock;
+
+    private MyWebClient c;
+
+    private WebView web;
 
     //ChatGPT usage: No
     // Followed along with: https://technotalkative.com/android-webviewclient-example/
@@ -43,18 +56,36 @@ public class InGameActivity extends AppCompatActivity {
         TextView destination = (TextView)  findViewById(R.id.destination_page);
         destination.append(" "+b.getString("end_page"));
 
-        WebView web;
         web = (WebView) findViewById(R.id.wikipedia_page_view);
-        web.setWebViewClient(new MyWebClient());
+        c = new MyWebClient();
+        web.setWebViewClient(c);
         web.getSettings().setJavaScriptEnabled(true);
         web.loadUrl(b.getString("start_url"));
+
         count = -1;
         pagesVisited = new ArrayList<>();
+        lastVisitedPages = new Stack<>();
 
         // https://medium.com/native-mobile-bits/easily-build-a-chronometer-a-simple-stopwatch-1f83aa361ee7
         clock = (Chronometer) findViewById(R.id.chronometer);
         clock.setBase(SystemClock.elapsedRealtime());
         clock.start();
+    }
+
+    //ChatGPT usage: No
+    private void displayLostConnectionPopup (WebView view,WebResourceRequest request) {
+        ContextCompat.getMainExecutor(InGameActivity.this).execute(() -> {
+            AlertDialog.Builder  builder = new AlertDialog.Builder(InGameActivity.this);
+            builder.setTitle("Network Issue");
+            builder.setMessage("Please check your internet connection and try again later");
+            builder.setCancelable(false);
+            builder.setNegativeButton("Retry", (DialogInterface.OnClickListener) (dialog, which) -> {
+                view.getWebViewClient().shouldOverrideUrlLoading(view, request);
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        });
     }
 
     public class MyWebClient extends WebViewClient {
@@ -65,15 +96,20 @@ public class InGameActivity extends AppCompatActivity {
         }
 
         //ChatGPT usage: No
-        // display the information from the url embedded in the app instead of opening a web viewer external application
+        //        // display the information from  in the app instead of opening a web viewer external application
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            if(!request.getUrl().getHost().equals("en.m.wikipedia.org")){
-               return true;
+            if (!DetectConnection.checkInternetConnection(InGameActivity.this)) {
+                displayLostConnectionPopup(view, request);
             }
-            Log.d(TAG, "URL host: "+request.getUrl());
-            Networker.sendPage(String.valueOf(request.getUrl()));
-            view.loadUrl(String.valueOf(request.getUrl()));
+            else {
+                if (!request.getUrl().getHost().equals("en.m.wikipedia.org")) {
+                    return true;
+                }
+                Log.d(TAG, "URL host: " + request.getUrl());
+                Networker.sendPage(String.valueOf(request.getUrl()));
+                view.loadUrl(String.valueOf(request.getUrl()));
+            }
             return true;
         }
 
@@ -84,10 +120,10 @@ public class InGameActivity extends AppCompatActivity {
 
             Log.d(TAG, "The number of clicked links is: " + count);
 
-            pagesVisited.add(view.getTitle().substring(0, view.getTitle().indexOf("-")));
+            pagesVisited.add(view.getTitle().substring(0, view.getTitle().indexOf("-")-1));
+            lastVisitedPages.push(view.getUrl());
 
-            Bundle b = getIntent().getExtras();
-
+            b = getIntent().getExtras();
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
             if(url.equals(b.getString("end_url"))){
@@ -119,8 +155,15 @@ public class InGameActivity extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
-        startActivity(new Intent(InGameActivity.this, PlayGameActivity.class));
-        finish();
+        if(lastVisitedPages.size()>1) {
+            lastVisitedPages.pop();
+            String s = lastVisitedPages.pop();
+            web.loadUrl(s);
+        }
+        else {
+            startActivity(new Intent(InGameActivity.this, PlayGameActivity.class));
+            finish();
+        }
     }
 }
+

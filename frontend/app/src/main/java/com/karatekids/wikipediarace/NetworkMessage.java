@@ -43,6 +43,7 @@ public final class NetworkMessage {
         }
         return data;
     }
+
     //ChatGPT usage: No
     public static JSONObject statsRequest(String name, String id){
         try {
@@ -121,6 +122,7 @@ public final class NetworkMessage {
         return data;
     }
 
+    //ChatGPT usage: No
     public static JSONObject addFriend(String name, String id, String friendId){
         try {
             data = new JSONObject();
@@ -138,6 +140,8 @@ public final class NetworkMessage {
         }
         return data;
     }
+
+    //ChatGPT usage: No
     public static JSONObject removeFriend(String name, String id, String friendId){
         try {
             data = new JSONObject();
@@ -156,6 +160,7 @@ public final class NetworkMessage {
         return data;
     }
 
+    //ChatGPT usage: No
     public static JSONObject getFriends(String name, String id){
         try {
             data = new JSONObject();
@@ -166,7 +171,7 @@ public final class NetworkMessage {
             str.append(id);
             str.append("/friend");
             data.put("subject", str.toString());
-            data.put("method","DELETE");
+            data.put("method","GET");
         }
         catch(JSONException e) {
         }
