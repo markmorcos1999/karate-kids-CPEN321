@@ -4,33 +4,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-<<<<<<< HEAD
-import android.app.Dialog;
-=======
-import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
->>>>>>> dfe19059a38ac331a06b8f5499578c3861eda520
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-<<<<<<< HEAD
-=======
-import android.net.NetworkInfo;
->>>>>>> dfe19059a38ac331a06b8f5499578c3861eda520
+
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.View;
-import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -50,13 +36,9 @@ public class InGameActivity extends AppCompatActivity {
 
     private static Chronometer clock;
 
-<<<<<<< HEAD
     private MyWebClient c;
 
     private WebView web;
-=======
-    private static CustomWebViewClient web;
->>>>>>> dfe19059a38ac331a06b8f5499578c3861eda520
 
     //ChatGPT usage: No
     // Followed along with: https://technotalkative.com/android-webviewclient-example/
@@ -127,7 +109,7 @@ public class InGameActivity extends AppCompatActivity {
                 Networker.sendPage(String.valueOf(request.getUrl()));
                 view.loadUrl(String.valueOf(request.getUrl()));
             }
-                return true;
+            return true;
         }
 
         //ChatGPT usage: No
@@ -141,7 +123,6 @@ public class InGameActivity extends AppCompatActivity {
             lastVisitedPages.push(view.getUrl());
 
             b = getIntent().getExtras();
-            CustomWebViewClient.setBundle(b, clock, InGameActivity.this);
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
 

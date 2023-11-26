@@ -7,7 +7,7 @@
     tools:context=".InGameActivity"
     tools:layout_editor_absoluteY="81dp">
 
-    <com.karatekids.wikipediarace.CustomWebViewClient
+    <WebView
         android:id="@+id/wikipedia_page_view"
         android:layout_width="wrap_content"
         android:layout_height="590dp"
