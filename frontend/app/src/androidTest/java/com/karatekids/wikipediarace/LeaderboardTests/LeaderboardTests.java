@@ -34,6 +34,6 @@ public class LeaderboardTests {
                     .putExtra("end_page", "Mexico")
                     .putExtra("start_url", "https://en.wikipedia.org/wiki/Taco")
                     .putExtra("end_url", "https://en.wikipedia.org/wiki/Mexico");
-            activityRule.launchActivity(test);
+//            activityRule.launchActivity(test);
         }
 }

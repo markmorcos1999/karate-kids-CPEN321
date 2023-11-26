@@ -2,22 +2,26 @@ package com.karatekids.wikipediarace;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -34,6 +38,8 @@ public class InGameActivity extends AppCompatActivity {
     private final static String TAG = "InGameActivity";
 
     private static Chronometer clock;
+
+    private MyWebClient c;
 
     private WebView web;
 
@@ -54,41 +60,11 @@ public class InGameActivity extends AppCompatActivity {
         destination.append(" "+b.getString("end_page"));
 
         web = (WebView) findViewById(R.id.wikipedia_page_view);
-        web.setWebViewClient(new MyWebClient()
-            {
-
-                @Override
-                public void onReceivedError(final WebView view, int errorCode, String description,
-                final String failingUrl) {
-                //control you layout, show something like a retry button, and
-                //call view.loadUrl(failingUrl) to reload.
-                    AlertDialog.Builder builder = new AlertDialog.Builder(InGameActivity.this);
-
-                    // Set the message show for the Alert time
-                    builder.setMessage("Do you want to reconnect");
-
-                    // Set Alert Title
-                    builder.setTitle("Error!");
-
-                    // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
-                    builder.setCancelable(false);
-
-                    // Set the positive button with yes name Lambda OnClickListener method is use of DialogInterface interface.
-                    builder.setPositiveButton("Retry", (DialogInterface.OnClickListener) (dialog, which) -> {
-                        // When the user click yes button then app will close
-                        web.loadUrl(failingUrl);
-                    });
-
-                    // Set the Negative button with No name Lambda OnClickListener method is use of DialogInterface interface.
-
-                    // Create the Alert dialog
-                    AlertDialog alertDialog = builder.create();
-                    // Show the Alert Dialog box
-                    alertDialog.show();
-                super.onReceivedError(view, errorCode, description, failingUrl);
-            }});
+        c = new MyWebClient();
+        web.setWebViewClient(c);
         web.getSettings().setJavaScriptEnabled(true);
         web.loadUrl(b.getString("start_url"));
+
         count = -1;
         pagesVisited = new ArrayList<>();
         lastVisitedPages = new Stack<>();
@@ -97,6 +73,21 @@ public class InGameActivity extends AppCompatActivity {
         clock = (Chronometer) findViewById(R.id.chronometer);
         clock.setBase(SystemClock.elapsedRealtime());
         clock.start();
+    }
+
+    private void displayLostConnectionPopup (WebView view,WebResourceRequest request) {
+        ContextCompat.getMainExecutor(InGameActivity.this).execute(() -> {
+            AlertDialog.Builder  builder = new AlertDialog.Builder(InGameActivity.this);
+            builder.setTitle("Network Issue");
+            builder.setMessage("Please check your internet connection and try again later");
+            builder.setCancelable(false);
+            builder.setNegativeButton("Retry", (DialogInterface.OnClickListener) (dialog, which) -> {
+                view.getWebViewClient().shouldOverrideUrlLoading(view, request);
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        });
     }
 
     @Override protected void onSaveInstanceState(Bundle outState ) { super.onSaveInstanceState(outState); web.saveState(outState); }
@@ -119,13 +110,18 @@ public class InGameActivity extends AppCompatActivity {
         //        // display the information from  in the app instead of opening a web viewer external application
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            if(!request.getUrl().getHost().equals("en.m.wikipedia.org")){
-               return true;
+            if (!DetectConnection.checkInternetConnection(InGameActivity.this)) {
+                displayLostConnectionPopup(view, request);
             }
-            Log.d(TAG, "URL host: "+request.getUrl());
-            Networker.sendPage(String.valueOf(request.getUrl()));
-            view.loadUrl(String.valueOf(request.getUrl()));
-            return true;
+            else {
+                if (!request.getUrl().getHost().equals("en.m.wikipedia.org")) {
+                    return true;
+                }
+                Log.d(TAG, "URL host: " + request.getUrl());
+                Networker.sendPage(String.valueOf(request.getUrl()));
+                view.loadUrl(String.valueOf(request.getUrl()));
+            }
+                return true;
         }
 
         //ChatGPT usage: No
@@ -182,3 +178,4 @@ public class InGameActivity extends AppCompatActivity {
         }
     }
 }
+

@@ -28,7 +28,6 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.web.webdriver.Locator;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-<<<<<<< HEAD:frontend/app/src/androidTest/java/com/karatekids/wikipediarace/SinglePlayerTests/InSinglePlayerGameTest.java
 import com.karatekids.wikipediarace.InGameActivity;
 import com.karatekids.wikipediarace.PlayGameActivity;
 import com.karatekids.wikipediarace.R;
