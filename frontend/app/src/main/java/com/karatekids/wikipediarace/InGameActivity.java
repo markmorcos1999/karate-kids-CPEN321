@@ -72,6 +72,7 @@ public class InGameActivity extends AppCompatActivity {
         clock.start();
     }
 
+    //ChatGPT usage: No
     private void displayLostConnectionPopup (WebView view,WebResourceRequest request) {
         ContextCompat.getMainExecutor(InGameActivity.this).execute(() -> {
             AlertDialog.Builder  builder = new AlertDialog.Builder(InGameActivity.this);
@@ -94,7 +95,7 @@ public class InGameActivity extends AppCompatActivity {
             super.onPageStarted(view, url, favicon);
         }
 
-        //ChatGPT usage: Nothe url embedded
+        //ChatGPT usage: No
         //        // display the information from  in the app instead of opening a web viewer external application
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {

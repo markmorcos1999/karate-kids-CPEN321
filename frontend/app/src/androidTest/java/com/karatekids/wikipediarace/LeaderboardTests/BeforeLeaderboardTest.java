@@ -26,6 +26,7 @@ public class BeforeLeaderboardTest {
     public ActivityScenarioRule<SignInActivity> activityRule =
             new ActivityScenarioRule<>(SignInActivity.class);
 
+    //ChatGPT usage: No
     @Test
     public void navigationToLeaderboardTest() throws InterruptedException {
 

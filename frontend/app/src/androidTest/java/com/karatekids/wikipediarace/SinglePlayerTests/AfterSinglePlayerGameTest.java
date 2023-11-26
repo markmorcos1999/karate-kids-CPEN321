@@ -35,6 +35,7 @@ public class AfterSinglePlayerGameTest {
     public IntentsTestRule<ResultsActivity> activityRule =
             new IntentsTestRule<>(ResultsActivity.class, false, false);
 
+    //ChatGPT usage: No
     @Test
     public void afterSinglePlayerTacoMexicoWithBack() throws JSONException {
         afterSinglePlayerGameTacoMexicoTestCase();
@@ -43,6 +44,7 @@ public class AfterSinglePlayerGameTest {
         intended(hasComponent(MainActivity.class.getName()));
     }
 
+    //ChatGPT usage: No
     @Test
     public void afterSinglePlayerTacoMexicoWithButton () throws JSONException {
         afterSinglePlayerGameTacoMexicoTestCase();
@@ -51,6 +53,7 @@ public class AfterSinglePlayerGameTest {
         intended(hasComponent(MainActivity.class.getName()));
     }
 
+    //ChatGPT usage: No
     @Test
     public void afterSinglePlayerGameCneoridiumJuanWithButton () throws JSONException {
         afterSinglePlayerGameCneoridiumJuanTestCase();
@@ -60,6 +63,7 @@ public class AfterSinglePlayerGameTest {
         intended(hasComponent(MainActivity.class.getName()));
     }
 
+    //ChatGPT usage: No
     @Test
     public void afterSinglePlayerGameCneoridiumJuanWithBack () throws JSONException {
         afterSinglePlayerGameCneoridiumJuanTestCase();
@@ -68,6 +72,7 @@ public class AfterSinglePlayerGameTest {
         intended(hasComponent(MainActivity.class.getName()));
     }
 
+    //ChatGPT usage: No
     public void afterSinglePlayerGameTacoMexicoTestCase() throws JSONException {
         Intent test = new Intent();
         int pagesVisitedCount = 3;
@@ -92,6 +97,7 @@ public class AfterSinglePlayerGameTest {
         onView(withText("Seconds: 30\n")).check(matches(isDisplayed()));
     }
 
+    //ChatGPT usage: No
     public void afterSinglePlayerGameCneoridiumJuanTestCase() throws JSONException {
         Intent test = new Intent();
         int pagesVisitedCount = 5;

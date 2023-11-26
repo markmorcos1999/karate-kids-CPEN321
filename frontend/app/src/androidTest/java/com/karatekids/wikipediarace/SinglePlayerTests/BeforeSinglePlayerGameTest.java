@@ -3,19 +3,22 @@ package com.karatekids.wikipediarace.SinglePlayerTests;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.util.Log;
 import android.view.View;
 
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.karatekids.wikipediarace.InGameActivity;
 import com.karatekids.wikipediarace.MobileViewMatchers;
 import com.karatekids.wikipediarace.R;
 import com.karatekids.wikipediarace.SignInActivity;
@@ -25,6 +28,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+//ChatGPT usage: No
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -36,6 +40,7 @@ public class BeforeSinglePlayerGameTest {
     public ActivityScenarioRule<SignInActivity> activityRule =
             new ActivityScenarioRule<>(SignInActivity.class);
 
+    //ChatGPT usage: No
     //https://stackoverflow.com/questions/28390574/checking-toast-message-in-android-espresso/33387980#33387980
     public String isToastMessageDisplayed(String text) {
         Matcher<View> textView = withSubstring(text);
@@ -43,12 +48,13 @@ public class BeforeSinglePlayerGameTest {
         return textView.toString();
     }
 
+    //ChatGPT usage: No
     @Test
     public void beforeSinglePlayerGameTest() throws InterruptedException {
         onView(withText("Sign in as a Guest")).check(matches(isDisplayed()));
         onView(withText("Sign in as a Guest")).perform(click());
 
-        Thread.sleep(1000);
+        Thread.sleep(3000);
 
         onView(withText("Play a Game")).check(matches(isDisplayed()));
         onView(withText("Play a Game")).perform(click());
@@ -64,7 +70,7 @@ public class BeforeSinglePlayerGameTest {
 
         while (true) {
             try {
-                isToastMessageDisplayed("Starting Page: ");//).inRoot(withDecorView(not(activityRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
+                isToastMessageDisplayed("Starting Page: ");
                 break;
             } catch (Exception e) {
                 e.printStackTrace();

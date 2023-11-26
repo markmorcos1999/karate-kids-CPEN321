@@ -41,6 +41,7 @@ public final class Networker {
         id = _id;
         name = _name;
         Thread thread = new Thread(new Runnable() {
+            //ChatGPT usage: No
             @Override
             public void run() {
                 executePost(URL, NetworkMessage.signInMessage(name, id, token));
@@ -55,6 +56,7 @@ public final class Networker {
     //ChatGPT usage: No
     public static void getLeaderboard(MainActivity main){
         Thread thread = new Thread(new Runnable() {
+            //ChatGPT usage: No
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.leaderboardRequest());
@@ -68,6 +70,7 @@ public final class Networker {
     public static void requestGame(String gameMode, LobbyActivity lobby) {
 
         Thread thread = new Thread(new Runnable() {
+            //ChatGPT usage: No
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.gameRequest(name, id, gameMode));
@@ -86,6 +89,7 @@ public final class Networker {
 
         //Log.d(TAG, NetworkMessage.friendGameRequest(name, id, friendId));
         Thread thread = new Thread(new Runnable() {
+            //ChatGPT usage: No
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.friendGameRequest(name, id, friendId));
@@ -103,6 +107,7 @@ public final class Networker {
     public static void getPlayerStats(MainActivity main){
 
         Thread thread = new Thread(new Runnable() {
+            //ChatGPT usage: No
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.statsRequest(name, id));
@@ -117,6 +122,7 @@ public final class Networker {
     public static void sendPage(String url){
 
         Thread thread = new Thread(new Runnable() {
+            //ChatGPT usage: No
             @Override
             public void run() {
                 executePost(URL, NetworkMessage.pagePost(name, id, url));
@@ -130,6 +136,7 @@ public final class Networker {
     //ChatGPT usage: No
     public static void endGame(Context context){
         Thread thread = new Thread(new Runnable() {
+            //ChatGPT usage: No
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.endGame(name, id));
@@ -141,9 +148,11 @@ public final class Networker {
         thread.start();
     }
 
+    //ChatGPT usage: No
     //Adds a friend, takes in the friends ID
     public static void addFriend(String friendId){
         Thread thread = new Thread(new Runnable() {
+            //ChatGPT usage: No
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.addFriend(name, id, friendId));
@@ -156,9 +165,11 @@ public final class Networker {
 
     }
 
+    //ChatGPT usage: No
     //removes a Friend, takes in the friends ID
     public static void removeFriend(String friendId){
         Thread thread = new Thread(new Runnable() {
+            //ChatGPT usage: No
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.removeFriend(name, id, friendId));
@@ -170,9 +181,10 @@ public final class Networker {
         thread.start();
     }
 
-    //@TODO here we need to put in a activity or a callback with a function that we can put the new friends into.
+    //ChatGPT usage: No
     public static void getFriends(){
         Thread thread = new Thread(new Runnable() {
+            //ChatGPT usage: No
             @Override
             public void run() {
                 String ret = executePost(URL, NetworkMessage.getFriends(name, id));
@@ -254,6 +266,9 @@ public final class Networker {
         } catch (Exception e) {
             //e.printStackTrace();
             //return "error";
+            try{
+                Thread.sleep(3000);
+            } catch (Exception exception) {}
             return executePost(URL, data);
 
         } finally {

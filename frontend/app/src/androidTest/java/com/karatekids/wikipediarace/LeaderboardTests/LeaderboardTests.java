@@ -3,39 +3,18 @@ package com.karatekids.wikipediarace.LeaderboardTests;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.doesNotHaveFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
-import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
-import static androidx.test.espresso.matcher.ViewMatchers.hasImeAction;
-import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
-import static androidx.test.espresso.matcher.ViewMatchers.isFocusable;
-import static androidx.test.espresso.matcher.ViewMatchers.isFocused;
-import static androidx.test.espresso.matcher.ViewMatchers.isNotEnabled;
-import static androidx.test.espresso.matcher.ViewMatchers.isNotFocusable;
-import static androidx.test.espresso.matcher.ViewMatchers.isNotFocused;
 import static androidx.test.espresso.matcher.ViewMatchers.withChild;
-import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.Manifest;
-import android.app.Instrumentation;
 import android.content.Intent;
-import android.os.Build;
-import android.view.View;
 
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.karatekids.wikipediarace.InGameActivity;
 import com.karatekids.wikipediarace.LeaderboardActivity;
 
 import org.json.JSONArray;
@@ -44,14 +23,10 @@ import org.json.JSONObject;
 import org.junit.Rule;
 import org.junit.Test;
 
-import de.codecrafters.tableview.listeners.TableDataClickListener;
-import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
-
 public class LeaderboardTests {
         @Rule
         public IntentsTestRule<LeaderboardActivity> activityRule =
                 new IntentsTestRule<>(LeaderboardActivity.class, false, false);
-
 
         public String mockLeaderboard() throws JSONException {
             // mock leaderboard with 4 players
@@ -108,67 +83,69 @@ public class LeaderboardTests {
         return playerArray.toString();
     }
 
-        @Test
-        public void leaderboardViewTest() throws InterruptedException, JSONException {
-            // start in the leaderboard activity
-            Intent leaderboardTest = new Intent();
-            leaderboardTest
-                    .putExtra("leaderboardData", mockLeaderboard());
-            activityRule.launchActivity(leaderboardTest);
+    //ChatGPT usage: No
+    @Test
+    public void leaderboardViewTest() throws InterruptedException, JSONException {
+        // start in the leaderboard activity
+        Intent leaderboardTest = new Intent();
+        leaderboardTest
+                .putExtra("leaderboardData", mockLeaderboard());
+        activityRule.launchActivity(leaderboardTest);
 
-            //check that player julian kennedy is displayed
-            onView(withText("julian kennedy")).check(matches(isDisplayed()));
+        //check that player julian kennedy is displayed
+        onView(withText("julian kennedy")).check(matches(isDisplayed()));
 
-            // check that player Mark Morcos is displayed
-            onView(withText("Mark Morcos")).check(matches(isDisplayed()));
+        // check that player Mark Morcos is displayed
+        onView(withText("Mark Morcos")).check(matches(isDisplayed()));
 
-            // check that player Mark Mekhail is displayed
-            onView(withText("Mark Mekhail")).check(matches(isDisplayed()));
+        // check that player Mark Mekhail is displayed
+        onView(withText("Mark Mekhail")).check(matches(isDisplayed()));
 
-            // check that player Kyle van Winkoop is displayed
-            onView(withText("Kyle van Winkoop")).check(matches(isDisplayed()));
+        // check that player Kyle van Winkoop is displayed
+        onView(withText("Kyle van Winkoop")).check(matches(isDisplayed()));
 
-            // check that stats view of player has not been created in the view
-            onView(withText("Number of Games Won:")).check(doesNotExist());
+        // check that stats view of player has not been created in the view
+        onView(withText("Number of Games Won:")).check(doesNotExist());
 
-            //check that the table has 3 columns
-            ViewInteraction row = onView(withChild(withText("julian kennedy")));
-            row.check(matches(hasChildCount(3)));
+        //check that the table has 3 columns
+        ViewInteraction row = onView(withChild(withText("julian kennedy")));
+        row.check(matches(hasChildCount(3)));
 
-            //check that the table has 4 entries and each entry is clickable
-            onView(withChild(withChild(withText("julian kennedy"))))
-                    .check(matches(isClickable()))
-                    .check(matches(hasChildCount(4)));
+        //check that the table has 4 entries and each entry is clickable
+        onView(withChild(withChild(withText("julian kennedy"))))
+                .check(matches(isClickable()))
+                .check(matches(hasChildCount(4)));
 
-            //click on the player julian kennedy
-            onView(withText("julian kennedy")).perform(ViewActions.click());
+        //click on the player julian kennedy
+        onView(withText("julian kennedy")).perform(ViewActions.click());
 
-            // the statistics page for julian kennedy appears
-            onView(withText("Number of Games Won:")).check(matches(isDisplayed()));
+        // the statistics page for julian kennedy appears
+        onView(withText("Number of Games Won:")).check(matches(isDisplayed()));
 
-            // the rows of all the players do not exist with pop up
-            onView(withText("Mark Morcos")).check(doesNotExist());
-            onView(withText("Mark Mekhail")).check(doesNotExist());
-            onView(withText("Kyle van Winkoop")).check(doesNotExist());
-        }
+        // the rows of all the players do not exist with pop up
+        onView(withText("Mark Morcos")).check(doesNotExist());
+        onView(withText("Mark Mekhail")).check(doesNotExist());
+        onView(withText("Kyle van Winkoop")).check(doesNotExist());
+    }
 
-        //minimum test as the fewest number of people could only be yourself
-        @Test
-        public void leaderbowardWithOneElementTest() throws JSONException {
-            // start in the leaderboard activity
-            Intent leaderboardTest = new Intent();
-            leaderboardTest
-                    .putExtra("leaderboardData", mockOneElementLeaderBoard());
-            activityRule.launchActivity(leaderboardTest);
+    //ChatGPT usage: No
+    //minimum test as the fewest number of people could only be yourself
+    @Test
+    public void leaderboardWithOneElementTest() throws JSONException {
+        // start in the leaderboard activity
+        Intent leaderboardTest = new Intent();
+        leaderboardTest
+                .putExtra("leaderboardData", mockOneElementLeaderBoard());
+        activityRule.launchActivity(leaderboardTest);
 
-            //check that player Guest is displayed
-            onView(withText("Guest")).check(matches(isDisplayed()));
+        //check that player Guest is displayed
+        onView(withText("Guest")).check(matches(isDisplayed()));
 
-            //check that the table has 1 entry and it is clickable
-            onView(withChild(withChild(withText("Guest"))))
-                    .check(matches(isClickable()))
-                    .check(matches(hasChildCount(1)));
-        }
+        //check that the table has 1 entry and it is clickable
+        onView(withChild(withChild(withText("Guest"))))
+                .check(matches(isClickable()))
+                .check(matches(hasChildCount(1)));
+    }
 
 
 }
