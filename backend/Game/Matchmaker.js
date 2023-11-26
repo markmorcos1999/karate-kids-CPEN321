@@ -1,7 +1,7 @@
 const ALLOWED_DIF_BASE = 50;
 const DIFF_TIME_MULTIPLIER_EXPONENT = 0.002;
 const MATCHING_INTERVAL = 500;
-const MAX_WAIT_TIME = 100000;
+const MAX_WAIT_TIME = 10000;
 
 class MatchMaker {
 	// ChatGPT usage: Partial
