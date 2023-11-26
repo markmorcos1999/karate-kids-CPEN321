@@ -1,10 +1,16 @@
 package com.karatekids.wikipediarace;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -28,9 +34,11 @@ public class InGameActivity extends AppCompatActivity {
 
     private final static String TAG = "InGameActivity";
 
+    public Bundle b;
+
     private static Chronometer clock;
 
-    private WebView web;
+    private static CustomWebViewClient web;
 
     //ChatGPT usage: No
     // Followed along with: https://technotalkative.com/android-webviewclient-example/
@@ -48,18 +56,43 @@ public class InGameActivity extends AppCompatActivity {
         TextView destination = (TextView)  findViewById(R.id.destination_page);
         destination.append(" "+b.getString("end_page"));
 
-        web = (WebView) findViewById(R.id.wikipedia_page_view);
+        web = (CustomWebViewClient) findViewById(R.id.wikipedia_page_view);
         web.setWebViewClient(new MyWebClient());
         web.getSettings().setJavaScriptEnabled(true);
+        CustomWebViewClient.setBundle(b, clock, InGameActivity.this);
         web.loadUrl(b.getString("start_url"));
         count = -1;
         pagesVisited = new ArrayList<>();
         lastVisitedPages = new Stack<>();
 
+        //https://stackoverflow.com/questions/18221728/handle-network-issues-in-webview
+        web.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedError(final WebView view, int errorCode, String description,
+                                        final String failingUrl) {
+                //control you layout, show something like a retry button, and
+                //call view.loadUrl(failingUrl) to reload.
+                displayLostConnectionPopup(failingUrl);
+            }
+        });
+
         // https://medium.com/native-mobile-bits/easily-build-a-chronometer-a-simple-stopwatch-1f83aa361ee7
         clock = (Chronometer) findViewById(R.id.chronometer);
         clock.setBase(SystemClock.elapsedRealtime());
         clock.start();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState ) {
+        super.onSaveInstanceState(outState);
+        web.saveState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onSaveInstanceState(savedInstanceState);
+        web.restoreState(savedInstanceState);
     }
 
     public class MyWebClient extends WebViewClient {
@@ -79,6 +112,10 @@ public class InGameActivity extends AppCompatActivity {
             Log.d(TAG, "URL host: "+request.getUrl());
             Networker.sendPage(String.valueOf(request.getUrl()));
             view.loadUrl(String.valueOf(request.getUrl()));
+            if(request.getUrl().equals(b.getString("end_url"))){
+                clock.stop();
+                endGame(InGameActivity.this);
+            }
             return true;
         }
 
@@ -92,14 +129,11 @@ public class InGameActivity extends AppCompatActivity {
             pagesVisited.add(view.getTitle().substring(0, view.getTitle().indexOf("-")-1));
             lastVisitedPages.push(view.getUrl());
 
-            Bundle b = getIntent().getExtras();
-
+            b = getIntent().getExtras();
+            CustomWebViewClient.setBundle(b, clock, InGameActivity.this);
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
-            if(url.equals(b.getString("end_url"))){
-                clock.stop();
-                endGame(InGameActivity.this);
-            }
+
         }
     }
 
@@ -135,4 +169,20 @@ public class InGameActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    private void displayLostConnectionPopup (String url) {
+        ContextCompat.getMainExecutor(InGameActivity.gameContext).execute(() -> {
+            AlertDialog.Builder  builder = new AlertDialog.Builder(InGameActivity.gameContext);
+            builder.setTitle("Network Issue");
+            builder.setMessage("Please check your internet connection and try again later");
+            builder.setCancelable(false);
+            builder.setNegativeButton("Retry", (DialogInterface.OnClickListener) (dialog, which) -> {
+                web.loadUrl(url);
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        });
+    }
 }
+
