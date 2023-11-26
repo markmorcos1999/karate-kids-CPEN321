@@ -25,6 +25,7 @@ import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 
 public class MockLeaderboard {
 
+    //ChatGPT usage: No
     @Rule
     public IntentsTestRule<InGameActivity> activityRule =
             new IntentsTestRule<>(InGameActivity.class, false, false);

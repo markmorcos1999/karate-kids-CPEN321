@@ -1,9 +1,5 @@
 package com.karatekids.wikipediarace;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 import android.os.IBinder;
 import android.view.WindowManager;
 
@@ -13,14 +9,17 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+//ChatGPT usage: No
 //https://stackoverflow.com/questions/28390574/checking-toast-message-in-android-espresso/33387980#33387980
 public class ToastMatcher extends TypeSafeMatcher<Root> {
 
+    //ChatGPT usage: No
     @Override
     public void describeTo(Description description) {
         description.appendText("is toast");
     }
 
+    //ChatGPT usage: No
     @Override
     public boolean matchesSafely(Root root) {
         int type = root.getWindowLayoutParams().get().type;

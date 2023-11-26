@@ -94,9 +94,10 @@ public class LeaderboardActivity extends AppCompatActivity {
         }
     }
 
-
+    //ChatGPT usage: No
     // https://github.com/ISchwarz23/SortableTableView/tree/master
     private class ProfileClickListener implements TableDataClickListener<String[]> {
+        //ChatGPT usage: No
         @Override
         public void onDataClicked(int rowIndex, String[] player) {
             try {

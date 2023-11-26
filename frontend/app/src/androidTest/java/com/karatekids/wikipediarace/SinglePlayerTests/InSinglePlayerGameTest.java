@@ -16,13 +16,12 @@ import static androidx.test.espresso.web.webdriver.DriverAtoms.getText;
 import static androidx.test.espresso.web.webdriver.DriverAtoms.webClick;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Intent;
+import android.provider.Settings;
 import android.util.Log;
 
-import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.web.webdriver.Locator;
@@ -45,6 +44,7 @@ public class InSinglePlayerGameTest {
     public IntentsTestRule<InGameActivity> activityRule =
             new IntentsTestRule<>(InGameActivity.class, false, false);
 
+    //ChatGPT usage: No
     //https://newsletter.automationhacks.io/p/hello-espresso-part-5-automating
     @Test
     public void inSinglePlayerGameDelayTest() {
@@ -107,6 +107,7 @@ public class InSinglePlayerGameTest {
         assertTrue(aboveThresholdCount <= 1);
     }
 
+    //ChatGPT usage: No
     @Test
     public void inSinglePlayerGameLargestDelayTest() throws InterruptedException {
         Intent test = new Intent();
@@ -126,6 +127,7 @@ public class InSinglePlayerGameTest {
         assertTrue(largestDelay < 3.5f);
     }
 
+    //ChatGPT usage: No
     @Test
     public void inSinglePlayerGameTest() throws InterruptedException {
         Intent test = new Intent();
@@ -138,7 +140,8 @@ public class InSinglePlayerGameTest {
 
         onView(withText("Destination Page: Mexico")).check(matches(isDisplayed()));
         onWebView()
-                .check(webMatches(getCurrentUrl(), containsString("Taco")));
+                .withElement(findElement(Locator.ID, "firstHeading"))
+                .check(webMatches(getText(), containsString("Taco")));
 
         onWebView()
                 .withElement(findElement(Locator.CSS_SELECTOR, "a[href=\"/wiki/British_English\"]")) // similar to onView(withId(...))

@@ -22,10 +22,12 @@ public class LeaderboardTests {
         public IntentsTestRule<LeaderboardActivity> activityRule =
                 new IntentsTestRule<>(LeaderboardActivity.class, false, false);
 
+        //ChatGPT usage: No
         public String mockLeaderboard() {
-
+            return "";
         }
 
+        //ChatGPT usage: No
         @Test
         public void leaderboardViewTest() throws InterruptedException {
             Intent leaderboardTest = new Intent();

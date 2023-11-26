@@ -2,7 +2,6 @@ package com.karatekids.wikipediarace;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,8 +11,6 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.listeners.TableDataClickListener;
@@ -66,18 +63,13 @@ public class FindFriendActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
 
-
-//        // iterate through the array and add each row of data to leaderboardData
-
-
         findViewById(R.id.validate_friend_id_bt).setOnClickListener(new View.OnClickListener() {
+            //ChatGPT usage: No
             @Override
             public void onClick(View view) {
                 TextView friend_id = (TextView) findViewById(R.id.friend_id_bar);
 
                 Networker.addFriend(friend_id.getText().toString());
-
-//                Networker.getFriends();
 
                 if(friends != null && !friends.isEmpty()) {
                     try {
@@ -118,6 +110,7 @@ public class FindFriendActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.friend_game_bt).setOnClickListener(new View.OnClickListener(){
+            //ChatGPT usage: No
             @Override
             public void onClick(View view){
                 Intent friendLobby = new Intent(FindFriendActivity.this, LobbyActivity.class);
@@ -141,8 +134,10 @@ public class FindFriendActivity extends AppCompatActivity {
         finish();
 
     }
-//
+
+    //ChatGPT usage: No
     private class FriendsListListener implements TableDataClickListener<String[]> {
+        //ChatGPT usage: No
         @Override
         public void onDataClicked(int rowIndex, String clickedString[]) {
             try {
@@ -157,8 +152,6 @@ public class FindFriendActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
-//            Toast.makeText(getContext(), clickedCarString, Toast.LENGTH_SHORT).show();
         }
     }
 }

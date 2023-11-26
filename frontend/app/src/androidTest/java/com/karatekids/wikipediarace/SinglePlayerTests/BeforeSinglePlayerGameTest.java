@@ -11,7 +11,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.test.espresso.intent.Intents;
@@ -19,6 +18,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.karatekids.wikipediarace.InGameActivity;
 import com.karatekids.wikipediarace.MobileViewMatchers;
 import com.karatekids.wikipediarace.R;
 import com.karatekids.wikipediarace.SignInActivity;
@@ -28,6 +28,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+//ChatGPT usage: No
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -39,6 +40,7 @@ public class BeforeSinglePlayerGameTest {
     public ActivityScenarioRule<SignInActivity> activityRule =
             new ActivityScenarioRule<>(SignInActivity.class);
 
+    //ChatGPT usage: No
     //https://stackoverflow.com/questions/28390574/checking-toast-message-in-android-espresso/33387980#33387980
     public String isToastMessageDisplayed(String text) {
         Matcher<View> textView = withSubstring(text);
@@ -46,6 +48,7 @@ public class BeforeSinglePlayerGameTest {
         return textView.toString();
     }
 
+    //ChatGPT usage: No
     @Test
     public void beforeSinglePlayerGameTest() throws InterruptedException {
         Intents.init();
