@@ -86,7 +86,7 @@ module.exports = class GameManager{
 		players.push(this.playerList[p2Id]);
 		
 
-		var pageList = await this.pageMan.getRandomPages();
+		var pageList = this.pageMan.getRandomPages();
 		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title);		
 		//Check if there isnt a path
 		
@@ -118,7 +118,7 @@ module.exports = class GameManager{
 		var players = []
 		players.push(this.playerList[id])
 		
-		var pageList = await this.pageMan.getRandomPages()
+		var pageList = this.pageMan.getRandomPages()
 		var path = await this.pageMan.getShortestPath(pageList[0].title, pageList[1].title)
 		var game = new Game(sessionId, players, pageList, path, this)
 		

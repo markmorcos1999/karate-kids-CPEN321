@@ -1,32 +1,33 @@
 const fetch = require('node-fetch');
-const wiki = require('wikijs').default;
+const fs = require('fs');
+const { randomInt } = require('crypto');
 
 
 class PageManager {
-    // ChatGPT usage: Yes
-    async getRandomPages(limit = 2) { 
-        try {
-            const randomTitles = await wiki().random(limit);
-		            
-			const titlePromises = randomTitles.map(async (title) => {
-                var url = await wiki().page(title).then(page => page.url()); //Statement here
-				url = url.slice(0, 10) + ".m" + url.slice(10);
-                const pageInfo = { 
-                    title, 
-                    url 
-                };
+    constructor() {
+        const pages = fs.readFileSync("pages.json")
+        this.pages = JSON.parse(pages);
+    }
 
-                return pageInfo;
-            });
-            return Promise.all(titlePromises);
-        } catch (error) {
-            throw error;
+    // ChatGPT usage: Yes
+    getRandomPages() { 
+        while(true) {
+            const page1 = this.getRandomPage();
+            const page2 = this.getRandomPage();
+
+            if (page1.title !== page2.title) {
+                return [page1, page2];
+            }
         }
+    }
+
+    getRandomPage() {
+        return this.pages[randomInt(this.pages.length)];
     }
 	
     
 	getDailyPage(){
-		return [{title: "Taco", url: "https://en.m.wikipedia.org/wiki/Taco"},{title: "Mexico", url: "https://en.m.wikipedia.org/wiki/Mexico"}]
+		return [ this.pages[0], this.pages[1] ]
 	}
 	
     /// ChatGPT usage: Partial
