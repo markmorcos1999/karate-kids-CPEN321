@@ -28,6 +28,7 @@ public class LeaderboardTests {
         public IntentsTestRule<LeaderboardActivity> activityRule =
                 new IntentsTestRule<>(LeaderboardActivity.class, false, false);
 
+        //ChatGPT usage: No
         public String mockLeaderboard() throws JSONException {
             // mock leaderboard with 4 players
             JSONObject player1 = new JSONObject()
