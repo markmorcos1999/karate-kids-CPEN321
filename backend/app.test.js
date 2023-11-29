@@ -374,8 +374,10 @@ describe("Request a game from the server (the POST game interface)", () => {
 	test("Multi Game Request with high elo difference", async () => {	
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 5);	
-		player2 = mockPlayer("Player2", "2000", 90);
+		const player = mockPlayer("Player1", "1000", 5);	
+		const player2 = mockPlayer("Player2", "2000", 90);
+
+        mockCollection.findOne.mockReturnValue(player);
 		
 		mockCollection.findOne.mockReturnValue(player);
 		
@@ -388,10 +390,11 @@ describe("Request a game from the server (the POST game interface)", () => {
         var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
         var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
 		
-		const [response, r2] = await Promise.all([promise1, promise2]);
+		const [response, response2] = await Promise.all([promise1, promise2]);
 		const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
+        expect(response.body).toEqual(response2.body);
 		expect(responsePages).toContain(mockPages[0].url);
         expect(responsePages).toContain(mockPages[1].url);
 		
@@ -641,7 +644,7 @@ describe("Get the results of a game (the GET game interface)", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, no signin even
-		player = mockPlayer();	
+		const player = mockPlayer();	
 		
         const response = await request(app).get('/game/' + player._id);
 		
