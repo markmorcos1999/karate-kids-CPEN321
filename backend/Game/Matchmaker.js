@@ -91,9 +91,10 @@ class MatchMaker {
 			for (var i = 1; i < this.waitingPlayers.length; i++) {
 				const p1 = this.waitingPlayers[i];
 				const p2 = this.waitingPlayers[i - 1];
-
+				
 				const diff = p1.elo - p2.elo;
 				const allowedDiff = this.allowedEloDiff(p1.waitStartTime, p2.waitStartTime);
+				
 				
 				if (diff <= allowedDiff) {
 					var game = this.gameManager.startGame(p1.id, p2.id);
@@ -103,12 +104,6 @@ class MatchMaker {
 
 					this.waitingPlayers.splice(i - 1, 2);
 					
-					//Found this
-					//I think it only happens when there are 3 or more players waiting
-					//Commenting out for now for coverage.
-					//if (i > 1) {
-					//	i -= 2;
-					//}
 				}
 			}
 		}
@@ -127,7 +122,7 @@ class MatchMaker {
 		
 	
 		//Now the friendslist matching
-		for(var i in this.friendList){
+		for(i in this.friendList){
 
 			if(!this.friendList[i].done){
 				this.matchingInProgress = true;

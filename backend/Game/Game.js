@@ -31,8 +31,9 @@ module.exports = class Game{
 				
 				if (page == this.end.url) {
 					
+					
 							
-					if(this.finishOrder.length == 0){
+					if(this.finishOrder.length === 0){
 						this.manager.sendLoss(this.players, id)
 					}
 					this.finishOrder.push(pl);
@@ -77,11 +78,6 @@ module.exports = class Game{
 		if (this.finishOrder.length + this.gaveUp.length >= this.players.length){
 			this.gameOver();
 		}		
-		
-		console.log("In game finished")
-		console.log(id)
-		console.log(this.finishOrder)
-		console.log(gameInfo)
 		
 		return gameInfo;
 		
