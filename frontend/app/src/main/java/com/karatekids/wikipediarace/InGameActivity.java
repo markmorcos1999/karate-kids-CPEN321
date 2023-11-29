@@ -120,7 +120,7 @@ public class InGameActivity extends AppCompatActivity {
                     return true;
                 }
                 Log.d(TAG, "URL host: " + request.getUrl());
-                Networker.sendPage(String.valueOf(request.getUrl()));
+                Networker.sendPage(String.valueOf(request.getUrl()), InGameActivity.this);
                 view.loadUrl(String.valueOf(request.getUrl()));
             }
             return true;
@@ -140,8 +140,8 @@ public class InGameActivity extends AppCompatActivity {
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
             if(url.equals(b.getString("end_url"))){
-                clock.stop();
-                endGame(InGameActivity.this);
+
+                //endGame(InGameActivity.this);
             }
         }
     }
@@ -153,6 +153,7 @@ public class InGameActivity extends AppCompatActivity {
 
     //ChatGPT usage: No
     public static void updateResults(Context context, String data){
+        clock.stop();
         Intent resultIntent = new Intent(context, ResultsActivity.class)
                 .putExtra("count", count)
                 .putExtra("time", clock.getText().toString())

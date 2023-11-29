@@ -338,8 +338,8 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer(elo = 11);	
-		player2 = mockPlayer(elo = 12);
+		player = mockPlayer("Player1", "1000", 11);	
+		player2 = mockPlayer("Player2", "2000", 12);
 		
 		
 		
@@ -373,8 +373,9 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer(elo = 11);	
-		player2 = mockPlayer(elo = 12);
+		player = mockPlayer("Player1", "1000", 11);	
+		player2 = mockPlayer("Player2", "2000", 12);
+		
 		
 		
 		
@@ -409,8 +410,8 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer(elo = 11);	
-		player2 = mockPlayer(elo = 12);
+		player = mockPlayer("Player1", "1000", 11);	
+		player2 = mockPlayer("Player2", "2000", 12);
 		
 		
 		
@@ -437,8 +438,8 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer(elo = 11);	
-		player2 = mockPlayer(elo = 12);
+		player = mockPlayer("Player1", "1000", 11);	
+		player2 = mockPlayer("Player2", "2000", 12);
 		
 		
 		
@@ -475,9 +476,12 @@ describe("Testing completing a game", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer(_id = "1000", elo = 10);	
-		player2 = mockPlayer(_id = "2000", elo = 11);
+		player = mockPlayer("Player1", "1000", 11);	
+		player2 = mockPlayer("Player2", "2000", 12);
 		
+		
+		console.log(player)
+		console.log(player2)
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
 		
@@ -492,16 +496,24 @@ describe("Testing completing a game", () => {
 		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
 		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexico"});
 
+		await request(app).put('/game').send({id:player2._id, name:player2.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
+		await request(app).put('/game').send({id:player2._id, name:player2.name, URL: "https://en.m.wikipedia.org/wiki/Mexico"});
+
+
         const response = await request(app).get('/game/' + player._id);
 		const response2 = await request(app).get('/game/' + player2._id);
 		
 		expect(response.status).toBe(200);
-
+		console.log("In test")
+		console.log(response2.body)
+		
+		console.log(response2.body.gamePosition)
+		
 		expect(mockMessenger.send).toHaveBeenCalled();
-		expect(JSON.stringify(response.body.gamePosition)).toBe(JSON.stringify(1));
+		expect(response.body.gamePosition).toBe(JSON.stringify(1));
 		expect(JSON.stringify(response.body.shortestPath)).toBe(JSON.stringify(["Taco", "Mexican Food", "Mexico"]));		
-
-		expect(JSON.stringify(response2.body.gamePosition)).toBe(JSON.stringify(2));
+		
+		expect(response2.body.gamePosition).toBe(JSON.stringify(2));
 		expect(JSON.stringify(response2.body.shortestPath)).toBe(JSON.stringify(["Taco", "Mexican Food", "Mexico"]));		
 
 		
@@ -520,8 +532,8 @@ describe("Testing completing a game", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer(_id = "1000", elo = 10);	
-		player2 = mockPlayer(_id = "2000", elo = 11);
+		player = mockPlayer("Player1", "1000", 11);	
+		player2 = mockPlayer("Player2", "2000", 12);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
@@ -544,10 +556,10 @@ describe("Testing completing a game", () => {
 		expect(response.status).toBe(200);
 
 		expect(mockMessenger.send).toHaveBeenCalled();
-		expect(JSON.stringify(response.body.gamePosition)).toBe(JSON.stringify(1));
+		expect(response.body.gamePosition).toBe(JSON.stringify(1));
 		expect(JSON.stringify(response.body.shortestPath)).toBe(JSON.stringify(["Taco", "Mexican Food", "Mexico"]));		
 
-		expect(JSON.stringify(response2.body.gamePosition)).toBe(JSON.stringify(2));
+		expect(response2.body.gamePosition).toBe("NA");
 		expect(JSON.stringify(response2.body.shortestPath)).toBe(JSON.stringify(["Taco", "Mexican Food", "Mexico"]));		
 		
     });
@@ -1071,8 +1083,8 @@ function mockPlayer(
     }
 
     return {
-        _id,
         name,
+        _id,
         elo,
         gamesWon,
         gamesLost,

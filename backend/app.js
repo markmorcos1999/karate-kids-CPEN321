@@ -49,7 +49,8 @@ app.post('/signIn/:id', async (req, res) => {
 				name: message.name, 
 				elo: 0, 
 				gamesWon: 0, 
-				gamesLost: 0
+				gamesLost: 0,
+				friends: []
 			};
 			
 		}
@@ -128,18 +129,20 @@ app.put('/game', async (req, res) => {
 		gameManager.checkForPlayer(message.id)			
 		if (gameManager.playerPagePost(message)) {
 			//Later, here verify player actually wins
-			//var result = gameManager.playerEndGame(message.id);
-			res.send(200);
+			var result = gameManager.playerEndGame(message.id);
+			res.status(200);
+			res.send(result);
 		}
 		else {
 			res.status(200);
-			res.send();
+			res.send({done: false});
 		}
 	}
 	catch (e) {
 		console.error(e);
 		res.status(500);
-		res.send();
+		res.send(req.body);
+		
 	}
 });
 
@@ -192,7 +195,7 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 
 		if(!((await playerManager.playerExists(playerId)) && (await playerManager.playerExists(friendId)))){
 			res.status(404);
-			res.send();
+			res.send(req.body);
 			return;
 		}
 
@@ -201,7 +204,7 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 		let friends = playerInfo.friends;
 		if (friends.includes(friendId)) {
 			res.status(409)
-			res.send();
+			res.send(req.body);
 			return;
 		}
 		friends.push(friendId);
@@ -217,12 +220,12 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 		);
 	
 		res.status(201);
-		res.send();
+		res.send(req.body);
 	} 
 	catch (e) {
 		console.error(e);
 		res.status(500);
-		res.send();
+		res.send(req.body);
 	}
 });
 
@@ -233,7 +236,7 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 
 		if(!(await playerManager.playerExists(playerId) && await playerManager.playerExists(friendId))){
 			res.status(404);
-			res.send();
+			res.send(req.body);
 			return;
 		}
 
@@ -244,7 +247,7 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 
 		if (friendIndex < 0) {
 			res.status(404)
-			res.send();
+			res.send(req.body);
 			return;
 		}
 		delete friends[friendIndex];
@@ -260,12 +263,12 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 		);
 	
 		res.status(204);
-		res.send();
+		res.send(req.body);
 	} 
 	catch (e) {
 		console.error(e);
 		res.status(500);
-		res.send();
+		res.send(req.body);
 	}
 });
 
@@ -275,7 +278,7 @@ app.get('/player/:id/friend', async (req, res) => {
 
 		if(!(await playerManager.playerExists(id))) {
 			res.status(404);
-			res.send();
+			res.send(req.body);
 			return;
 		}
 
@@ -288,7 +291,7 @@ app.get('/player/:id/friend', async (req, res) => {
 	catch (e) {
 		console.error(e);
 		res.status(500);
-		res.send();
+		res.send(req.body);
 	}
 });
 

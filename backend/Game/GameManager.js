@@ -61,11 +61,13 @@ module.exports = class GameManager{
 		return this.sessionList[sessionId].playerEndGame(id)
 	}
 	//ChatGPT usage: No
-	completeGame(playerOrder, sessionId){
+	completeGame(playerOrder, gaveUp, sessionId){
 		//Insert real elo logic here
 		playerOrder[0].elo += playerOrder.length
 		playerOrder[0].gamesWon += 1;
 		
+		console.log("In complete Game")
+		console.log(playerOrder)
 		for(let i = 1; i < playerOrder.length; i++){
 			playerOrder[i].elo += (playerOrder.length - i)
 			playerOrder[i].gamesLost += 1
