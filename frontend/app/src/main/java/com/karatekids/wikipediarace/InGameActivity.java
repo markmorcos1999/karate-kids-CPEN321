@@ -69,6 +69,7 @@ public class InGameActivity extends AppCompatActivity {
         MyWebClient c = new MyWebClient();
         web.setWebViewClient(c);
         web.getSettings().setJavaScriptEnabled(true);
+        web.setVisibility(View.INVISIBLE);
         web.loadUrl(b.getString("start_url"));
 
         count = -1;
@@ -119,8 +120,8 @@ public class InGameActivity extends AppCompatActivity {
                 }
                 Log.d(TAG, "URL host: " + request.getUrl());
                 Networker.sendPage(String.valueOf(request.getUrl()), InGameActivity.this);
-                view.loadUrl(String.valueOf(request.getUrl()));
-            }
+                view.setVisibility(View.INVISIBLE);
+                view.loadUrl(String.valueOf(request.getUrl()));}
             return true;
         }
 
@@ -138,9 +139,17 @@ public class InGameActivity extends AppCompatActivity {
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
             if(url.equals(b.getString("end_url"))){
-
-                //endGame(InGameActivity.this);
             }
+        }
+
+        //ChatGPT usage: No
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            view.loadUrl("javascript:(function(){" +
+                    "$('.header-container.header-chrome').remove();" +
+                    "})()");
+            super.onPageFinished(view, url);
+            view.setVisibility(View.VISIBLE);
         }
     }
 
@@ -170,6 +179,7 @@ public class InGameActivity extends AppCompatActivity {
         if(lastVisitedPages.size()>1) {
             lastVisitedPages.pop();
             String s = lastVisitedPages.pop();
+            web.setVisibility(View.INVISIBLE);
             web.loadUrl(s);
         }
         else {

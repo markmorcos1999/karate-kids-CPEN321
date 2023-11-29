@@ -59,7 +59,7 @@ public class InSinglePlayerGameTest {
             {"Empress Dowager Bo", "https://en.wikipedia.org/wiki/Empress_Dowager_Bo"},
             {"Shane Morrison", "https://en.wikipedia.org/wiki/Shane_Morrison"},
             {"Atlason", "https://en.wikipedia.org/wiki/Atlason"},
-            {"Sengunrur Kilar", "https://en.wikipedia.org/wiki/Madurai_Tamilaasiriyar_Sengunrur_Kilar"},
+            {"Jewish National Front", "https://en.wikipedia.org/wiki/Jewish_National_Front"},
             {"Flight 185", "https://en.wikipedia.org/wiki/Flight_185"},
             {"Cathedral of the Assumption of the Virgin", "https://en.wikipedia.org/wiki/Cathedral_of_the_Assumption_of_the_Virgin,_Tashkent"},
             {"Eving", "https://en.wikipedia.org/wiki/Eving"},
@@ -126,7 +126,7 @@ public class InSinglePlayerGameTest {
         Date afterLoading = new Date();
         float largestDelay = (afterLoading.getTime() - beforeLoading.getTime())/1000f;
         Log.d(TAG, "Elapsed Time: " + largestDelay + "\n");
-        assertTrue(largestDelay < 3.5f);
+        assertTrue(largestDelay < 2.5f);
         activityRule.finishActivity();
     }
 
