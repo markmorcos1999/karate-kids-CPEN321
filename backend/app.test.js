@@ -378,12 +378,9 @@ describe("Request a game from the server (the POST game interface)", () => {
 		const player2 = mockPlayer("Player2", "2000", 90);
 
         mockCollection.findOne.mockReturnValue(player);
-		
-		mockCollection.findOne.mockReturnValue(player);
+        mockCollection.findOne.mockReturnValue(player2);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
-		
-		mockCollection.findOne.mockReturnValue(player2);
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
 
 		//Now start game
