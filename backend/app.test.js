@@ -397,61 +397,61 @@ describe("Testing game requests", () => {
     });	
 	
 	
-	// /**
-    //  * ChatGPT usage: No
-    //  * Input: One Multi Game Request
-    //  * Expected status code: 200
-    //  * Expected behaviour: The server should return a "604" message, signalling there are no other players online
-    //  * Expected output: Valid Game information
-    //  */
-	// test("Multi Game Request timeout", async () => {	
+	/**
+     * ChatGPT usage: No
+     * Input: One Multi Game Request
+     * Expected status code: 200
+     * Expected behaviour: The server should return a "604" message, signalling there are no other players online
+     * Expected output: Valid Game information
+     */
+	test("Multi Game Request timeout", async () => {	
 		
-	// 	mockCollection.findOne.mockReturnValue(null);
+		mockCollection.findOne.mockReturnValue(null);
 		
-	// 	//First, sign player in
-	// 	player = mockPlayer(elo = 11);	
-	// 	player2 = mockPlayer(elo = 12);
+		//First, sign player in
+		player = mockPlayer(elo = 11);	
+		player2 = mockPlayer(elo = 12);
 		
 		
 		
-	// 	await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 
-	// 	//Now send game request to player 2 (who isnt signed in or online)
-	// 	const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
+		//Now send game request to player 2 (who isnt signed in or online)
+		const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
 		
-	// 	expect(response.status).toBe(604);
+		expect(response.status).toBe(604);
 
 		
         
-    // }, 15000);
+    }, 15000);
 	
-	// /**
-    //  * ChatGPT usage: No 
-    //  * Input: One Friend Game Request
-    //  * Expected status code: 200
-    //  * Expected behaviour: The server should return a "604" message, signalling there are no other players online
-    //  * Expected output: Valid Game information
-    //  */
-	// test("Friend Game Request timeout", async () => {	
+	/**
+     * ChatGPT usage: No 
+     * Input: One Friend Game Request
+     * Expected status code: 200
+     * Expected behaviour: The server should return a "604" message, signalling there are no other players online
+     * Expected output: Valid Game information
+     */
+	test("Friend Game Request timeout", async () => {	
 		
-	// 	mockCollection.findOne.mockReturnValue(null);
+		mockCollection.findOne.mockReturnValue(null);
 		
-	// 	//First, sign player in
-	// 	player = mockPlayer(elo = 11);	
-	// 	player2 = mockPlayer(elo = 12);
+		//First, sign player in
+		player = mockPlayer(elo = 11);	
+		player2 = mockPlayer(elo = 12);
 		
 		
 		
-	// 	await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 
-	// 	//Now send game request to player 2 (who isnt signed in or online)
-	// 	const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "friend", friendId:player2._id});
+		//Now send game request to player 2 (who isnt signed in or online)
+		const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "friend", friendId:player2._id});
 		
-	// 	expect(response.status).toBe(604);
+		expect(response.status).toBe(604);
 
 		
         
-    // }, 15000);
+    }, 15000);
 	
 });
 
