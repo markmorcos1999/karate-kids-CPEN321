@@ -146,6 +146,7 @@ app.put('/game', async (req, res) => {
 });
 
 app.get('/game/:id', async(req,res) =>{
+	// This comment makes codacy happy
 	try{
 		const id = req.params.id;
 	

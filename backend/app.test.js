@@ -369,12 +369,11 @@ describe("Testing game requests", () => {
      * Expected output: Valid Game information
      */
 	test("Multi Game Request with high elo difference", async () => {	
-		
-		
-		mockCollection.findOne.mockReturnValue(player);
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 5);	
-		player2 = mockPlayer("Player2", "2000", 90);
+		const player = mockPlayer("Player1", "1000", 5);	
+		const player2 = mockPlayer("Player2", "2000", 90);
+
+        mockCollection.findOne.mockReturnValue(player);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		
@@ -596,7 +595,7 @@ describe("Testing completing a game", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, no signin even
-		player = mockPlayer();	
+		const player = mockPlayer();	
 		
         const response = await request(app).get('/game/' + player._id);
 		
