@@ -14,7 +14,8 @@ const mockPages = [
     { "title": "Cat", "url": "https://en.m.wikipedia.org/wiki/Cat" },
     { "title": "France", "url": "https://en.m.wikipedia.org/wiki/France" }
 ];
-fs.readFileSync = jest.fn((filePath) => {
+const originalReadFileSync = fs.readFileSync;
+fs.readFileSync = jest.fn((filePath, encoding) => {
     if (filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem'
         || filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem') {
         return '';
@@ -23,7 +24,7 @@ fs.readFileSync = jest.fn((filePath) => {
         return JSON.stringify(mockPages);
     }
     
-    return null;
+    return originalReadFileSync(filePath, encoding);
 });
 
 jest.mock('mongodb');
@@ -982,8 +983,8 @@ describe("Testing putting mockPages into games", () => {
         mockCollection.findOne.mockReturnValue(player);
 
         await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
-        
-		await request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
+        await request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
+
    		const response = await request(app).put('/game').send({ id: player._id, name: player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine" });
 		
 		expect(response.status).toBe(200);
