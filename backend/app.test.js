@@ -14,7 +14,6 @@ const mockPages = [
     { "title": "Cat", "url": "https://en.m.wikipedia.org/wiki/Cat" },
     { "title": "France", "url": "https://en.m.wikipedia.org/wiki/France" }
 ];
-const originalReadFileSync = fs.readFileSync;
 fs.readFileSync = jest.fn((filePath) => {
     if (filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem'
         || filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem') {
@@ -24,7 +23,7 @@ fs.readFileSync = jest.fn((filePath) => {
         return JSON.stringify(mockPages);
     }
     
-    return originalReadFileSync(filePath);
+    return null;
 });
 
 jest.mock('mongodb');
@@ -401,7 +400,7 @@ describe("Testing game requests", () => {
 	/**
      * ChatGPT usage: No
      * Input: One Multi Game Request
-     * Expected status code: 200
+     * Expected status code: 604
      * Expected behaviour: The server should return a "604" message, signalling there are no other players online
      * Expected output: Valid Game information
      */
@@ -410,10 +409,7 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		const player = mockPlayer("Player1", "1000", 11);	
-		const player2 = mockPlayer("Player2", "2000", 12);
-		
-		
+		const player = mockPlayer("Player1", "1000", 11);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 

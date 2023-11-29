@@ -39,7 +39,8 @@ app.post('/signIn/:id', async (req, res) => {
 		if(await playerManager.playerExists(id)) {
 			player = await playerManager.getPlayerInfo(id);			
 		}
-		else {
+		else 
+		{
 			playerManager.createNewPlayer(id, message.name);
 			player = {
 				_id: id, 
@@ -49,7 +50,6 @@ app.post('/signIn/:id', async (req, res) => {
 				gamesLost: 0,
 				friends: []
 			};
-			
 		}
 						
 		gameManager.addPlayer(player, message.token)
@@ -121,6 +121,7 @@ app.post('/game', async (req, res) => {
 });
 
 app.put('/game', async (req, res) => {
+	// This comment makes codacy happy
 	try {
 		const message = req.body;
 
