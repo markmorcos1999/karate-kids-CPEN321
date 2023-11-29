@@ -72,7 +72,7 @@ const app = require('./app.js');
 const { randomInt } = require('crypto');
 
 // Interface GET /leaderboard
-describe("Retrieve the leaderboard", () => {
+describe("Retreive data from the leaderboard (GET /leaderboard)", () => {
     beforeEach(() => {
         resetConnectionMocks();
     });
@@ -135,10 +135,10 @@ describe("Retrieve the leaderboard", () => {
      * ChatGPT usage: Partial
      * Input: N/A
      * Expected status code: 500
-     * Expected behaviour: The server should error out
-     * Expected output: An internal server error response
+     * Expected behaviour: The server should encounter a recoverable error and return and error code.
+     * Expected output: An empty message with the status code 500, signaling an error
      */
-    test("Database retrieval error", async () => {
+    test("Database retrieval error when searching for leaderboard", async () => {
         mockCollection.find.mockRejectedValue(new Error("Test Error"));
 
         // Perform actions to set up the scenario with no players (e.g., clear database)
@@ -150,7 +150,7 @@ describe("Retrieve the leaderboard", () => {
 
 
 // Interface GET /player/:id
-describe("Retrieve a player's information", () => {
+describe("Retrieve a player's information from the server (the GET player interface)", () => {
     beforeEach(() => {
         resetConnectionMocks();
     });
@@ -179,8 +179,9 @@ describe("Retrieve a player's information", () => {
      * ChatGPT usage: Partial
      * Input: A nonexistent player id (300)
      * Expected status code: 404
-     * Expected behaviour: The server should simply return a 404 error
-     * Expected output: A 404 response
+     * Expected behaviour: The server should encounter an error retreaving the player
+	 * and return a 404 error
+     * Expected output: An empty message with a 404 status code
      */
     test("Retrieve a nonexistent player's information", async () => {
         mockCollection.findOne.mockReturnValue(null);
@@ -196,10 +197,11 @@ describe("Retrieve a player's information", () => {
      * ChatGPT usage: Partial
      * Input: N/A
      * Expected status code: 500
-     * Expected behaviour: The server should error out
-     * Expected output: An internal server error response
+     * Expected behaviour: The server should encounter a recoverable error when searching for
+	 * the players.
+     * Expected output: Should return an empty message with response code 500, signaling an error.
      */
-    test("Database retrieval error", async () => {
+    test("Database retrieval error when searching for player", async () => {
         mockCollection.findOne.mockRejectedValue(new Error("Test error"));
 
         const response = await request(app).get('/player/20');
@@ -210,15 +212,15 @@ describe("Retrieve a player's information", () => {
 
 
 // Interface POST /signIn/:id
-describe("Testing player signIn", () => {
+describe("Sign a player into the server (the POST SignIn interface)", () => {
     /**
      * ChatGPT usage: No
      * Input: A player's id
      * Expected status code: 200
-     * Expected behaviour: The player should be "signed in" and can now enter games.
+     * Expected behaviour: The player should be "signed in" by the server and can now enter games.
      * Expected output: Should return the players ID as signin confirmation
      */
-    test("SignIn Player", async () => {
+    test("Sign in one player", async () => {
         const player = mockPlayer();
 
         mockCollection.findOne.mockReturnValue(player);
@@ -233,10 +235,10 @@ describe("Testing player signIn", () => {
      * ChatGPT usage: No
      * Input: A player ID
      * Expected status code: 500
-     * Expected behaviour: The server should error out
-     * Expected output: An internal server error response
+     * Expected behaviour: The server should encounter a recoverable database error
+     * Expected output: An empty message with status code 500, signaling an error
     */
-    test("Database error", async () => {
+    test("Database error when signing in player", async () => {
 
 		mockCollection.findOne.mockRejectedValue(new Error("Test error"));
 
@@ -250,19 +252,20 @@ describe("Testing player signIn", () => {
 });
 
 // Interface POST /game
-describe("Testing game requests", () => {
+describe("Request a game from the server (the POST game interface)", () => {
     beforeEach(() => {
         resetConnectionMocks();
     });
 
     /** 
      * ChatGPT usage: No
-     * Input: Single Game Request
+     * Input: A request for a single player game
      * Expected status code: 200
-     * Expected behaviour: The server should check on the game and send back details
-     * Expected output: Game information
+     * Expected behaviour: The server should find pages for the game, register them and
+	 * return the pages to the user.
+     * Expected output: Information about the found game
      */
-    test("Single Game Request", async () => {
+    test("Single game request from player", async () => {
 		
         var player = mockPlayer();
 		
@@ -278,12 +281,12 @@ describe("Testing game requests", () => {
 	
 	/** 
      * ChatGPT usage: No
-     * Input: Single Game Request
+     * Input: A request for a single player game
      * Expected status code: 500
-     * Expected behaviour: The server should run into a fetch error and return error
-     * Expected output: error code 500
+     * Expected behaviour: The server should run into a fetch error and return an error code to the user
+     * Expected output: An empty message with status code 500, signaling an errore
      */
-    test("Single Player Fetch path error", async () => {
+    test("Single player fetch path error", async () => {
 		
         var player = mockPlayer();
 		
@@ -305,12 +308,12 @@ describe("Testing game requests", () => {
 	
 	/**
      * ChatGPT usage: No
-     * Input: Daily Game Request
+     * Input: A request for a daily game
      * Expected status code: 200
      * Expected behaviour: The server should create a game using the Current Daily mockPages
-     * Expected output: Valid Game information
+     * Expected output: The valid information for a match.
      */
-    test("Daily Game Request", async () => {	
+    test("A request for a daily game", async () => {	
 		var player = mockPlayer();
 		
 		jest.mock('node-fetch');
@@ -328,12 +331,12 @@ describe("Testing game requests", () => {
 	
     /**
      * ChatGPT usage: No 
-     * Input: Multi Game Request
+     * Input: Two multiplayer Game Request
      * Expected status code: 200
-     * Expected behaviour: The server should create a game with the two players
-     * Expected output: Valid Game information
+     * Expected behaviour: The server should create a game with the two players and return the game information
+     * Expected output: The game information for the multiplayer game
      */
-	test("Multi Game Request", async () => {	
+	test("Testing requesting a multiplayer game", async () => {	
 		
 		mockCollection.findOne.mockReturnValue(null);
 		
@@ -363,18 +366,18 @@ describe("Testing game requests", () => {
 	
 	/**
      * ChatGPT usage: No 
-     * Input: Multi Game Request
+     * Input: Two multiplayer game request with the two users a large elo apart
      * Expected status code: 200
-     * Expected behaviour: The server should create a game with the two players
-     * Expected output: Valid Game information
+     * Expected behaviour: The server should create a game with the two players and return the game information
+     * Expected output: The information for their game
      */
 	test("Multi Game Request with high elo difference", async () => {	
 		
-		
-		mockCollection.findOne.mockReturnValue(player);
 		//First, sign player in
 		player = mockPlayer("Player1", "1000", 5);	
 		player2 = mockPlayer("Player2", "2000", 90);
+		
+		mockCollection.findOne.mockReturnValue(player);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		
@@ -398,12 +401,13 @@ describe("Testing game requests", () => {
 	
 	/**
      * ChatGPT usage: No 
-     * Input: Two Friend Game Requests
+     * Input: Two requests for friend games
      * Expected status code: 200
-     * Expected behaviour: The server should create a game with the two players, as friends
-     * Expected output: Valid Game information
+     * Expected behaviour: The server should create a game with the two players who are friends
+	 * and return the game information.
+     * Expected output: The information relating to their game.
      */
-	test("Friend Game Request", async () => {	
+	test("Testing friend game requests", async () => {	
 		
 		mockCollection.findOne.mockReturnValue(null);
 		
@@ -432,12 +436,12 @@ describe("Testing game requests", () => {
 	
 	/**
      * ChatGPT usage: No
-     * Input: One Multi Game Request
+     * Input: One request for a multiplayer game
      * Expected status code: 604
      * Expected behaviour: The server should return a "604" message, signalling there are no other players online
-     * Expected output: Valid Game information
+     * Expected output: An empty message with status code 604
      */
-	test("Multi Game Request timeout", async () => {	
+	test("Multi game request timeout", async () => {	
 		
 		mockCollection.findOne.mockReturnValue(null);
 		
@@ -460,11 +464,11 @@ describe("Testing game requests", () => {
 	/**
      * ChatGPT usage: No 
      * Input: One Friend Game Request
-     * Expected status code: 200
+     * Expected status code: 604
      * Expected behaviour: The server should return a "604" message, signalling there are no other players online
-     * Expected output: Valid Game information
+     * Expected output: An empty message with status code 604
      */
-	test("Friend Game Request timeout", async () => {
+	test("Friend game request timeout", async () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
@@ -485,19 +489,19 @@ describe("Testing game requests", () => {
 
 
 // Interface GET /game
-describe("Testing completing a game", () => {
+describe("Get the results of a game (the GET game interface)", () => {
     beforeEach(() => {
         resetConnectionMocks();
     });
 
 	/**
      * ChatGPT usage: No
-     * Input: Completing a game after mockPages have been aded
+     * Input: Signin requests, pages to complete the game and a results get request
      * Expected status code: 200
-     * Expected behaviour: The server should create a game with both players.
-     * Expected output: Valid Game information
+     * Expected behaviour: The server should create a game with both players, then complete the game as it recieves the pages.
+     * Expected output: The results of the game
      */
-    test("Completing multiplayer game", async () => {	
+    test("Completing a multiplayer game", async () => {	
 		
 		mockMessenger.send.mockReturnValue("Succsess!");
 		mockCollection.findOne.mockReturnValue(null);
@@ -540,11 +544,52 @@ describe("Testing completing a game", () => {
     });
 	
 	/**
-     * ChatGPT usage: No 
-     * Input: Completing a complete game, but with a message failure
+     * ChatGPT usage: No
+     * Input: Signin requests and results get requests
      * Expected status code: 200
-     * Expected behaviour: The server should continue as normal, despite the failure
-     * Expected output: Valid Game information
+     * Expected behaviour: The server should create a game with both players, return their positions when they try to end the game.
+     * Expected output: The results of the games
+     */
+    test("Completing multiplayer game with no winner", async () => {	
+		
+		mockMessenger.send.mockReturnValue("Succsess!");
+		mockCollection.findOne.mockReturnValue(null);
+		
+		//First, sign player in
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
+
+		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
+		
+		//Now start game
+        var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
+        
+		var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
+
+		await Promise.all([promise1, promise2]);
+
+        const response = await request(app).get('/game/' + player._id);
+		const response2 = await request(app).get('/game/' + player2._id);
+		
+		expect(response.status).toBe(200);
+		
+		expect(mockMessenger.send).toHaveBeenCalled();
+		expect(response.body.gamePosition).toBe("NA");
+		expect(JSON.stringify(response.body.shortestPath)).toBe(JSON.stringify(["Taco", "Mexican Food", "Mexico"]));		
+		
+		expect(response2.body.gamePosition).toBe("NA");
+		expect(JSON.stringify(response2.body.shortestPath)).toBe(JSON.stringify(["Taco", "Mexican Food", "Mexico"]));		
+
+		
+    });
+	
+	/**
+     * ChatGPT usage: No 
+     * Input: Completing a complete game, but with a messager failure
+     * Expected status code: 200
+     * Expected behaviour: The server should still return the game information, despite the failure
+     * Expected output: The results of the game
      */
 	test("Completing multiplayer game with messenger failure", async () => {	
 		
@@ -586,12 +631,12 @@ describe("Testing completing a game", () => {
 	
 	/**
      * ChatGPT usage: No 
-     * Input: Completing a complete game, but with a message failure
-     * Expected status code: 200
-     * Expected behaviour: The server should continue as normal, despite the failure
-     * Expected output: Valid Game information
+     * Input: Completing a complete game, but the user did not enter a game
+     * Expected status code: 500
+     * Expected behaviour: The server should return an empty message with status code 500 to signal an error
+     * Expected output: An empty message with status code 500
      */
-	test("Game completion message while not in a game.", async () => {	
+	test("Game completion while not in a game.", async () => {	
 		
 		mockCollection.findOne.mockReturnValue(null);
 		
@@ -610,7 +655,7 @@ describe("Testing completing a game", () => {
 });
 
 // Interface POST /player/{playerId}/friend/{friendId}
-describe("Add a friend", () => {
+describe("Add a friend (the POST player interface", () => {
     beforeEach(() => {
         resetConnectionMocks();
     });
@@ -759,7 +804,7 @@ describe("Add a friend", () => {
 });
 
 // Interface DELETE /player/{playerId}/friend/{friendId}
-describe("Remove a friend", () => {
+describe("Remove a friend (The DELETE player interface)", () => {
     beforeEach(() => {
         resetConnectionMocks();
     });
@@ -908,7 +953,7 @@ describe("Remove a friend", () => {
 });
 
 // Interface GET /player/{id}/friend
-describe("Retrieve a player's friend list", () => {
+describe("Retrieve a player's friend list (The GET player 'friend' interface)", () => {
     beforeEach(() => {
         resetConnectionMocks();
     });
@@ -1013,17 +1058,17 @@ describe("Retrieve a player's friend list", () => {
 });
 
 // Interface PUT /game
-describe("Testing putting mockPages into games", () => {
+describe("Testing putting mockPages into games (The PUT game interface)", () => {
     beforeEach(() => {
         resetConnectionMocks();
     });
 
 	/**
      * ChatGPT usage: No
-     * Input: testing adding mockPages to a game in progress.
+     * Input: Signing in, starting a game and sending pages to the game
      * Expected status code: 200
-     * Expected behaviour: The server should add the game to its internal page list
-     * Expected output: A success response code
+     * Expected behaviour: The server should add the game to its internal page list and return
+     * Expected output: An empty message with status code 200, signaling success
      */
     test("Page Put Message", async () => {
 		var player = mockPlayer();
@@ -1045,7 +1090,7 @@ describe("Testing putting mockPages into games", () => {
      * Input: testing adding mockPages to a game in progress.
      * Expected status code: 500
      * Expected behaviour: The server should error because of incorrect inputs
-     * Expected output: A 500 response code
+     * Expected output: An empty message with status code 500 to signal error.
      */
     test("Page Put Message error", async () => {
 		var player = mockPlayer();
