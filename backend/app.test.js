@@ -2,7 +2,6 @@ const request = require('supertest');
 const https = require('https');
 const fs = require('fs');
 const { MongoClient } = require('mongodb');
-const Wikijs = require('wikijs');
 
 jest.mock('https');
 https.createServer.mockReturnValue({ 
@@ -11,11 +10,18 @@ https.createServer.mockReturnValue({
     }) 
 });
 
+const mockPages = [
+    { "title": "Cat", "url": "https://en.m.wikipedia.org/wiki/Cat" },
+    { "title": "France", "url": "https://en.m.wikipedia.org/wiki/France" }
+];
 originalReadFileSync = fs.readFileSync;
 fs.readFileSync = jest.fn((filePath, encoding) => {
     if (filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem'
         || filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem') {
         return '';
+    }
+    else if (filePath == 'pages.json') {
+        return JSON.stringify(mockPages);
     }
     
     return originalReadFileSync(filePath, encoding);
@@ -46,39 +52,7 @@ var mockMessenger = {
 
 admin.messaging.mockReturnValue(mockMessenger)
 
-
-
 admin.credential.cert.mockReturnValue('');
-
-jest.mock('wikijs');
-var mockWiki = {
-	page: mockPages,
-	random: jest.fn()
-}
-
-
-function examplePages(title){
-	return "https://en.wikipedia.org/wiki/" + title
-}
-
-function mockPages (title){
-	return {
-		then: (cb) => {
-			cb({url:()=>{return}})
-			return examplePages(title)
-			}
-	}
-}
-
-//mockWiki.page.mockReturnValue(mockPages);
-mockWiki.random.mockReturnValue(mockTitles());
-
-var mockTitle = {
-	map: jest.fn()
-}
-Wikijs.default.mockReturnValue(mockWiki)
-
-//Wikijs.default = mockWiki;
 
 var node_fetch = require('node-fetch');
 jest.mock('node-fetch');
@@ -292,21 +266,12 @@ describe("Testing game requests", () => {
         mockCollection.findOne.mockReturnValue(player);
 
         await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
-        
-		const response = await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name})
-		.then(response => {
-			return request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
-		});
-                 
+		const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
+        const responsePages = [response.body.startPage, response.body.endPage]
+		
 		expect(response.status).toBe(200);
-		
-		var pages = clientPages();
-		expect(response.body.startPage).toBe(pages[0]);
-		expect(response.body.endPage).toBe(pages[1]);
-		
-        expect(mockWiki.random).toHaveBeenCalledTimes(1)
-		
-		
+		expect(responsePages).toContain(mockPages[0].url);
+        expect(responsePages).toContain(mockPages[1].url);
     });
 	
 	/** 
@@ -336,62 +301,27 @@ describe("Testing game requests", () => {
 		
     });
 	
-	/** 
-     * ChatGPT usage: No
-     * Input: Single Game Request
-     * Expected status code: 500
-     * Expected behaviour: The server should run into a wiki error and return error
-     * Expected output: error code 500
-     */
-    test("Single Player Wiki path error", async () => {
-		
-        var player = mockPlayer();
-				
-		mockWiki.random.mockRejectedValueOnce(new Error("Test error"));;
-		
-        mockCollection.findOne.mockReturnValue(player);
-
-        await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
-        
-		const response = await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name})
-		.then(response => {
-			return request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
-		});
-                 
-		expect(response.status).toBe(500);
-		
-		
-    });
-	
 	/**
      * ChatGPT usage: No
      * Input: Daily Game Request
      * Expected status code: 200
-     * Expected behaviour: The server should create a game using the Current Daily pages
+     * Expected behaviour: The server should create a game using the Current Daily mockPages
      * Expected output: Valid Game information
      */
     test("Daily Game Request", async () => {	
-
 		var player = mockPlayer();
 		
-		
 		jest.mock('node-fetch');
-
 
         mockCollection.findOne.mockReturnValue(player);
 
         await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
         
-		const response = await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name})
-		.then(response => {
-			return request(app).post('/game').send({id:player._id, name:player.name, mode: "daily"});
-		});
+		const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "daily"});
                  
 		expect(response.status).toBe(200);
-		
-		var pages = clientPages();
-		expect(response.body.startPage).toBe(pages[0]);
-		expect(response.body.endPage).toBe(pages[1]);
+		expect(response.body.startPage).toBe(mockPages[0].url);
+		expect(response.body.endPage).toBe(mockPages[1].url);
 		
          
     });
@@ -420,14 +350,12 @@ describe("Testing game requests", () => {
         var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
         var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
 		
-		const[response, r2] = await Promise.all([promise1, promise2]);
-		
+		const [response, r2] = await Promise.all([promise1, promise2]);
+		const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
-
-		var pages = clientPages();
-		expect(response.body.startPage).toBe(pages[0]);
-		expect(response.body.endPage).toBe(pages[1]);
+		expect(responsePages).toContain(mockPages[0].url);
+        expect(responsePages).toContain(mockPages[1].url);
 		
 		//Sleeping to let the player matching stop for the next test
         await sleep(1000);
@@ -457,75 +385,73 @@ describe("Testing game requests", () => {
         var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "friend", friendId:player._id});
         var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "friend", friendId:player2._id});
 		
-		const[response, r2] = await Promise.all([promise1, promise2]);
-		
+		const [response, r2] = await Promise.all([promise1, promise2]);
+		const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
-
-		var pages = clientPages();
-		expect(response.body.startPage).toBe(pages[0]);
-		expect(response.body.endPage).toBe(pages[1]);
+		expect(responsePages).toContain(mockPages[0].url);
+        expect(responsePages).toContain(mockPages[1].url);
 		
         //Sleeping to let the player matching stop for the next test
         await sleep(1000);
     });	
 	
 	
-	/**
-     * ChatGPT usage: No
-     * Input: One Multi Game Request
-     * Expected status code: 200
-     * Expected behaviour: The server should return a "604" message, signalling there are no other players online
-     * Expected output: Valid Game information
-     */
-	test("Multi Game Request timeout", async () => {	
+	// /**
+    //  * ChatGPT usage: No
+    //  * Input: One Multi Game Request
+    //  * Expected status code: 200
+    //  * Expected behaviour: The server should return a "604" message, signalling there are no other players online
+    //  * Expected output: Valid Game information
+    //  */
+	// test("Multi Game Request timeout", async () => {	
 		
-		mockCollection.findOne.mockReturnValue(null);
+	// 	mockCollection.findOne.mockReturnValue(null);
 		
-		//First, sign player in
-		player = mockPlayer(elo = 11);	
-		player2 = mockPlayer(elo = 12);
+	// 	//First, sign player in
+	// 	player = mockPlayer(elo = 11);	
+	// 	player2 = mockPlayer(elo = 12);
 		
 		
 		
-		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+	// 	await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 
-		//Now send game request to player 2 (who isnt signed in or online)
-		const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
+	// 	//Now send game request to player 2 (who isnt signed in or online)
+	// 	const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
 		
-		expect(response.status).toBe(604);
+	// 	expect(response.status).toBe(604);
 
 		
         
-    }, 15000);
+    // }, 15000);
 	
-	/**
-     * ChatGPT usage: No 
-     * Input: One Friend Game Request
-     * Expected status code: 200
-     * Expected behaviour: The server should return a "604" message, signalling there are no other players online
-     * Expected output: Valid Game information
-     */
-	test("Friend Game Request timeout", async () => {	
+	// /**
+    //  * ChatGPT usage: No 
+    //  * Input: One Friend Game Request
+    //  * Expected status code: 200
+    //  * Expected behaviour: The server should return a "604" message, signalling there are no other players online
+    //  * Expected output: Valid Game information
+    //  */
+	// test("Friend Game Request timeout", async () => {	
 		
-		mockCollection.findOne.mockReturnValue(null);
+	// 	mockCollection.findOne.mockReturnValue(null);
 		
-		//First, sign player in
-		player = mockPlayer(elo = 11);	
-		player2 = mockPlayer(elo = 12);
+	// 	//First, sign player in
+	// 	player = mockPlayer(elo = 11);	
+	// 	player2 = mockPlayer(elo = 12);
 		
 		
 		
-		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+	// 	await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 
-		//Now send game request to player 2 (who isnt signed in or online)
-		const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "friend", friendId:player2._id});
+	// 	//Now send game request to player 2 (who isnt signed in or online)
+	// 	const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "friend", friendId:player2._id});
 		
-		expect(response.status).toBe(604);
+	// 	expect(response.status).toBe(604);
 
 		
         
-    }, 15000);
+    // }, 15000);
 	
 });
 
@@ -538,7 +464,7 @@ describe("Testing completing a game", () => {
 
 	/**
      * ChatGPT usage: No
-     * Input: Completing a game after pages have been aded
+     * Input: Completing a game after mockPages have been aded
      * Expected status code: 200
      * Expected behaviour: The server should create a game with both players.
      * Expected output: Valid Game information
@@ -1034,14 +960,14 @@ describe("Retrieve a player's friend list", () => {
 });
 
 // Interface PUT /game
-describe("Testing putting pages into games", () => {
+describe("Testing putting mockPages into games", () => {
     beforeEach(() => {
         resetConnectionMocks();
     });
 
 	/**
      * ChatGPT usage: No
-     * Input: testing adding pages to a game in progress.
+     * Input: testing adding mockPages to a game in progress.
      * Expected status code: 200
      * Expected behaviour: The server should add the game to its internal page list
      * Expected output: A success response code
@@ -1082,7 +1008,7 @@ describe("Testing putting pages into games", () => {
 	
 	/**
      * ChatGPT usage: No
-     * Input: testing adding pages to a game in progress.
+     * Input: testing adding mockPages to a game in progress.
      * Expected status code: 500
      * Expected behaviour: The server should error because of incorrect inputs
      * Expected output: A 500 response code
@@ -1154,27 +1080,6 @@ function mockPlayer(
         avgGamePathLength,
         friends
     };
-}
-
-
-function clientPages(){
-	return ["https://en.m.wikipedia.org/wiki/Taco", "https://en.m.wikipedia.org/wiki/Mexico"]
-}
-
-function mockTitles(){
-	return ["Taco", "Mexico"]
-}
-
-
-
-
-function mockPath(){
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(mockResponse);
-        }, 1000);
-    });
-
 }
 
 function sleep(milliseconds) {

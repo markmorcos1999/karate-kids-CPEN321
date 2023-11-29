@@ -28,8 +28,6 @@ var port = 8081;
 app.use(bodyParser.json());
 
 app.post('/signIn/:id', async (req, res) => {
-	
-	
 	try {
 		
 		const id = req.params.id;
@@ -115,11 +113,9 @@ app.post('/game', async (req, res) => {
 		}
 	}
 	catch (e){
-
-
+		console.error(e);
 		res.status(500);
 		res.send();
-		
 	}
 	
 	//res.send({startPage:"https://en.m.wikipedia.org/wiki/Taco", endPage: "https://en.m.wikipedia.org/wiki/Mexico", players: [{name:"Mark", ELO: "1001"}, {name:"Kyle", ELO: "1001"}]})
@@ -140,10 +136,10 @@ app.put('/game', async (req, res) => {
 			res.send();
 		}
 	}
-	catch {
+	catch (e) {
+		console.error(e);
 		res.status(500);
 		res.send();
-		
 	}
 });
 
@@ -162,7 +158,8 @@ app.get('/leaderboard', async (req, res) => {
 	try {
 		res.send(await playerManager.getTopPlayers()); //Here add the "database get leaderboard"
 	}
-	catch {
+	catch (e) {
+		console.error(e);
 		res.status(500);
 		res.send();
 	}
@@ -181,7 +178,7 @@ app.get('/player/:id', async (req, res) => {
 		res.send(await playerManager.getPlayerInfo(id)); //here add the "database get playerinfo
 	}
 	catch (e){
-
+		console.error(e);
 		res.status(500);
 		res.send();
 	}
@@ -222,7 +219,8 @@ app.post('/player/:playerId/friend/:friendId', async (req, res) => {
 		res.status(201);
 		res.send();
 	} 
-	catch (err) {
+	catch (e) {
+		console.error(e);
 		res.status(500);
 		res.send();
 	}
@@ -264,7 +262,8 @@ app.delete('/player/:playerId/friend/:friendId', async (req, res) => {
 		res.status(204);
 		res.send();
 	} 
-	catch {
+	catch (e) {
+		console.error(e);
 		res.status(500);
 		res.send();
 	}
@@ -286,7 +285,8 @@ app.get('/player/:id/friend', async (req, res) => {
 		res.status(200);
 		res.send(friendInfo);
 	} 
-	catch {
+	catch (e) {
+		console.error(e);
 		res.status(500);
 		res.send();
 	}
