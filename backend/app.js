@@ -147,14 +147,20 @@ app.put('/game', async (req, res) => {
 });
 
 app.get('/game/:id', async(req,res) =>{
+	try{
+		const id = req.params.id;
 	
-	const id = req.params.id;
+		gameManager.checkForPlayer(id);
 	
-	gameManager.checkForPlayer(id);
-	
-	var result = gameManager.playerEndGame(id);
-	res.send(result);
-	
+		var result = gameManager.playerEndGame(id);
+		res.send(result);
+	}
+	catch (e) {
+		console.error(e);
+		res.status(500);
+		res.send(req.body);
+		
+	}
 });
 
 app.get('/leaderboard', async (req, res) => {

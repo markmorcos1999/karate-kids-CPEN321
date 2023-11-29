@@ -364,6 +364,41 @@ describe("Testing game requests", () => {
 	
 	/**
      * ChatGPT usage: No 
+     * Input: Multi Game Request
+     * Expected status code: 200
+     * Expected behaviour: The server should create a game with the two players
+     * Expected output: Valid Game information
+     */
+	test("Multi Game Request with high elo difference", async () => {	
+		
+		
+		mockCollection.findOne.mockReturnValue(player);
+		//First, sign player in
+		player = mockPlayer("Player1", "1000", 5);	
+		player2 = mockPlayer("Player2", "2000", 90);
+		
+		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+		
+		mockCollection.findOne.mockReturnValue(player2);
+		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
+
+		//Now start game
+        var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
+        var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
+		
+		const [response, r2] = await Promise.all([promise1, promise2]);
+		const responsePages = [response.body.startPage, response.body.endPage]
+		
+		expect(response.status).toBe(200);
+		expect(responsePages).toContain(mockPages[0].url);
+        expect(responsePages).toContain(mockPages[1].url);
+		
+		//Sleeping to let the player matching stop for the next test
+        await sleep(1000);
+    });
+	
+	/**
+     * ChatGPT usage: No 
      * Input: Two Friend Game Requests
      * Expected status code: 200
      * Expected behaviour: The server should create a game with the two players, as friends
@@ -412,7 +447,6 @@ describe("Testing game requests", () => {
 		
 		//First, sign player in
 		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
 		
 		
 		
@@ -426,6 +460,8 @@ describe("Testing game requests", () => {
 		
         
     }, 15000);
+	
+	
 	
 	/**
      * ChatGPT usage: No 
@@ -455,6 +491,8 @@ describe("Testing game requests", () => {
         
     }, 15000);
 	
+	
+	
 });
 
 
@@ -480,9 +518,6 @@ describe("Testing completing a game", () => {
 		player = mockPlayer("Player1", "1000", 11);	
 		player2 = mockPlayer("Player2", "2000", 12);
 		
-		
-		console.log(player)
-		console.log(player2)
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
 		
@@ -505,10 +540,6 @@ describe("Testing completing a game", () => {
 		const response2 = await request(app).get('/game/' + player2._id);
 		
 		expect(response.status).toBe(200);
-		console.log("In test")
-		console.log(response2.body)
-		
-		console.log(response2.body.gamePosition)
 		
 		expect(mockMessenger.send).toHaveBeenCalled();
 		expect(response.body.gamePosition).toBe(JSON.stringify(1));
@@ -563,6 +594,27 @@ describe("Testing completing a game", () => {
 		expect(response2.body.gamePosition).toBe("NA");
 		expect(JSON.stringify(response2.body.shortestPath)).toBe(JSON.stringify(["Taco", "Mexican Food", "Mexico"]));		
 		
+    });
+	
+	/**
+     * ChatGPT usage: No 
+     * Input: Completing a complete game, but with a message failure
+     * Expected status code: 200
+     * Expected behaviour: The server should continue as normal, despite the failure
+     * Expected output: Valid Game information
+     */
+	test("Game completion message while not in a game.", async () => {	
+		
+		mockCollection.findOne.mockReturnValue(null);
+		
+		//First, no signin even
+		player = mockPlayer();	
+		
+        const response = await request(app).get('/game/' + player._id);
+		
+		expect(response.status).toBe(500);
+
+				
     });
 
 	

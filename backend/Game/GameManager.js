@@ -66,8 +66,6 @@ module.exports = class GameManager{
 		playerOrder[0].elo += playerOrder.length
 		playerOrder[0].gamesWon += 1;
 		
-		console.log("In complete Game")
-		console.log(playerOrder)
 		for(let i = 1; i < playerOrder.length; i++){
 			playerOrder[i].elo += (playerOrder.length - i)
 			playerOrder[i].gamesLost += 1
