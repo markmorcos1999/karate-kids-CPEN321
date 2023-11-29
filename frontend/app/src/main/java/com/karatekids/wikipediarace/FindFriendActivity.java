@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.MissingResourceException;
+
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
@@ -60,7 +62,7 @@ public class FindFriendActivity extends AppCompatActivity {
 
                 tableView.setDataAdapter(new SimpleTableDataAdapter(this, friendsData));
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
 
         findViewById(R.id.validate_friend_id_bt).setOnClickListener(new View.OnClickListener() {
@@ -150,12 +152,8 @@ public class FindFriendActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.clicked_friend_id_tv)).setText(selectedFriendId);
                 ((Button) findViewById(R.id.friend_game_bt)).setEnabled(true);
             } catch (JSONException e) {
-                jsonException();
+                e.printStackTrace();
             }
         }
-    }
-
-    public void jsonException() throws RuntimeException {
-        throw new RuntimeException();
     }
 }
