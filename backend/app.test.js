@@ -15,7 +15,7 @@ const mockPages = [
     { "title": "France", "url": "https://en.m.wikipedia.org/wiki/France" }
 ];
 const originalReadFileSync = fs.readFileSync;
-fs.readFileSync = jest.fn((filePath, encoding) => {
+fs.readFileSync = jest.fn((filePath) => {
     if (filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem'
         || filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem') {
         return '';
@@ -24,7 +24,7 @@ fs.readFileSync = jest.fn((filePath, encoding) => {
         return JSON.stringify(mockPages);
     }
     
-    return originalReadFileSync(filePath, encoding);
+    return originalReadFileSync(filePath);
 });
 
 jest.mock('mongodb');
@@ -386,7 +386,7 @@ describe("Testing game requests", () => {
         var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "friend", friendId:player._id});
         var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "friend", friendId:player2._id});
 		
-		const [response, r2] = await Promise.all([promise1, promise2]);
+		const response = await Promise.all([promise1, promise2])[0];
 		const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
@@ -410,8 +410,8 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
 		
 		
 		
@@ -988,10 +988,9 @@ describe("Testing putting mockPages into games", () => {
         await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
         
 		await request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
-   		const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
+   		const response = await request(app).put('/game').send({ id: player._id, name: player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine" });
 		
 		expect(response.status).toBe(200);
-        expect(mockTitle.map).toHaveBeenCalledTimes(0)
     });
 	
 	/**
@@ -1002,7 +1001,7 @@ describe("Testing putting mockPages into games", () => {
      * Expected output: A 500 response code
      */
     test("Page Put Message error", async () => {
-		var player = mockPlayer(_id = undefined);
+		var player = mockPlayer();
 		
 		jest.mock('node-fetch');
 

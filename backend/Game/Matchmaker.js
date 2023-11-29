@@ -114,7 +114,7 @@ class MatchMaker {
 		}
 		
 		//timeout for the normal players
-		for (var i = 0; i < this.waitingPlayers.length; i++) {
+		for (i = 0; i < this.waitingPlayers.length; i++) {
 			const curPlayer = this.waitingPlayers[i];
 
 			if (Date.now() - curPlayer.waitStartTime >= MAX_WAIT_TIME) {
@@ -127,7 +127,7 @@ class MatchMaker {
 		
 	
 		//Now the friendslist matching
-		for(var i in this.friendList){
+		for(i in this.friendList){
 
 			if(!this.friendList[i].done){
 				this.matchingInProgress = true;

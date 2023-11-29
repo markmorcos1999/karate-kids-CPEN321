@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 
 //Moved to a secure location, cannot be accessed without higher privileges.
-const serviceAccount = require(`${process.env.FIREBASE_ACCOUNT_KEY_PATH}`);
+const serviceAccount = require(process.env.FIREBASE_ACCOUNT_KEY_PATH);
 
 class FCMNotifier {
     // ChatGPT usage: Partial
