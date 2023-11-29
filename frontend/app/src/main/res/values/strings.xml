@@ -82,4 +82,5 @@
     <string name="friend_game_st">Start Game</string>
     <string name="select_friend_instruction_st">Click on a Friend From the List Above to Start a Game</string>
     <string name="click_friend_id_st">0000000</string>
+    <string name="quit_game_st">Quit Game</string>
 </resources>

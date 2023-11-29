@@ -12,9 +12,11 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
@@ -51,6 +53,15 @@ public class InGameActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
 
         //TODO: use server to randomly get pages
+
+        Button quit_game = (Button) findViewById(R.id.quit_game_bt);
+
+        quit_game.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                endGame(InGameActivity.this);
+            }
+        });
 
         //TODO: replace with the randomly determined destination page
         TextView destination = (TextView)  findViewById(R.id.destination_page);
@@ -93,6 +104,8 @@ public class InGameActivity extends AppCompatActivity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+            web.loadUrl("javascript:(function() { " +
+                    "document.getElementsByClassName ('header-container header-chrome')[0].style.display='none';" +"})()");
         }
 
         //ChatGPT usage: No
