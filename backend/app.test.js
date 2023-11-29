@@ -384,10 +384,11 @@ describe("Testing game requests", () => {
         var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
         var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
 		
-		const [response, r2] = await Promise.all([promise1, promise2]);
+		const [response, response2] = await Promise.all([promise1, promise2]);
 		const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
+        expect(response.body).toEqual(response2.body);
 		expect(responsePages).toContain(mockPages[0].url);
         expect(responsePages).toContain(mockPages[1].url);
 		
