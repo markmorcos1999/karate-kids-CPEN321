@@ -114,7 +114,7 @@ class MatchMaker {
 		}
 		
 		//timeout for the normal players
-		for (i = 0; i < this.waitingPlayers.length; i++) {
+		for (var i = 0; i < this.waitingPlayers.length; i++) {
 			const curPlayer = this.waitingPlayers[i];
 
 			if (Date.now() - curPlayer.waitStartTime >= MAX_WAIT_TIME) {

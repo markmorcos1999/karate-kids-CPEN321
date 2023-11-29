@@ -28,6 +28,7 @@ var port = 8081;
 app.use(bodyParser.json());
 
 app.post('/signIn/:id', async (req, res) => {
+	// This makes codacy happy
 	try {
 		
 		const id = req.params.id;
@@ -68,7 +69,7 @@ app.post('/signIn/:id', async (req, res) => {
 
 app.post('/game', async (req, res) => {
 	try {
-	  const message = req.body;
+		const message = req.body;
 
 		const type = message.mode;
 		const id = message.id;

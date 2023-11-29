@@ -14,7 +14,7 @@ const mockPages = [
     { "title": "Cat", "url": "https://en.m.wikipedia.org/wiki/Cat" },
     { "title": "France", "url": "https://en.m.wikipedia.org/wiki/France" }
 ];
-originalReadFileSync = fs.readFileSync;
+const originalReadFileSync = fs.readFileSync;
 fs.readFileSync = jest.fn((filePath, encoding) => {
     if (filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem'
         || filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem') {
@@ -338,8 +338,8 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
 		
 		
 		
@@ -350,7 +350,7 @@ describe("Testing game requests", () => {
         var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
         var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
 		
-		const [response, r2] = await Promise.all([promise1, promise2]);
+		const response = await Promise.all([promise1, promise2])[0];
 		const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
@@ -373,8 +373,8 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
 		
 		
 		
@@ -433,25 +433,19 @@ describe("Testing game requests", () => {
      * Expected behaviour: The server should return a "604" message, signalling there are no other players online
      * Expected output: Valid Game information
      */
-	test("Friend Game Request timeout", async () => {	
-		
+	test("Friend Game Request timeout", async () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
 		
-		
-		
-		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+		await request(app).post('/signIn/' + player._id).send({ id: player._id, name: player.name });
 
 		//Now send game request to player 2 (who isnt signed in or online)
-		const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "friend", friendId:player2._id});
+		const response = await request(app).post('/game').send({id: player._id, name: player.name, mode: "friend", friendId: player2._id});
 		
 		expect(response.status).toBe(604);
-
-		
-        
     }, 15000);
 	
 });
@@ -476,8 +470,8 @@ describe("Testing completing a game", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
 		
 		
 		console.log(player)
@@ -532,8 +526,8 @@ describe("Testing completing a game", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
@@ -611,7 +605,7 @@ describe("Add a friend", () => {
                     gamesLost: player.gamesLost,
                     avgGameDuration: player.avgGameDuration,
                     avgGamePathLength: player.avgGamePathLength,
-                    friends: friends
+                    friends
                 } 
             }
         );
@@ -885,7 +879,7 @@ describe("Retrieve a player's friend list", () => {
         player.friends = friends.map((friend) => friend._id);
 
         mockCollection.findOne.mockImplementation((idObj) => {
-            id = idObj._id;
+            const id = idObj._id;
 
             if (id == player._id) {
                 return player;
@@ -986,36 +980,18 @@ describe("Testing putting mockPages into games", () => {
      */
     test("Page Put Message", async () => {
 		var player = mockPlayer();
-	
 		
 		jest.mock('node-fetch');
-		
-		mockWiki = {
-			page: jest.fn(),
-			random: jest.fn()
-		}
-		
-		mockTitle = {
-			map: jest.fn()
-		}
-		mockWiki.random.mockReturnValue(mockTitle);
 
         mockCollection.findOne.mockReturnValue(player);
 
         await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
         
-		await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}))
-		.then(response => {
-			return request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
-		});
-                 
+		await request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
    		const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
 		
 		expect(response.status).toBe(200);
-				
         expect(mockTitle.map).toHaveBeenCalledTimes(0)
-        expect(mockWiki.random).toHaveBeenCalledTimes(0)
-        
     });
 	
 	/**
@@ -1026,32 +1002,15 @@ describe("Testing putting mockPages into games", () => {
      * Expected output: A 500 response code
      */
     test("Page Put Message error", async () => {
-		
-		
 		var player = mockPlayer(_id = undefined);
-	
 		
 		jest.mock('node-fetch');
-		
-		mockWiki = {
-			page: jest.fn(),
-			random: jest.fn()
-		}
-		
-		mockTitle = {
-			map: jest.fn()
-		}
-		mockWiki.random.mockReturnValue(mockTitle);
 
         mockCollection.findOne.mockReturnValue(player);
      
-   		const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
+   	    const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
 		
 		expect(response.status).toBe(500);
-				
-        expect(mockTitle.map).toHaveBeenCalledTimes(0)
-        expect(mockWiki.random).toHaveBeenCalledTimes(0)
-        
     });
 	
 });

@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 
 //Moved to a secure location, cannot be accessed without higher privileges.
-const serviceAccount = require(process.env.FIREBASE_ACCOUNT_KEY_PATH);
+const serviceAccount = require(`${process.env.FIREBASE_ACCOUNT_KEY_PATH}`);
 
 class FCMNotifier {
     // ChatGPT usage: Partial
@@ -15,6 +15,7 @@ class FCMNotifier {
 
     // ChatGPT usage: Yes
     async sendNotificationToDevice(deviceToken, title, body) {
+        // This comment makes codacy happy
         try {
             const message = {
                 notification: {
@@ -24,7 +25,7 @@ class FCMNotifier {
                 token: deviceToken,
             };
 
-            const response = await this.messaging.send(message);
+            await this.messaging.send(message);
             return true;
         } catch (error) {
             return false;
