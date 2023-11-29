@@ -62,6 +62,10 @@ module.exports = class GameManager{
 	}
 	//ChatGPT usage: No
 	completeGame(playerOrder, gaveUp, sessionId){
+		
+		if(playerOrder.length < 1){
+			return
+		}
 		//Insert real elo logic here
 		playerOrder[0].elo += playerOrder.length
 		playerOrder[0].gamesWon += 1;
