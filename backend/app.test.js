@@ -27,7 +27,8 @@ fs.readFileSync = jest.fn((filePath, encoding) => {
         return JSON.stringify(mockPages);
     }
     
-    return originalReadSync(filePath, encoding);
+    const readSync = originalReadSync;
+    return readSync(filePath, encoding);
 });
 
 jest.mock('mongodb');
