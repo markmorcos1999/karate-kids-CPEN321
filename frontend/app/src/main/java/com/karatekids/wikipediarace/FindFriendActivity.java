@@ -150,8 +150,12 @@ public class FindFriendActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.clicked_friend_id_tv)).setText(selectedFriendId);
                 ((Button) findViewById(R.id.friend_game_bt)).setEnabled(true);
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                jsonException();
             }
         }
+    }
+
+    public void jsonException() throws RuntimeException {
+        throw new RuntimeException();
     }
 }

@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -164,9 +163,7 @@ public final class Networker {
             //ChatGPT usage: No
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.addFriend(name, id, friendId));
-
-                //What to do after a post? status code returned?
+                executePost(URL, NetworkMessage.addFriend(name, id, friendId));
             }
         });
 
@@ -181,9 +178,7 @@ public final class Networker {
             //ChatGPT usage: No
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.removeFriend(name, id, friendId));
-
-                //What to do after a post? status code returned?
+                executePost(URL, NetworkMessage.removeFriend(name, id, friendId));
             }
         });
 
