@@ -14,7 +14,7 @@ const mockPages = [
     { "title": "Cat", "url": "https://en.m.wikipedia.org/wiki/Cat" },
     { "title": "France", "url": "https://en.m.wikipedia.org/wiki/France" }
 ];
-const originalReadSync = fs.readFileSync;
+const originalReadFileSync = fs.readFileSync;
 fs.readFileSync = jest.fn((filePath, encoding) => {
     if (filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem'
         || filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem') {
@@ -23,12 +23,11 @@ fs.readFileSync = jest.fn((filePath, encoding) => {
     else if (filePath === './service-account-key.json') {
         return '{}'
     }
-    else if (filePath == 'pages.json') {
+    else if (filePath === 'pages.json') {
         return JSON.stringify(mockPages);
     }
     
-    const readSync = originalReadSync;
-    return readSync(filePath, encoding);
+    originalReadFileSync(filePath, encoding);
 });
 
 jest.mock('mongodb');
