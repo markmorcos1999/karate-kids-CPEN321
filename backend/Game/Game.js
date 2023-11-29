@@ -33,7 +33,7 @@ module.exports = class Game{
 					
 					
 							
-					if(this.finishOrder.length == 0){
+					if(this.finishOrder.length === 0){
 						this.manager.sendLoss(this.players, id)
 					}
 					this.finishOrder.push(pl);

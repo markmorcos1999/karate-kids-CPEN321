@@ -14,14 +14,16 @@ const mockPages = [
     { "title": "Cat", "url": "https://en.m.wikipedia.org/wiki/Cat" },
     { "title": "France", "url": "https://en.m.wikipedia.org/wiki/France" }
 ];
-
-originalReadFileSync = fs.readFileSync;
+const originalReadFileSync = fs.readFileSync;
 fs.readFileSync = jest.fn((filePath, encoding) => {
     if (filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem'
         || filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem') {
         return '';
     }
-    else if (filePath == 'pages.json') {
+    else if (filePath === './service-account-key.json') {
+        return '{}'
+    }
+    else if (filePath === 'pages.json') {
         return JSON.stringify(mockPages);
     }
     
@@ -271,8 +273,7 @@ describe("Testing game requests", () => {
         const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
-		expect(responsePages).toContain(mockPages[0].url);
-        expect(responsePages).toContain(mockPages[1].url);
+		expect(responsePages.sort()).toEqual([mockPages[0].url, mockPages[1].url]);
     });
 	
 	/** 
@@ -323,8 +324,6 @@ describe("Testing game requests", () => {
 		expect(response.status).toBe(200);
 		expect(response.body.startPage).toBe(mockPages[0].url);
 		expect(response.body.endPage).toBe(mockPages[1].url);
-		
-         
     });
 	
     /**
@@ -339,8 +338,8 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
 		
 		
 		
@@ -351,12 +350,12 @@ describe("Testing game requests", () => {
         var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
         var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
 		
-		const [response, r2] = await Promise.all([promise1, promise2]);
+		const [response, response2] = await Promise.all([promise1, promise2]);
 		const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
-		expect(responsePages).toContain(mockPages[0].url);
-        expect(responsePages).toContain(mockPages[1].url);
+        expect(response.body).toEqual(response2.body);
+		expect(responsePages.sort()).toEqual([mockPages[0].url, mockPages[1].url]);
 		
 		//Sleeping to let the player matching stop for the next test
         await sleep(1000);
@@ -409,11 +408,8 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
-		
-		
-		
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
@@ -422,12 +418,12 @@ describe("Testing game requests", () => {
         var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "friend", friendId:player._id});
         var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "friend", friendId:player2._id});
 		
-		const [response, r2] = await Promise.all([promise1, promise2]);
+		const [response, response2] = await Promise.all([promise1, promise2]);
 		const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
-		expect(responsePages).toContain(mockPages[0].url);
-        expect(responsePages).toContain(mockPages[1].url);
+        expect(response.body).toEqual(response2.body);
+        expect(responsePages.sort()).toEqual([mockPages[0].url, mockPages[1].url]);
 		
         //Sleeping to let the player matching stop for the next test
         await sleep(1000);
@@ -437,7 +433,7 @@ describe("Testing game requests", () => {
 	/**
      * ChatGPT usage: No
      * Input: One Multi Game Request
-     * Expected status code: 200
+     * Expected status code: 604
      * Expected behaviour: The server should return a "604" message, signalling there are no other players online
      * Expected output: Valid Game information
      */
@@ -446,9 +442,7 @@ describe("Testing game requests", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		
-		
+		const player = mockPlayer("Player1", "1000", 11);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 
@@ -470,25 +464,19 @@ describe("Testing game requests", () => {
      * Expected behaviour: The server should return a "604" message, signalling there are no other players online
      * Expected output: Valid Game information
      */
-	test("Friend Game Request timeout", async () => {	
-		
+	test("Friend Game Request timeout", async () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
 		
-		
-		
-		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+		await request(app).post('/signIn/' + player._id).send({ id: player._id, name: player.name });
 
 		//Now send game request to player 2 (who isnt signed in or online)
-		const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "friend", friendId:player2._id});
+		const response = await request(app).post('/game').send({id: player._id, name: player.name, mode: "friend", friendId: player2._id});
 		
 		expect(response.status).toBe(604);
-
-		
-        
     }, 15000);
 	
 	
@@ -515,9 +503,9 @@ describe("Testing completing a game", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
-		
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
+
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
 		
@@ -564,8 +552,8 @@ describe("Testing completing a game", () => {
 		mockCollection.findOne.mockReturnValue(null);
 		
 		//First, sign player in
-		player = mockPlayer("Player1", "1000", 11);	
-		player2 = mockPlayer("Player2", "2000", 12);
+		const player = mockPlayer("Player1", "1000", 11);	
+		const player2 = mockPlayer("Player2", "2000", 12);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
@@ -664,7 +652,7 @@ describe("Add a friend", () => {
                     gamesLost: player.gamesLost,
                     avgGameDuration: player.avgGameDuration,
                     avgGamePathLength: player.avgGamePathLength,
-                    friends: friends
+                    friends
                 } 
             }
         );
@@ -938,7 +926,7 @@ describe("Retrieve a player's friend list", () => {
         player.friends = friends.map((friend) => friend._id);
 
         mockCollection.findOne.mockImplementation((idObj) => {
-            id = idObj._id;
+            const id = idObj._id;
 
             if (id == player._id) {
                 return player;
@@ -1039,36 +1027,17 @@ describe("Testing putting mockPages into games", () => {
      */
     test("Page Put Message", async () => {
 		var player = mockPlayer();
-	
 		
 		jest.mock('node-fetch');
-		
-		mockWiki = {
-			page: jest.fn(),
-			random: jest.fn()
-		}
-		
-		mockTitle = {
-			map: jest.fn()
-		}
-		mockWiki.random.mockReturnValue(mockTitle);
 
         mockCollection.findOne.mockReturnValue(player);
 
         await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}));
-        
-		await request(app).post('/signIn/' + player._id).send(JSON.stringify({id:player._id, name:player.name}))
-		.then(response => {
-			return request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
-		});
-                 
-   		const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
+        await request(app).post('/game').send({id:player._id, name:player.name, mode: "single"});
+
+   		const response = await request(app).put('/game').send({ id: player._id, name: player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine" });
 		
 		expect(response.status).toBe(200);
-				
-        expect(mockTitle.map).toHaveBeenCalledTimes(0)
-        expect(mockWiki.random).toHaveBeenCalledTimes(0)
-        
     });
 	
 	/**
@@ -1079,32 +1048,15 @@ describe("Testing putting mockPages into games", () => {
      * Expected output: A 500 response code
      */
     test("Page Put Message error", async () => {
-		
-		
-		var player = mockPlayer(_id = undefined);
-	
+		var player = mockPlayer();
 		
 		jest.mock('node-fetch');
-		
-		mockWiki = {
-			page: jest.fn(),
-			random: jest.fn()
-		}
-		
-		mockTitle = {
-			map: jest.fn()
-		}
-		mockWiki.random.mockReturnValue(mockTitle);
 
         mockCollection.findOne.mockReturnValue(player);
      
-   		const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
+   	    const response = await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
 		
 		expect(response.status).toBe(500);
-				
-        expect(mockTitle.map).toHaveBeenCalledTimes(0)
-        expect(mockWiki.random).toHaveBeenCalledTimes(0)
-        
     });
 	
 });

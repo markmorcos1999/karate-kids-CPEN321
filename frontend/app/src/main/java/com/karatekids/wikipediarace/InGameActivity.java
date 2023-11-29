@@ -38,8 +38,6 @@ public class InGameActivity extends AppCompatActivity {
 
     private static Chronometer clock;
 
-    private MyWebClient c;
-
     private WebView web;
 
     //ChatGPT usage: No
@@ -68,7 +66,7 @@ public class InGameActivity extends AppCompatActivity {
         destination.append(" "+b.getString("end_page"));
 
         web = (WebView) findViewById(R.id.wikipedia_page_view);
-        c = new MyWebClient();
+        MyWebClient c = new MyWebClient();
         web.setWebViewClient(c);
         web.getSettings().setJavaScriptEnabled(true);
         web.loadUrl(b.getString("start_url"));

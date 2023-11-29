@@ -1,7 +1,5 @@
 package com.karatekids.wikipediarace;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,7 +7,6 @@ import org.json.JSONObject;
 //I don't know why I did this the hard way. @TODO
 public final class NetworkMessage {
 
-    private static JSONObject message;
     private static JSONObject data;
 
     //ChatGPT usage: No
