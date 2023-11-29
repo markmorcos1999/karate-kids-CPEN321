@@ -12,8 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.MissingResourceException;
-
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
@@ -87,7 +85,7 @@ public class FindFriendActivity extends AppCompatActivity {
                             try {
                                 Thread.sleep(2000);
                             } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
                             }
                             count++;
                         }
@@ -105,7 +103,7 @@ public class FindFriendActivity extends AppCompatActivity {
 
                         tableView.setDataAdapter(new SimpleTableDataAdapter(FindFriendActivity.this, friendsData));
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                 }
             }
