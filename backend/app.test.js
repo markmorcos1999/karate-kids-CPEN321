@@ -270,8 +270,7 @@ describe("Testing game requests", () => {
         const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
-		expect(responsePages).toContain(mockPages[0].url);
-        expect(responsePages).toContain(mockPages[1].url);
+		expect(responsePages.sort()).toEqual([mockPages[0].url, mockPages[1].url]);
     });
 	
 	/** 
@@ -322,8 +321,6 @@ describe("Testing game requests", () => {
 		expect(response.status).toBe(200);
 		expect(response.body.startPage).toBe(mockPages[0].url);
 		expect(response.body.endPage).toBe(mockPages[1].url);
-		
-         
     });
 	
     /**
@@ -350,12 +347,12 @@ describe("Testing game requests", () => {
         var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "multi"});
         var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
 		
-		const response = await Promise.all([promise1, promise2])[0];
+		const [response, response2] = await Promise.all([promise1, promise2]);
 		const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
-		expect(responsePages).toContain(mockPages[0].url);
-        expect(responsePages).toContain(mockPages[1].url);
+        expect(response.body).toEqual(response2.body);
+		expect(responsePages.sort()).toEqual([mockPages[0].url, mockPages[1].url]);
 		
 		//Sleeping to let the player matching stop for the next test
         await sleep(1000);
@@ -376,9 +373,6 @@ describe("Testing game requests", () => {
 		const player = mockPlayer("Player1", "1000", 11);	
 		const player2 = mockPlayer("Player2", "2000", 12);
 		
-		
-		
-		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
 
@@ -386,12 +380,12 @@ describe("Testing game requests", () => {
         var promise1 = request(app).post('/game').send({id:player2._id, name:player2.name, mode: "friend", friendId:player._id});
         var promise2 = request(app).post('/game').send({id:player._id, name:player.name, mode: "friend", friendId:player2._id});
 		
-		const response = await Promise.all([promise1, promise2])[0];
+		const [response, response2] = await Promise.all([promise1, promise2]);
 		const responsePages = [response.body.startPage, response.body.endPage]
 		
 		expect(response.status).toBe(200);
-		expect(responsePages).toContain(mockPages[0].url);
-        expect(responsePages).toContain(mockPages[1].url);
+        expect(response.body).toEqual(response2.body);
+        expect(responsePages.sort()).toEqual([mockPages[0].url, mockPages[1].url]);
 		
         //Sleeping to let the player matching stop for the next test
         await sleep(1000);
@@ -469,10 +463,7 @@ describe("Testing completing a game", () => {
 		//First, sign player in
 		const player = mockPlayer("Player1", "1000", 11);	
 		const player2 = mockPlayer("Player2", "2000", 12);
-		
-		
-		console.log(player)
-		console.log(player2)
+
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
 		
@@ -495,10 +486,6 @@ describe("Testing completing a game", () => {
 		const response2 = await request(app).get('/game/' + player2._id);
 		
 		expect(response.status).toBe(200);
-		console.log("In test")
-		console.log(response2.body)
-		
-		console.log(response2.body.gamePosition)
 		
 		expect(mockMessenger.send).toHaveBeenCalled();
 		expect(response.body.gamePosition).toBe(JSON.stringify(1));
