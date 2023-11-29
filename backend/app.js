@@ -29,7 +29,8 @@ app.use(bodyParser.json());
 
 app.post('/signIn/:id', async (req, res) => {
 	
-	
+	console.log(req.params.id)
+	console.log(req.body)
 	try {
 		
 		const id = req.params.id;
@@ -51,7 +52,8 @@ app.post('/signIn/:id', async (req, res) => {
 				name: message.name, 
 				elo: 0, 
 				gamesWon: 0, 
-				gamesLost: 0
+				gamesLost: 0,
+				friends: []
 			};
 			
 		}
@@ -132,17 +134,18 @@ app.put('/game', async (req, res) => {
 		gameManager.checkForPlayer(message.id)			
 		if (gameManager.playerPagePost(message)) {
 			//Later, here verify player actually wins
-			//var result = gameManager.playerEndGame(message.id);
-			res.send(200);
+			var result = gameManager.playerEndGame(message.id);
+			res.status(200);
+			res.send(result);
 		}
 		else {
 			res.status(200);
-			res.send();
+			res.send({done: false});
 		}
 	}
 	catch {
 		res.status(500);
-		res.send();
+		res.send(req.body);
 		
 	}
 });

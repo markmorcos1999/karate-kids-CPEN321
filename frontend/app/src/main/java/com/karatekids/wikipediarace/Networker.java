@@ -114,12 +114,21 @@ public final class Networker {
     }
     //ChatGPT usage: No
     //Call this any time
-    public static void sendPage(String url){
+    public static void sendPage(String url, Context context){
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                executePost(URL, NetworkMessage.pagePost(name, id, url));
+                String ret = executePost(URL, NetworkMessage.pagePost(name, id, url));
+                try {
+                    JSONObject response = new JSONObject(ret);
+                    if(response.getBoolean("done")){
+                        InGameActivity.updateResults(context, ret);
+                    }
+                }
+                catch (Throwable t){
+
+                }
                 //What to do after a post? status code returned?
             }
         });
