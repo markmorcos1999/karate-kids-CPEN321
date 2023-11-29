@@ -39,7 +39,8 @@ app.post('/signIn/:id', async (req, res) => {
     
 		if(playerExists) {
 			player = await playerManager.getPlayerInfo(id);			
-		} else {
+		} 
+		else {
 			playerManager.createNewPlayer(id, message.name);
 			player = {
 				_id: id, 
