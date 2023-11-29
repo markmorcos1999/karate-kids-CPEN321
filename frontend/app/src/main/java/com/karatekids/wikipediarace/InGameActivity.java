@@ -38,8 +38,6 @@ public class InGameActivity extends AppCompatActivity {
 
     private static Chronometer clock;
 
-    private MyWebClient c;
-
     private WebView web;
 
     //ChatGPT usage: No
@@ -68,9 +66,10 @@ public class InGameActivity extends AppCompatActivity {
         destination.append(" "+b.getString("end_page"));
 
         web = (WebView) findViewById(R.id.wikipedia_page_view);
-        c = new MyWebClient();
+        MyWebClient c = new MyWebClient();
         web.setWebViewClient(c);
         web.getSettings().setJavaScriptEnabled(true);
+        web.setVisibility(View.INVISIBLE);
         web.loadUrl(b.getString("start_url"));
 
         count = -1;
@@ -120,9 +119,9 @@ public class InGameActivity extends AppCompatActivity {
                     return true;
                 }
                 Log.d(TAG, "URL host: " + request.getUrl());
-                Networker.sendPage(String.valueOf(request.getUrl()));
-                view.loadUrl(String.valueOf(request.getUrl()));
-            }
+                Networker.sendPage(String.valueOf(request.getUrl()), InGameActivity.this);
+                view.setVisibility(View.INVISIBLE);
+                view.loadUrl(String.valueOf(request.getUrl()));}
             return true;
         }
 
@@ -140,9 +139,17 @@ public class InGameActivity extends AppCompatActivity {
             //check if user reaches destination page
             //TODO: change this to take the destination page given from the server
             if(url.equals(b.getString("end_url"))){
-                clock.stop();
-                endGame(InGameActivity.this);
             }
+        }
+
+        //ChatGPT usage: No
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            view.loadUrl("javascript:(function(){" +
+                    "$('.header-container.header-chrome').remove();" +
+                    "})()");
+            super.onPageFinished(view, url);
+            view.setVisibility(View.VISIBLE);
         }
     }
 
@@ -153,6 +160,7 @@ public class InGameActivity extends AppCompatActivity {
 
     //ChatGPT usage: No
     public static void updateResults(Context context, String data){
+        clock.stop();
         Intent resultIntent = new Intent(context, ResultsActivity.class)
                 .putExtra("count", count)
                 .putExtra("time", clock.getText().toString())
@@ -171,6 +179,7 @@ public class InGameActivity extends AppCompatActivity {
         if(lastVisitedPages.size()>1) {
             lastVisitedPages.pop();
             String s = lastVisitedPages.pop();
+            web.setVisibility(View.INVISIBLE);
             web.loadUrl(s);
         }
         else {

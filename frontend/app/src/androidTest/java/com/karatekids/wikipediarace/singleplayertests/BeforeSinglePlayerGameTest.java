@@ -1,10 +1,8 @@
-package com.karatekids.wikipediarace.SinglePlayerTests;
+package com.karatekids.wikipediarace.singleplayertests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -13,12 +11,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.view.View;
 
-import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.karatekids.wikipediarace.InGameActivity;
 import com.karatekids.wikipediarace.MobileViewMatchers;
 import com.karatekids.wikipediarace.R;
 import com.karatekids.wikipediarace.SignInActivity;
@@ -63,7 +59,7 @@ public class BeforeSinglePlayerGameTest {
         onView(withText("Join a Single Player Game")).perform(click());
 
         //check loading animation is visible
-        onView(ViewMatchers.withId(R.id.loading_pb))
+        onView(withId(R.id.loading_pb))
                 .check(matches(isDisplayed()))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         onView(withText("Finding Start and End Pages...")).check(matches(isDisplayed()));

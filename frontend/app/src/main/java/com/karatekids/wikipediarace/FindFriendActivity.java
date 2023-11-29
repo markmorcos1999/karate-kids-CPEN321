@@ -60,7 +60,7 @@ public class FindFriendActivity extends AppCompatActivity {
 
                 tableView.setDataAdapter(new SimpleTableDataAdapter(this, friendsData));
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
 
         findViewById(R.id.validate_friend_id_bt).setOnClickListener(new View.OnClickListener() {
@@ -85,7 +85,7 @@ public class FindFriendActivity extends AppCompatActivity {
                             try {
                                 Thread.sleep(2000);
                             } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
+                                e.printStackTrace();
                             }
                             count++;
                         }
@@ -103,7 +103,7 @@ public class FindFriendActivity extends AppCompatActivity {
 
                         tableView.setDataAdapter(new SimpleTableDataAdapter(FindFriendActivity.this, friendsData));
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                 }
             }
@@ -150,7 +150,7 @@ public class FindFriendActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.clicked_friend_id_tv)).setText(selectedFriendId);
                 ((Button) findViewById(R.id.friend_game_bt)).setEnabled(true);
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }

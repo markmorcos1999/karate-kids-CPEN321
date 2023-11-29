@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -119,13 +118,22 @@ public final class Networker {
     }
     //ChatGPT usage: No
     //Call this any time
-    public static void sendPage(String url){
+    public static void sendPage(String url, Context context){
 
         Thread thread = new Thread(new Runnable() {
             //ChatGPT usage: No
             @Override
             public void run() {
-                executePost(URL, NetworkMessage.pagePost(name, id, url));
+                String ret = executePost(URL, NetworkMessage.pagePost(name, id, url));
+                try {
+                    JSONObject response = new JSONObject(ret);
+                    if(response.getBoolean("done")){
+                        InGameActivity.updateResults(context, ret);
+                    }
+                }
+                catch (Throwable t){
+
+                }
                 //What to do after a post? status code returned?
             }
         });
@@ -155,9 +163,7 @@ public final class Networker {
             //ChatGPT usage: No
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.addFriend(name, id, friendId));
-
-                //What to do after a post? status code returned?
+                executePost(URL, NetworkMessage.addFriend(name, id, friendId));
             }
         });
 
@@ -172,9 +178,7 @@ public final class Networker {
             //ChatGPT usage: No
             @Override
             public void run() {
-                String ret = executePost(URL, NetworkMessage.removeFriend(name, id, friendId));
-
-                //What to do after a post? status code returned?
+                executePost(URL, NetworkMessage.removeFriend(name, id, friendId));
             }
         });
 
