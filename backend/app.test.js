@@ -14,6 +14,7 @@ const mockPages = [
     { "title": "Cat", "url": "https://en.m.wikipedia.org/wiki/Cat" },
     { "title": "France", "url": "https://en.m.wikipedia.org/wiki/France" }
 ];
+
 originalReadFileSync = fs.readFileSync;
 fs.readFileSync = jest.fn((filePath, encoding) => {
     if (filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/privkey.pem'
@@ -493,11 +494,11 @@ describe("Testing completing a game", () => {
 		await Promise.all([promise1, promise2]);
 
 
-		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
-		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexico"});
+		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Cat"});
+		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/France"});
 
-		await request(app).put('/game').send({id:player2._id, name:player2.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
-		await request(app).put('/game').send({id:player2._id, name:player2.name, URL: "https://en.m.wikipedia.org/wiki/Mexico"});
+		await request(app).put('/game').send({id:player2._id, name:player2.name, URL: "https://en.m.wikipedia.org/wiki/France"});
+		await request(app).put('/game').send({id:player2._id, name:player2.name, URL: "https://en.m.wikipedia.org/wiki/Cat"});
 
 
         const response = await request(app).get('/game/' + player._id);
@@ -547,8 +548,8 @@ describe("Testing completing a game", () => {
 
 	
 
-		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexican_cuisine"});
-		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Mexico"});
+		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/France"});
+		await request(app).put('/game').send({id:player._id, name:player.name, URL: "https://en.m.wikipedia.org/wiki/Cat"});
 
         const response = await request(app).get('/game/' + player._id);
 		const response2 = await request(app).get('/game/' + player2._id);
