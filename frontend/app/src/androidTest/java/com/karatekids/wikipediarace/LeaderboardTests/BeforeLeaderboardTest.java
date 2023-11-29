@@ -1,4 +1,4 @@
-package com.karatekids.wikipediarace.LeaderboardTests;
+package com.karatekids.wikipediarace.leaderboardtests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -8,12 +8,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isNotClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.karatekids.wikipediarace.LeaderboardActivity;
 import com.karatekids.wikipediarace.SignInActivity;
 
 import org.junit.Rule;

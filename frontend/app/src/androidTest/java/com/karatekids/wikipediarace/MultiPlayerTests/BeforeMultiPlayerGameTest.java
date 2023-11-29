@@ -1,4 +1,4 @@
-package com.karatekids.wikipediarace.MultiPlayerTests;
+package com.karatekids.wikipediarace.multiplayertests;
 
 //ChatGPT usage: No
 
@@ -77,7 +77,7 @@ public class BeforeMultiPlayerGameTest {
         onView(withText("Join a Multi Player Game")).perform(click());
 
         //check loading animation is visible
-        onView(ViewMatchers.withId(R.id.loading_pb))
+        onView(withId(R.id.loading_pb))
                 .check(matches(isDisplayed()))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 

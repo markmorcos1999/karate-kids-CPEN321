@@ -6,7 +6,6 @@ import android.view.WindowManager;
 import androidx.test.espresso.Root;
 
 import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 //ChatGPT usage: No

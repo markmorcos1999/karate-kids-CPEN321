@@ -1,4 +1,4 @@
-package com.karatekids.wikipediarace.MultiPlayerTests;
+package com.karatekids.wikipediarace.multiplayertests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -10,7 +10,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.content.Intent;
 import android.view.View;
 
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -26,8 +25,6 @@ import org.junit.runner.RunWith;
 
 import com.karatekids.wikipediarace.MobileViewMatchers;
 import com.karatekids.wikipediarace.SignInActivity;
-
-import java.util.ArrayList;
 
 @RunWith(AndroidJUnit4.class)
 public class CompleteGameTest {
@@ -101,7 +98,7 @@ public class CompleteGameTest {
         onView(withText("Join a Multi Player Game")).perform(click());
 
         //check loading animation is visible
-        onView(ViewMatchers.withId(R.id.loading_pb))
+        onView(withId(R.id.loading_pb))
                 .check(matches(isDisplayed()))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 

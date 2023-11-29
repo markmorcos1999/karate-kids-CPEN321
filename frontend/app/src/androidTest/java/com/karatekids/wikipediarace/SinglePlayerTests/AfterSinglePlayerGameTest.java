@@ -1,4 +1,4 @@
-package com.karatekids.wikipediarace.SinglePlayerTests;
+package com.karatekids.wikipediarace.singleplayertests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -14,7 +14,6 @@ import android.content.Intent;
 
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.karatekids.wikipediarace.MainActivity;
@@ -39,7 +38,7 @@ public class AfterSinglePlayerGameTest {
     @Test
     public void afterSinglePlayerTacoMexicoWithBack() throws JSONException {
         afterSinglePlayerGameTacoMexicoTestCase();
-        onView(ViewMatchers.withId(R.id.shortest_path_text))
+        onView(withId(R.id.shortest_path_text))
                 .perform(pressBack());
         intended(hasComponent(MainActivity.class.getName()));
     }
