@@ -66,7 +66,7 @@ class PlayerManager {
             { $set: updatedProperties } 
         );
 
-        return result && result.modifiedCount === 1;
+        return result;
     }
 }
 

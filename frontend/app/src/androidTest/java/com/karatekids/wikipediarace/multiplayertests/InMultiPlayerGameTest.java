@@ -1,4 +1,4 @@
-package com.karatekids.wikipediarace.MultiPlayerTests;
+package com.karatekids.wikipediarace.multiplayertests;
 
 
 import static androidx.test.espresso.Espresso.onView;
@@ -6,7 +6,6 @@ import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isNotClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -21,16 +20,13 @@ import static org.hamcrest.Matchers.containsString;
 
 import android.content.Intent;
 
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.web.webdriver.Locator;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.karatekids.wikipediarace.InGameActivity;
 import com.karatekids.wikipediarace.PlayGameActivity;
 import com.karatekids.wikipediarace.R;
-import com.karatekids.wikipediarace.ResultsActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -112,7 +108,7 @@ public class InMultiPlayerGameTest {
         }
 
         //check back button functionality
-        onView(ViewMatchers.withId(R.id.wikipedia_page_view))
+        onView(withId(R.id.wikipedia_page_view))
                 .perform(pressBack());
         onWebView()
                 .withElement(findElement(Locator.ID, "firstHeading"))

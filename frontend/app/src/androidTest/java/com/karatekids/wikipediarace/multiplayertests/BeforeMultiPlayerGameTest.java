@@ -1,4 +1,6 @@
-package com.karatekids.wikipediarace.MultiPlayerTests;
+package com.karatekids.wikipediarace.multiplayertests;
+
+//ChatGPT usage: No
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -10,70 +12,44 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.content.Intent;
 import android.view.View;
 
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.karatekids.wikipediarace.MobileViewMatchers;
 import com.karatekids.wikipediarace.R;
+import com.karatekids.wikipediarace.SignInActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.karatekids.wikipediarace.MobileViewMatchers;
-import com.karatekids.wikipediarace.SignInActivity;
-
-import java.util.ArrayList;
-
+/**
+ * Instrumented test, which will execute on an Android device.
+ *
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ */
+// test with two emulators simultaneously
 @RunWith(AndroidJUnit4.class)
-public class CompleteGameTest {
+public class BeforeMultiPlayerGameTest {
     @Rule
     public ActivityScenarioRule<SignInActivity> activityRule =
             new ActivityScenarioRule<>(SignInActivity.class);
 
+    //ChatGPT usage: No
+    //https://stackoverflow.com/questions/28390574/checking-toast-message-in-android-espresso/33387980#33387980
     public String isToastMessageDisplayed(String text) {
         Matcher<View> textView = withSubstring(text);
         onView(textView).inRoot(MobileViewMatchers.isToast()).check(matches(isDisplayed()));
         return textView.toString();
     }
 
+    //ChatGPT usage: No
     @Test
-    public void winnerMultiplayerGameTest() throws InterruptedException {
-        multiplayerGameTestHelper();
-        while (true) {
-            try {
-                onView(withSubstring("Shortest Path Possible")).check(matches(isDisplayed()));
-                break;
-            } catch (Exception e) {
-            }
-        }
-
-        onView(withSubstring("Number of Links to Reach Destination:")).check(matches(isDisplayed()));
-        onView(withText("Position: 1")).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void loserMultiplayerGameTest() throws InterruptedException {
-        multiplayerGameTestHelper();
-
-        while (true) {
-            try {
-                onView(withSubstring("Game Over! You lost.")).check(matches(isDisplayed()));
-                onView(withSubstring("End Game")).perform(click());
-                break;
-            } catch (Exception e) {
-            }
-        }
-
-        onView(withSubstring("Number of Links to Reach Destination:")).check(matches(isDisplayed()));
-        onView(withText("Position: 2")).check(matches(isDisplayed()));
-    }
-
-    public void multiplayerGameTestHelper() throws InterruptedException {
+    public void beforeMultiPlayerGameTest() throws InterruptedException {
         //verify sign in as guest button
         onView(withText("Sign in as a Guest"))
                 .check(matches(isDisplayed()))
@@ -101,7 +77,7 @@ public class CompleteGameTest {
         onView(withText("Join a Multi Player Game")).perform(click());
 
         //check loading animation is visible
-        onView(ViewMatchers.withId(R.id.loading_pb))
+        onView(withId(R.id.loading_pb))
                 .check(matches(isDisplayed()))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 

@@ -1,4 +1,4 @@
-package com.karatekids.wikipediarace.LeaderboardTests;
+package com.karatekids.wikipediarace.leaderboardtests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;

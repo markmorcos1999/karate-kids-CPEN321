@@ -1,8 +1,7 @@
-package com.karatekids.wikipediarace.SinglePlayerTests;
+package com.karatekids.wikipediarace.singleplayertests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.pressBack;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -10,7 +9,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.web.assertion.WebViewAssertions.webMatches;
-import static androidx.test.espresso.web.model.Atoms.getCurrentUrl;
 import static androidx.test.espresso.web.sugar.Web.onWebView;
 import static androidx.test.espresso.web.webdriver.DriverAtoms.findElement;
 import static androidx.test.espresso.web.webdriver.DriverAtoms.getText;
@@ -21,11 +19,9 @@ import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Intent;
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.web.webdriver.Locator;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -73,7 +69,6 @@ public class InSinglePlayerGameTest {
             {"Javier Díaz", "https://en.wikipedia.org/wiki/Javier_D%C3%ADaz_(swimmer)"},
             {"Hendrik Witbooi", "https://en.wikipedia.org/wiki/Hendrik_Witbooi"},
         };
-        ////*[@id="mw-content-text"]/div[1]/p[2]
         float [] pagesDelay = new float[pagesToVisit.length];
         float avg = 0;
         int aboveThresholdCount = 0;
@@ -111,7 +106,6 @@ public class InSinglePlayerGameTest {
             if(pagesDelay[i] > 2.5f) aboveThresholdCount++;
         }
 
-//        assertTrue((avg/20f) < 1f);
         assertTrue(aboveThresholdCount <= 1);
     }
 
@@ -153,7 +147,7 @@ public class InSinglePlayerGameTest {
                 .check(webMatches(getText(), containsString("Taco")));
 
         onWebView()
-                .withElement(findElement(Locator.CSS_SELECTOR, "a[href=\"/wiki/British_English\"]")) // similar to onView(withId(...))
+                .withElement(findElement(Locator.CSS_SELECTOR, "a[href=\"/wiki/British_English\"]"))
                 .perform(webClick());
 
         onWebView()
@@ -161,7 +155,7 @@ public class InSinglePlayerGameTest {
                 .check(webMatches(getText(), containsString("British English")));
 
         onWebView()
-                .withElement(findElement(Locator.CSS_SELECTOR, "a[href=\"/wiki/English_language\"]")) // similar to onView(withId(...))
+                .withElement(findElement(Locator.CSS_SELECTOR, "a[href=\"/wiki/English_language\"]"))
                 .perform(webClick());
 
         onWebView()
@@ -194,7 +188,7 @@ public class InSinglePlayerGameTest {
         }
 
         //check back button functionality
-        onView(ViewMatchers.withId(R.id.wikipedia_page_view))
+        onView(withId(R.id.wikipedia_page_view))
                 .perform(pressBack());
         onWebView()
                 .withElement(findElement(Locator.ID, "firstHeading"))
