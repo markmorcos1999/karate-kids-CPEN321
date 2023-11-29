@@ -1,7 +1,8 @@
 const admin = require('firebase-admin');
+const fs = require('fs');
 
 //Moved to a secure location, cannot be accessed without higher privileges.
-const serviceAccount = require(process.env.FIREBASE_ACCOUNT_KEY_PATH);
+const serviceAccount = JSON.parse(fs.readFileSync('./service-account-key.json'));
 
 class FCMNotifier {
     // ChatGPT usage: Partial

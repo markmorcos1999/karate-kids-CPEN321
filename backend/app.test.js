@@ -20,6 +20,9 @@ fs.readFileSync = jest.fn((filePath, encoding) => {
         || filePath === '/etc/letsencrypt/live/milestone1.canadacentral.cloudapp.azure.com/fullchain.pem') {
         return '';
     }
+    else if (filePath === './service-account-key.json') {
+        return '{}'
+    }
     else if (filePath == 'pages.json') {
         return JSON.stringify(mockPages);
     }
