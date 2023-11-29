@@ -127,7 +127,7 @@ class MatchMaker {
 		
 	
 		//Now the friendslist matching
-		for(var i in this.friendList){
+		for(i in this.friendList){
 
 			if(!this.friendList[i].done){
 				this.matchingInProgress = true;

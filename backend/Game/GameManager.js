@@ -27,23 +27,20 @@ module.exports = class GameManager{
 	checkForPlayer(id){
 		
 		if(this.playerList[id]){
-		
 			return true
+		}
 
-		}
-		else{
-			var newPlayer = {
-				_id: id, 
-				name: "Guest", 
-				elo: 0, 
-				gamesWon: 0, 
-				gamesLost: 0
-			};
-			
-			this.playerList[id] = new Player(newPlayer, "")
-			
-			return true
-		}
+		const newPlayer = {
+			_id: id, 
+			name: "Guest", 
+			elo: 0, 
+			gamesWon: 0, 
+			gamesLost: 0
+		};
+		
+		this.playerList[id] = new Player(newPlayer, "")
+		
+		return true
 	}
 	//ChatGPT usage: No
 	playerFindGame(id){
@@ -136,7 +133,7 @@ module.exports = class GameManager{
 			id,
 			friendId,
 			done: false,
-			waitStartTime: waitStartTime
+			waitStartTime
 		};
 
 		player.matchPromise = new Promise(
