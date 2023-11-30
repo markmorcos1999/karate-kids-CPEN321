@@ -5,7 +5,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
@@ -36,7 +35,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.karatekids.wikipediarace.InGameActivity;
 import com.karatekids.wikipediarace.PlayGameActivity;
 import com.karatekids.wikipediarace.R;
-import com.karatekids.wikipediarace.ResultsActivity;
 import com.karatekids.wikipediarace.SignInActivity;
 
 import org.junit.Rule;
@@ -51,6 +49,10 @@ public class InSinglePlayerGameTest {
     @Rule
     public IntentsTestRule<InGameActivity> activityRule =
             new IntentsTestRule<>(InGameActivity.class, false, false);
+
+    @Rule
+    public ActivityScenarioRule<SignInActivity> signInActivityRule =
+            new ActivityScenarioRule<>(SignInActivity.class);
 
     //ChatGPT usage: No
     //https://newsletter.automationhacks.io/p/hello-espresso-part-5-automating
@@ -216,9 +218,6 @@ public class InSinglePlayerGameTest {
     }
 
 
-    @Rule
-    public ActivityScenarioRule<SignInActivity> signInActivityRule =
-            new ActivityScenarioRule<>(SignInActivity.class);
     //ChatGPT usage: No
     @Test
     public void inSinglePlayerGameTestQuit() throws InterruptedException {

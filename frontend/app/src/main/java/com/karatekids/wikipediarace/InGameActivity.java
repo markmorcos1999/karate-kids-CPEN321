@@ -128,6 +128,7 @@ public class InGameActivity extends AppCompatActivity {
         @Override
         public void onPageCommitVisible(WebView view, String url) {
             Networker.sendPage(url, InGameActivity.this);
+
             count++;
 
             Log.d(TAG, "The number of clicked links is: " + count);
