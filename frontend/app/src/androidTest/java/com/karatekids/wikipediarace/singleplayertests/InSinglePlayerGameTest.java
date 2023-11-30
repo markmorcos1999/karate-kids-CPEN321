@@ -268,6 +268,8 @@ public class InSinglePlayerGameTest {
                 .check(matches(isClickable()));
         onView(withText("Quit Game")).perform(click());
 
+        Thread.sleep(2000);
+
         //check that we move to the results activity and the return to main page button is displayed
         onView(withText("Return to Main Page")).perform(scrollTo()).check(matches(isDisplayed()));
     }
