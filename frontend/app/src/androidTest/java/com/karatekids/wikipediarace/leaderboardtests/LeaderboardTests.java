@@ -7,6 +7,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withChild;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Intent;
@@ -14,8 +16,10 @@ import android.content.Intent;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.karatekids.wikipediarace.LeaderboardActivity;
+import com.karatekids.wikipediarace.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -108,6 +112,9 @@ public class LeaderboardTests {
         // check that stats view of player has not been created in the view
         onView(withText("Number of Games Won:")).check(doesNotExist());
 
+        //check that the achievement badge does not exist
+        onView(withId(R.id.badge_iv)).check(doesNotExist());
+
         //check that the table has 3 columns
         ViewInteraction row = onView(withChild(withText("julian kennedy")));
         row.check(matches(hasChildCount(3)));
@@ -122,6 +129,10 @@ public class LeaderboardTests {
 
         // the statistics page for julian kennedy appears
         onView(withText("Number of Games Won:")).check(matches(isDisplayed()));
+        onView(withText("julian kennedy")).check(matches(isDisplayed()));
+
+        //check that the achievement badge is visible
+        onView(withId(R.id.badge_iv)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         // the rows of all the players do not exist with pop up
         onView(withText("Mark Morcos")).check(doesNotExist());

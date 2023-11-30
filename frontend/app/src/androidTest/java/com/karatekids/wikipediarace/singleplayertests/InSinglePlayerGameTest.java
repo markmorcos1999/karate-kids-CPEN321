@@ -1,12 +1,17 @@
 package com.karatekids.wikipediarace.singleplayertests;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.web.assertion.WebViewAssertions.webMatches;
 import static androidx.test.espresso.web.sugar.Web.onWebView;
@@ -22,12 +27,16 @@ import android.content.Intent;
 import android.util.Log;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.espresso.web.webdriver.Locator;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.karatekids.wikipediarace.InGameActivity;
 import com.karatekids.wikipediarace.PlayGameActivity;
 import com.karatekids.wikipediarace.R;
+import com.karatekids.wikipediarace.ResultsActivity;
+import com.karatekids.wikipediarace.SignInActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -203,5 +212,63 @@ public class InSinglePlayerGameTest {
         onView(withId(R.id.wikipedia_page_view))
                 .perform(pressBack());
         intended(hasComponent(PlayGameActivity.class.getName()));
+    }
+
+
+    @Rule
+    public ActivityScenarioRule<SignInActivity> signInActivityRule =
+            new ActivityScenarioRule<>(SignInActivity.class);
+    //ChatGPT usage: No
+    @Test
+    public void inSinglePlayerGameTestQuit() throws InterruptedException {
+        //sign in as a guest and check that the button is displayed and clickable
+        onView(withText("Sign in as a Guest")).check(matches(isDisplayed()));
+        onView(withText("Sign in as a Guest")).perform(click());
+
+        Thread.sleep(3000);
+
+        //check that the play a game button is displayed and clickable
+        onView(withText("Play a Game")).check(matches(isDisplayed()));
+        onView(withText("Play a Game")).perform(click());
+
+        //check that the join a single player game is displayed and clickable
+        onView(withText("Join a Single Player Game")).check(matches(isDisplayed()));
+        onView(withText("Join a Single Player Game")).perform(click());
+
+        //check loading animation is visible
+        onView(withId(R.id.loading_pb))
+                .check(matches(isDisplayed()))
+                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+        //check that the finding start and end pages string is displayed
+        onView(withText("Finding Start and End Pages...")).check(matches(isDisplayed()));
+
+
+        //wait until the destination page string is displayed (wait until the in game activity begins)
+        while (true) {
+            try {
+                onView(withSubstring("Destination Page: ")).perform().check(matches(isDisplayed()));
+                break;
+            } catch (Exception e) {
+            }
+        }
+
+        //check that the time is displayed
+        while (true) {
+            try {
+                onView(withText("00:07")).perform().check(matches(isDisplayed()));
+                break;
+            } catch (Exception e) {
+            }
+        }
+
+        //check that the quit game button exists and is clickable
+        onView(withText("Quit Game"))
+                .check(matches(isDisplayed()))
+                .check(matches(isClickable()));
+        onView(withText("Quit Game")).perform(click());
+
+        //check that we move to the results activity and the return to main page button is displayed
+        onView(withText("Return to Main Page")).check(matches(isDisplayed()));
     }
 }
