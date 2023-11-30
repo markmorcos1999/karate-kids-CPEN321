@@ -3,6 +3,7 @@ package com.karatekids.wikipediarace.singleplayertests;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressBack;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.init;
 import static androidx.test.espresso.intent.Intents.intended;
@@ -269,6 +270,6 @@ public class InSinglePlayerGameTest {
         onView(withText("Quit Game")).perform(click());
 
         //check that we move to the results activity and the return to main page button is displayed
-        onView(withText("Return to Main Page")).check(matches(isDisplayed()));
+        onView(withText("Return to Main Page")).perform(scrollTo()).check(matches(isDisplayed()));
     }
 }
