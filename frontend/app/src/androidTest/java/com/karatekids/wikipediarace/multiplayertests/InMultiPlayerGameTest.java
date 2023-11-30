@@ -46,6 +46,10 @@ public class InMultiPlayerGameTest {
     public IntentsTestRule<InGameActivity> activityRule =
             new IntentsTestRule<>(InGameActivity.class, false, false);
 
+    @Rule
+    public ActivityScenarioRule<SignInActivity> signInActivityRule =
+            new ActivityScenarioRule<>(SignInActivity.class);
+
     //ChatGPT usage: No
     @Test
     public void inMultiPlayerGameTestLeaveGame() throws InterruptedException {
@@ -132,10 +136,6 @@ public class InMultiPlayerGameTest {
                 .perform(pressBack());
         intended(hasComponent(PlayGameActivity.class.getName()));
     }
-
-    @Rule
-    public ActivityScenarioRule<SignInActivity> signInActivityRule =
-            new ActivityScenarioRule<>(SignInActivity.class);
 
     //ChatGPT usage: No
     //run with two emulators
