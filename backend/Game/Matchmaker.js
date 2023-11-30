@@ -121,7 +121,7 @@ class MatchMaker {
 		}
 		
 	
-		//Now the friendslist matching
+		//Now the friendslist timeout
 		for(i in this.friendList){
 
 			if(!this.friendList[i].done){
