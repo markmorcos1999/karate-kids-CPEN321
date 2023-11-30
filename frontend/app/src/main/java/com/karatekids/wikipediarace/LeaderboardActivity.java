@@ -128,8 +128,4 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         }
     }
-
-    public int getDrawableId(ImageView iv){
-        return (Integer) iv.getTag();
-    }
 }
