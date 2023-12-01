@@ -7,6 +7,6 @@ import org.hamcrest.Matcher;
 public class MobileViewMatchers {
     //ChatGPT usage: No
     public static Matcher<Root> isToast() {
-        return new ToastMatcher(); 
+        return new ToastMatcher();
     }
 }
