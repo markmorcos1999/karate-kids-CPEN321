@@ -89,6 +89,103 @@ public class LeaderboardTests {
     }
 
     //ChatGPT usage: No
+    public String mockElevenElementLeaderboard() throws JSONException {
+        // mock leaderboard with 11 players
+        JSONObject player1 = new JSONObject()
+                .put("_id",1)
+                .put("name","julian kennedy")
+                .put("elo", 10)
+                .put("gamesWon",5)
+                .put("gamesLost",1);
+
+        JSONObject player2 = new JSONObject()
+                .put("_id",2)
+                .put("name","Mark Morcos")
+                .put("elo", 5)
+                .put("gamesWon",2)
+                .put("gamesLost",0);
+
+        JSONObject player3 = new JSONObject()
+                .put("_id",3)
+                .put("name","Mark Mekhail")
+                .put("elo", 4)
+                .put("gamesWon",2)
+                .put("gamesLost",0);
+
+        JSONObject player4 = new JSONObject()
+                .put("_id",4)
+                .put("name","Kyle van Winkoop")
+                .put("elo", 4)
+                .put("gamesWon",2)
+                .put("gamesLost",2);
+
+        JSONObject player5 = new JSONObject()
+                .put("_id",5)
+                .put("name","Player 5")
+                .put("elo", 4)
+                .put("gamesWon",1)
+                .put("gamesLost",2);
+
+        JSONObject player6 = new JSONObject()
+                .put("_id",6)
+                .put("name","Player 6")
+                .put("elo", 3)
+                .put("gamesWon",2)
+                .put("gamesLost",2);
+
+        JSONObject player7 = new JSONObject()
+                .put("_id",7)
+                .put("name","Player 7")
+                .put("elo", 3)
+                .put("gamesWon",1)
+                .put("gamesLost",2);
+
+        JSONObject player8 = new JSONObject()
+                .put("_id",8)
+                .put("name","Player 8")
+                .put("elo", 2)
+                .put("gamesWon",2)
+                .put("gamesLost",2);
+
+        JSONObject player9 = new JSONObject()
+                .put("_id",9)
+                .put("name","Player 9")
+                .put("elo", 1)
+                .put("gamesWon",1)
+                .put("gamesLost",2);
+
+        JSONObject player10 = new JSONObject()
+                .put("_id",10)
+                .put("name","Player 10")
+                .put("elo", 0)
+                .put("gamesWon",0)
+                .put("gamesLost",2);
+
+        JSONObject player11 = new JSONObject()
+                .put("_id",11)
+                .put("name","Player 11")
+                .put("elo", 0)
+                .put("gamesWon",0)
+                .put("gamesLost",2);
+
+
+        JSONArray playerArray = new JSONArray();
+        playerArray.put(player1)
+                .put(player2)
+                .put(player3)
+                .put(player4)
+                .put(player5)
+                .put(player6)
+                .put(player7)
+                .put(player8)
+                .put(player9)
+                .put(player10)
+                .put(player11);
+
+        return playerArray.toString();
+    }
+
+    //ChatGPT usage: No
     @Test
     public void leaderboardViewTest() throws InterruptedException, JSONException {
         // start in the leaderboard activity
@@ -157,6 +254,28 @@ public class LeaderboardTests {
         onView(withChild(withChild(withText("Guest"))))
                 .check(matches(isClickable()))
                 .check(matches(hasChildCount(1)));
+    }
+
+    //ChatGPT usage: No
+    //maximum test as the maximum number of people in the leaderboard at one time is 10
+    @Test
+    public void leaderboardWithElevenElementsTest() throws JSONException {
+        // start in the leaderboard activity
+        Intent leaderboardTest = new Intent();
+        leaderboardTest
+                .putExtra("leaderboardData", mockElevenElementLeaderboard());
+        activityRule.launchActivity(leaderboardTest);
+
+        //check that Player 6 is displayed
+        onView(withText("Player 6")).check(matches(isDisplayed()));
+
+        //check that Player 11 is not displayed
+        onView(withText("Player 11")).check(doesNotExist());
+
+        //check that the table has 1 entry and it is clickable
+        onView(withChild(withChild(withText("Player 6"))))
+                .check(matches(isClickable()))
+                .check(matches(hasChildCount(10)));
     }
 
 

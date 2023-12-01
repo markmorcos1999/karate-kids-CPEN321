@@ -66,6 +66,7 @@ public class CompleteGameTest {
             }
         }
 
+        Thread.sleep(3000);
         onView(withSubstring("Number of Links to Reach Destination:")).check(matches(isDisplayed()));
         onView(withText("Position: 2")).check(matches(isDisplayed()));
     }
