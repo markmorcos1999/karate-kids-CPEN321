@@ -77,7 +77,7 @@ public class LeaderboardTests {
         // mock leaderboard with 1 player
         JSONObject player1 = new JSONObject()
                 .put("_id",1)
-                .put("name","Guest")
+                .put("name","julian kennedy")
                 .put("elo", 10)
                 .put("gamesWon",5)
                 .put("gamesLost",1);
@@ -247,13 +247,23 @@ public class LeaderboardTests {
                 .putExtra("leaderboardData", mockOneElementLeaderBoard());
         activityRule.launchActivity(leaderboardTest);
 
-        //check that player Guest is displayed
-        onView(withText("Guest")).check(matches(isDisplayed()));
+        //check that player julian kennedy is displayed
+        onView(withText("julian kennedy")).check(matches(isDisplayed()));
 
         //check that the table has 1 entry and it is clickable
-        onView(withChild(withChild(withText("Guest"))))
+        onView(withChild(withChild(withText("julian kennedy"))))
                 .check(matches(isClickable()))
                 .check(matches(hasChildCount(1)));
+
+        //click on the player julian kennedy
+        onView(withText("julian kennedy")).perform(ViewActions.click());
+
+        // the statistics page for julian kennedy appears
+        onView(withText("Number of Games Won:")).check(matches(isDisplayed()));
+        onView(withText("julian kennedy")).check(matches(isDisplayed()));
+
+        //check that the achievement badge is visible
+        onView(withId(R.id.badge_iv)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
     //ChatGPT usage: No
@@ -266,16 +276,37 @@ public class LeaderboardTests {
                 .putExtra("leaderboardData", mockElevenElementLeaderboard());
         activityRule.launchActivity(leaderboardTest);
 
-        //check that Player 6 is displayed
-        onView(withText("Player 6")).check(matches(isDisplayed()));
+        //check that julian kennedy is displayed
+        onView(withText("julian kennedy")).check(matches(isDisplayed()));
 
         //check that Player 11 is not displayed
         onView(withText("Player 11")).check(doesNotExist());
 
         //check that the table has 1 entry and it is clickable
-        onView(withChild(withChild(withText("Player 6"))))
+        onView(withChild(withChild(withText("julian kennedy"))))
                 .check(matches(isClickable()))
                 .check(matches(hasChildCount(10)));
+
+        //click on the player julian kennedy
+        onView(withText("julian kennedy")).perform(ViewActions.click());
+
+        // the statistics page for julian kennedy appears
+        onView(withText("Number of Games Won:")).check(matches(isDisplayed()));
+        onView(withText("julian kennedy")).check(matches(isDisplayed()));
+
+        //check that the achievement badge is visible
+        onView(withId(R.id.badge_iv)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+        // the rows of all the players do not exist with pop up
+        onView(withText("Mark Morcos")).check(doesNotExist());
+        onView(withText("Mark Mekhail")).check(doesNotExist());
+        onView(withText("Kyle van Winkoop")).check(doesNotExist());
+        onView(withText("Player 5")).check(doesNotExist());
+        onView(withText("Player 6")).check(doesNotExist());
+        onView(withText("Player 7")).check(doesNotExist());
+        onView(withText("Player 8")).check(doesNotExist());
+        onView(withText("Player 9")).check(doesNotExist());
+        onView(withText("Player 10")).check(doesNotExist());
     }
 
 
