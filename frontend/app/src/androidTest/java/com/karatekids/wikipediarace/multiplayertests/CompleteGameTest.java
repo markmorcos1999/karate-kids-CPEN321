@@ -2,6 +2,7 @@ package com.karatekids.wikipediarace.multiplayertests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -43,14 +44,15 @@ public class CompleteGameTest {
         multiplayerGameTestHelper();
         while (true) {
             try {
-                onView(withSubstring("Shortest Path Possible")).check(matches(isDisplayed()));
+                onView(withSubstring("Shortest Path Possible")).perform(scrollTo()).check(matches(isDisplayed()));
                 break;
             } catch (Exception e) {
+                Thread.sleep(1000);
             }
         }
 
-        onView(withSubstring("Number of Links to Reach Destination:")).check(matches(isDisplayed()));
-        onView(withText("Position: 1")).check(matches(isDisplayed()));
+        onView(withSubstring("Number of Links to Reach Destination")).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withText("Position: 1")).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
@@ -60,15 +62,18 @@ public class CompleteGameTest {
         while (true) {
             try {
                 onView(withSubstring("Game Over! You lost.")).check(matches(isDisplayed()));
-                onView(withSubstring("End Game")).perform(click());
                 break;
             } catch (Exception e) {
+                Thread.sleep(1000);
             }
         }
 
-        Thread.sleep(3000);
+        onView(withText("End Game")).perform(click());
+
+        Thread.sleep(2000);
+
         onView(withSubstring("Number of Links to Reach Destination:")).check(matches(isDisplayed()));
-        onView(withText("Position: 2")).check(matches(isDisplayed()));
+        onView(withText("Position: NA")).check(matches(isDisplayed()));
     }
 
     public void multiplayerGameTestHelper() throws InterruptedException {

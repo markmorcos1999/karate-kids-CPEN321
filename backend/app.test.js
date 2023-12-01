@@ -378,12 +378,9 @@ describe("Request a game from the server (the POST game interface)", () => {
 		const player2 = mockPlayer("Player2", "2000", 90);
 
         mockCollection.findOne.mockReturnValue(player);
-		
-		mockCollection.findOne.mockReturnValue(player);
+        mockCollection.findOne.mockReturnValue(player2);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
-		
-		mockCollection.findOne.mockReturnValue(player2);
 		await request(app).post('/signIn/' + player2._id).send({id:player2._id, name:player2.name});
 
 		//Now start game
@@ -452,14 +449,15 @@ describe("Request a game from the server (the POST game interface)", () => {
 		const player = mockPlayer("Player1", "1000", 11);
 		
 		await request(app).post('/signIn/' + player._id).send({id:player._id, name:player.name});
+        const requestTime = Date.now()
 
 		//Now send game request to player 2 (who isnt signed in or online)
 		const response = await request(app).post('/game').send({id:player._id, name:player.name, mode: "multi"});
-		
-		expect(response.status).toBe(604);
-
-		
         
+        // Test the NFR that matchmaking always complete or timeout within 8.25 seconds
+		expect(Date.now() - requestTime < 8250).toBe(true);
+
+		expect(response.status).toBe(604);
     }, 15000);
 	
 	
