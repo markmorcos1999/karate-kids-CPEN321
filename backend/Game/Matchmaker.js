@@ -1,7 +1,8 @@
 const ALLOWED_DIF_BASE = 50;
 const DIFF_TIME_MULTIPLIER_EXPONENT = 0.002;
 const MATCHING_INTERVAL = 500;
-const MAX_WAIT_TIME = 10000;
+const MAX_WAIT_TIME = 7000;
+const MAX_FRIEND_WAIT_TIME = 12000;
 
 class MatchMaker {
 	// ChatGPT usage: Partial
@@ -68,7 +69,6 @@ class MatchMaker {
 			
 		}
 
-		
 	}
 
 
@@ -127,7 +127,7 @@ class MatchMaker {
 			if(!this.friendList[i].done){
 				this.matchingInProgress = true;
 			}
-			if(Date.now() - this.friendList[i].waitStartTime >= MAX_WAIT_TIME && !this.friendList[i].done){
+			if(Date.now() - this.friendList[i].waitStartTime >= MAX_FRIEND_WAIT_TIME && !this.friendList[i].done){
 				this.friendList[i].done = true
 				
 				this.friendList[i].matchPromiseReject("604")
