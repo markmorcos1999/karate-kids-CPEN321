@@ -119,7 +119,6 @@ public class InGameActivity extends AppCompatActivity {
                     return true;
                 }
                 Log.d(TAG, "URL host: " + request.getUrl());
-                Networker.sendPage(String.valueOf(request.getUrl()), InGameActivity.this);
                 view.setVisibility(View.INVISIBLE);
                 view.loadUrl(String.valueOf(request.getUrl()));}
             return true;
@@ -128,6 +127,8 @@ public class InGameActivity extends AppCompatActivity {
         //ChatGPT usage: No
         @Override
         public void onPageCommitVisible(WebView view, String url) {
+            Networker.sendPage(url, InGameActivity.this);
+
             count++;
 
             Log.d(TAG, "The number of clicked links is: " + count);

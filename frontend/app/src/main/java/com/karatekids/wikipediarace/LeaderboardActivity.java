@@ -23,8 +23,8 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     public static String JSON_String = "";
 
-    private static final int SILVER_THRESHOLD = 8;
-    private static final int GOLD_THRESHOLD = 10;
+    private static final int SILVER_THRESHOLD = 3;
+    private static final int GOLD_THRESHOLD = 6;
 
     private static final int[] TABLE_HEADERS = {R.string.table_ranking_st, R.string.table_name_st, R.string.table_score_st};
 
@@ -109,13 +109,14 @@ public class LeaderboardActivity extends AppCompatActivity {
                 player_id.setText(obj.getString("_id"));
                 player_name.setText(obj.getString("name"));
 
+
                 int gamesWon = Integer.parseInt(obj.getString("gamesWon"));
 
                 if(gamesWon >= GOLD_THRESHOLD) {
-                    ImageView image = (ImageView) findViewById(R.id.badge_iv);
+                    ImageView image = (ImageView) dialog.findViewById(R.id.badge_iv);
                     image.setImageResource(R.drawable.gold_badge);
                 } else if (gamesWon < GOLD_THRESHOLD && gamesWon >= SILVER_THRESHOLD) {
-                    ImageView image = (ImageView) findViewById(R.id.badge_iv);
+                    ImageView image = (ImageView) dialog.findViewById(R.id.badge_iv);
                     image.setImageResource(R.drawable.silver_badge);
                 }
 
